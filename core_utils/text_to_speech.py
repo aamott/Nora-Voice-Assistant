@@ -1,15 +1,10 @@
-# For loading keys and data
-import json
-
 # For working with audio
 from playsound import playsound
-import speech_recognition as sr
 from os import remove
 
 # Temporary fix for playsound is to specify the entire filepath like so:
 # path.abspath(filename).replace("\\", "/")
 from os import path
-
 
 
 
@@ -48,7 +43,9 @@ class IBM_TTS:
         
         playsound(path.abspath(filename).replace("\\", "/"))
         remove(filename)
-            
+
+
+
 ######################################
 # Google Text to Speech
 #
@@ -72,7 +69,7 @@ class Google_TTS:
         remove(filename)
 
 ###########################################
-# Microsoft Text to Speech
+# Microsoft Text to Speech and Text to Speech
 # Documentation:
 #    https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=script%2Cbrowserjs%2Cwindowsinstall&pivots=programming-language-python
 # For a list of voices, please visit
