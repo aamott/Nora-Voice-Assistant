@@ -1,20 +1,3 @@
-
-
-# For working with audio
-from playsound import playsound
-import speech_recognition as sr
-from os import remove
-
-# Temporary fix for playsound is to specify the entire filepath like so:
-# path.abspath(filename).replace("\\", "/")
-from os import path
-
-
-
-
-
-
-
 #######################################
 # Mozilla DeepSpeech
 # Requires:
@@ -25,11 +8,13 @@ from deepspeech import Model
 # For listening to mic
 import io
 import soundfile as sf
-class DeepSpeech_STT:
+
+
+class STT:
     # The id of the object as it will appear in the json
-    id = "DeepSpeech_STT"
-    
-    def __init__(self, model_file = 'deepSpeech/deepspeech-0.9.3-models.pbmm'):
+    name = "DeepSpeech_STT"
+
+    def __init__(self, model_file='deepSpeech/deepspeech-0.9.3-models.pbmm'):
         # Initialize stuff for recording with SpeechRecognition package
         self.r = sr.Recognizer()
         self.mic = sr.Microphone()
@@ -37,7 +22,6 @@ class DeepSpeech_STT:
             self.r.adjust_for_ambient_noise(source)
 
         self.ds = Model(model_file)
-
 
     def record_mic(self, samplerate=16000):
         """Records audio, stopping at first silence
@@ -64,7 +48,6 @@ class DeepSpeech_STT:
         raw_wav = audioData.get_wav_data(convert_rate=samplerate)
         data, samplerate = sf.read(io.BytesIO(raw_wav), dtype="int16")
         return samplerate, data
-
 
     def listen(self):
         samplerate, data = self.record_mic()
