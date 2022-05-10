@@ -1,3 +1,3 @@
-core_utils/__pycache__/*
 .vscode/*
-core_utils/speech_to_text/__pycache__/*
+*/__pycache__/*
+*/*/__pycache__/*
