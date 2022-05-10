@@ -12,17 +12,16 @@ def import_skills():
     """ Imports all skills. """
     # import the skills
     skills = []
-
     skill_module_paths = get_skill_module_paths()
+
     for module_path in skill_module_paths:
         try:
-            skill_module = import_skill(module_path)
+            skill_module = importlib.import_module(module_path)
             skill = skill_module.Skill()
-        except Exception as e: 
+            skills.append(skill)
+        except Exception as e:
             print("Error importing skill: " + module_path)
             print(e)
-
-        skills.append(skill)
 
     return skills
 
@@ -47,7 +46,7 @@ def get_skill_module_paths():
             for subfile in os.listdir(SKILLS_FOLDER + '/' + file):
                 if subfile == "__init__.py" or subfile == "init.py" or subfile == file:
                     subfile = subfile.replace(".py", "")
-                    skill_module_paths.append(SKILLS_FOLDER +'.' + file + "." + subfile)
+                    skill_module_paths.append(SKILLS_FOLDER +'.' + file + '.' + subfile)
 
     return skill_module_paths
 

@@ -23,5 +23,4 @@ class IntentParser:
     #############
 
     def register_intent(self, intent_callback: callable, intent_phrases: list):
-        # self.intents.append(intent_callback)
         pass

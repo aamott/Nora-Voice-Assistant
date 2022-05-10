@@ -8,7 +8,7 @@ stt = stt_getter.get_stt_object()
 # import the skills
 skills = skill_creator.import_skills()
 
-# get the intent parser and feed it the skills
+# initialize the intent parser
 intent_parser = intent_parser.IntentParser(skills)
 
 ########################################
