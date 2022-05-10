@@ -1,4 +1,4 @@
-class BaseSkill:
+class Skill:
 
     def __init__(self):
         """ Initialize the Skill
