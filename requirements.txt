@@ -1,0 +1,15 @@
+# intents
+padaos
+
+# Speech Recognition
+deepspeech
+azure-cognitiveservices-speech
+
+
+# Text to Speech
+gTTS>=2.2.3
+ibm-watson
+
+# audio
+pygame
+sounddevice
