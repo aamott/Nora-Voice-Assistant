@@ -61,11 +61,11 @@ class AudioRecorder:
         max_velocity = np.max(indata)
 
         if max_velocity > self.min_threshold:
-            print("Speaking...")
+            # print("Speaking...")
             self.frames_of_silence -= 1
 
         elif max_velocity < self.min_threshold:
-            print("Not speaking...")
+            # print("Not speaking...")
             self.frames_of_silence += 1
             # stop recording if silence has been detected for a while
             if self.frames_of_silence > self.max_frames_silence:
@@ -75,10 +75,11 @@ class AudioRecorder:
             self.frames_of_silence = 0
 
         # Add audio to the buffer
-        if self.recorded_audio:
-            np.concatenate((self.recorded_audio, indata[0]))
+        if self.recorded_audio is None:
+            self.recorded_audio = indata
         else:
-            self.recorded_audio = indata[0]
+            self.recorded_audio = np.concatenate([self.recorded_audio, indata], axis=0)
+
 
     def record(self,
                samplerate=48000,
@@ -122,8 +123,7 @@ class AudioRecorder:
         bytes_wav = bytes()
         bytes_io = io.BytesIO(
             bytes_wav)  # create a temporary buffer to store the wav file
-        write(bytes_io, samplerate,
-              self.recorded_audio)  #write to the bytes object
+        write(bytes_io, samplerate, self.recorded_audio)  #write to the bytes object
         output_wav = bytes_io.read()  # and back to bytes
 
         # save the audio
@@ -137,5 +137,13 @@ class AudioRecorder:
 
 if __name__ == "__main__":
     recorder = AudioRecorder()
+
+    print("Getting threshold... Shhhh...")
     threshold = recorder.sample_silence()
-    recorder.record()
+
+    print("Recording...")
+    audio = recorder.record()
+
+    print("Playing back...")
+    sd.play(recorder.recorded_audio, 48000)
+    sd.wait()
