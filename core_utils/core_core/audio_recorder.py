@@ -28,7 +28,7 @@ class AudioRecorder:
                 channels (int): number of channels
                 sample_time (int): number of seconds to sample
             Returns:
-                ndarray: audio data
+                int: silence threshold
         """
         with sd.InputStream(channels=1, samplerate=48000,
                             dtype="int16") as stream:
@@ -81,7 +81,7 @@ class AudioRecorder:
             self.recorded_audio = np.concatenate([self.recorded_audio, indata], axis=0)
 
 
-    def record(self,
+    def get_recording(self,
                samplerate=48000,
                channels=1,
                filename=None,
@@ -94,7 +94,7 @@ class AudioRecorder:
                 max_recording_seconds (int): maximum number of seconds to record
 
             Returns:
-                bytes: audio data wav file
+                ndarray [int16]: audio data
         """
         # reset values for recording
         self.frames_of_silence = 0
@@ -119,20 +119,37 @@ class AudioRecorder:
             print("Failed to record:", e)
             raise e
 
-        # Convert frames from numpy array to bytes
-        bytes_wav = bytes()
-        bytes_io = io.BytesIO(
-            bytes_wav)  # create a temporary buffer to store the wav file
-        write(bytes_io, samplerate, self.recorded_audio)  #write to the bytes object
-        output_wav = bytes_io.read()  # and back to bytes
+        # return the recorded audio
+        return self.recorded_audio
 
-        # save the audio
-        if filename:
-            with open(filename, 'wb') as f:
-                f.write(output_wav)
 
-        # return the bytes object
-        return output_wav
+    def get_recording_as_wav(self,
+                                samplerate=48000,
+                                channels=1,
+                                filename=None,
+                                max_recording_seconds=8):
+        """Record audio from the microphone for a specified time.
+            Args:
+                samplerate (int): sample rate of the audio
+                channels (int): number of channels
+                filename (str): filename to save the audio to
+                max_recording_seconds (int): maximum number of seconds to record
+
+            Returns:
+                bytes: audio data wav file
+        """
+        audio_array = self.get_recording(samplerate=samplerate,
+                                            channels=channels,
+                                            filename=filename,
+                                            max_recording_seconds=max_recording_seconds)
+
+        # convert to wav
+        wav_file = io.BytesIO()
+        write(wav_file, samplerate, audio_array)
+        wav_file.seek(0)
+        return wav_file.read()
+
+
 
 
 if __name__ == "__main__":
@@ -142,8 +159,18 @@ if __name__ == "__main__":
     threshold = recorder.sample_silence()
 
     print("Recording...")
-    audio = recorder.record()
+    audio = recorder.get_recording_as_wav()
 
-    print("Playing back...")
+    print("Playing the recording...")
+    import pygame
+    pygame.mixer.init()
+    pygame.mixer.music.load(io.BytesIO(audio))
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        pygame.time.delay(100)
+    pygame.mixer.music.stop()
+    pygame.mixer.quit()
+
+    print("Playing the recording array...")
     sd.play(recorder.recorded_audio, 48000)
     sd.wait()
