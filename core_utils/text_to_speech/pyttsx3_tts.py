@@ -11,6 +11,10 @@ class TTS(TTS_Abstract):
     def __init__(self, ):
         self.engine = pyttsx3.init()
 
+        # default voice
+        voices = self.get_available_voices()
+        self.set_voice(voices[1])
+
 
     def set_voice(self, voice="en-US_AllisonVoice"):
         self.engine.setProperty('voice', voice)
