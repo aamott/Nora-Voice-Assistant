@@ -16,6 +16,8 @@ class IntentParser:
         self.intents = IntentContainer()
         self.intent_callbacks = {}
 
+        self.set_up_skills()
+
 
     def parse_intent(self, user_input):
         """Parses the user input
@@ -105,7 +107,6 @@ if __name__ == "__main__":
 
 
     intent_parser = IntentParser( [Skill()] )
-    intent_parser.set_up_skills()
 
 
     # Test the intent parser
