@@ -8,7 +8,7 @@ from os import remove, path
 from playsound import playsound
 
 
-class Google_TTS(TTS_Abstract):
+class TTS(TTS_Abstract):
     # The id of the object as it will appear in the json
     id = "Google_TTS"
 
