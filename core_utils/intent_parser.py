@@ -40,7 +40,7 @@ class IntentParser:
     def set_up_skills(self):
         """Sets up the skills
             Calls the intent_creator method for each skill, passing in a 
-            register_intent function customized for that skill's name
+            register_intent function customized for that skill's name.
         """
         for skill in self.skills:
 
@@ -48,7 +48,7 @@ class IntentParser:
             # We need this because the intent parser needs all names to be unique,
             # but the intents may not all be unique, so we concatenate the skill name and the
             # intent name.
-            def register_intent_skill(intent_callback : callable, intent_phrases : list, intent_name : str):
+            def register_intent_skill(intent_callback : callable, intent_phrases : list[str], intent_name : str):
                 """Registers an intent for a skill
 
                 Args:
