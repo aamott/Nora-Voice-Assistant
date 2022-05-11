@@ -16,5 +16,5 @@ class STT( STT_Abstract ):
         pass
 
     def listen(self):
-        text = "Hello, world!"
+        text = "hello world"
         return text
