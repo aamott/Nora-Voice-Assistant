@@ -7,7 +7,7 @@ A voice assistant written in python
     - [X] Audio Recording class 🎤
 - [ ] Text to Speech engines 🔊
     - [ ] Audio Playback class 🎵
-- [ ] Intent Parser 🤔
+- [X] Intent Parser - Now using [Padaos](https://github.com/MycroftAI/padaos) 🤔
 - [ ] Wakeword ⏰
 - [ ] Basic skills 🤹🏻‍♀️
 
@@ -18,5 +18,5 @@ A voice assistant written in python
 
 ### Web Interface 🌐
 - [ ] Web Server 🚀
-- [ ] Skill Editor
-- [ ] Settings Manager
+- [ ] Skill Editor 📝
+- [ ] Settings Manager Frontend 🔧
