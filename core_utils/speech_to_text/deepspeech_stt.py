@@ -1,55 +1,43 @@
 #######################################
 # Mozilla DeepSpeech
 # Requires:
-#     /python39.scripts/pip3.9.exe install deepspeech-gpu deepspeech
+#     pip install deepspeech-gpu deepspeech
 #     pip install -U TTS
 #######################################
+from core_utils.speech_to_text.stt_abstract import STT as STT_Abstract
+from core_utils.core_core.audio_recorder import AudioRecorder
 from deepspeech import Model
-# For listening to mic
-import io
-import soundfile as sf
 
+import numpy as np
 
-class STT:
+class STT( STT_Abstract ):
     # The id of the object as it will appear in the json
     name = "DeepSpeech_STT"
+    model_file = 'core_utils/speech_to_text/deepSpeech/deepspeech-0.9.3-models.pbmm'
 
-    def __init__(self, model_file='deepSpeech/deepspeech-0.9.3-models.pbmm'):
-        # Initialize stuff for recording with SpeechRecognition package
-        self.r = sr.Recognizer()
-        self.mic = sr.Microphone()
-        with self.mic as source:
-            self.r.adjust_for_ambient_noise(source)
+    def __init__(self, model_file=model_file):
+        self.audio_recorder = AudioRecorder(samplerate=16000)
 
         self.ds = Model(model_file)
+        print("Samplerate of Deepspeech Model: ", self.ds.sampleRate())
 
-    def record_mic(self, samplerate=16000):
-        """Records audio, stopping at first silence
-            
-            Records audio using the SpeechRecognition library
-            then converts it to a wav file in Numpy array form
-            for DeepSpeech.
-            For information on the SpeechRecognition AudioData object, visit
-            https://github.com/Uberi/speech_recognition/blob/master/reference/library-reference.rst
 
-            Args:
-                int samplerate  --  Samplerate the file should be returned with. 
-            Returns:
-                int samplerate  -- Must match the samplerate of the model trained!
-                numpy.int16[] data -- wav audio file as an int16 Numpy array
+    def calibrate_audio(self):
         """
-        # record
-        print("Listening...")
-        with self.mic as source:
-            audioData = self.r.listen(source)
-        print("Done listening")
+        Calibrates the audio recorder
+        """
+        self.audio_recorder.calibrate_silence()
 
-        # convert to an int16 numpy array for DeepSpeech
-        raw_wav = audioData.get_wav_data(convert_rate=samplerate)
-        data, samplerate = sf.read(io.BytesIO(raw_wav), dtype="int16")
-        return samplerate, data
 
     def listen(self):
-        samplerate, data = self.record_mic()
+        # Get audio BytesIO object
+        audio = self.audio_recorder.get_recording()
+
         # get text with DeepSpeech (ds)
-        return self.ds.stt(data)
+        return self.ds.stt(audio)
+
+
+if __name__ == "__main__":
+    stt = STT()
+    print("Listening...")
+    print(stt.listen())
