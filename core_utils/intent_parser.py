@@ -21,6 +21,7 @@ class IntentParser:
         """Parses the user input
             Returns:
                 intent ( {'name':str, 'callback':callable, 'entities': {'<entity_name>': value}} )
+                    or None if no intent is detected
         """
         intent = self.intents.calc_intent(user_input)
         if intent:
@@ -29,6 +30,8 @@ class IntentParser:
             intent["callback"] = intent_callback
 
             return intent
+        else:
+            return None
 
 
 

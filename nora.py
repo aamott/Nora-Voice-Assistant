@@ -32,4 +32,7 @@ while True:
     intent = intent_parser.parse_intent(text)
 
     # run the intent
-    # intent()
+    if intent is not None:
+        intent["callback"](intent)
+    else:
+        print("No intent detected")
