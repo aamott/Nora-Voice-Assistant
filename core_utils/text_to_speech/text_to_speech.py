@@ -45,29 +45,6 @@ class IBM_TTS:
         remove(filename)
 
 
-
-######################################
-# Google Text to Speech
-#
-######################################
-from gtts import gTTS
-class Google_TTS:
-    # The id of the object as it will appear in the json
-    id="Google_TTS"
-
-    def __init__(self, ):
-        pass
-        
-    def say(self, text):
-        # send audio to google and save it as a file
-        filename = "tts.mp3"
-        google_audio = gTTS(text)
-        google_audio.save(filename)
-
-        # play speech then remove the file
-        playsound(path.abspath(filename).replace("\\", "/"))
-        remove(filename)
-
 ###########################################
 # Microsoft Text to Speech and Text to Speech
 # Documentation:
