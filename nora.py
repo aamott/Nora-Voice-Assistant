@@ -3,8 +3,8 @@ import core_utils.speech_to_text_getter as stt_getter
 import core_utils.intent_parser as intent_parser
 import core_utils.skill_creator as skill_creator
 
-# get the STT object - can currently be 'google' or 'deepspeech'
-stt = stt_getter.get_stt_object(stt_type="google")
+# get the STT object - can currently be 'stub', 'google', 'deepspeech'
+stt = stt_getter.get_stt_object(stt_type="stub")
 
 # import the skills
 skills = skill_creator.import_skills()
