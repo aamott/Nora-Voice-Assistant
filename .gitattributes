@@ -1,0 +1,2 @@
+core_utils/speech_to_text/deepspeech/deepspeech-0.9.3-models.pbmm filter=lfs diff=lfs merge=lfs -text
+core_utils/speech_to_text/deepspeech/deepspeech-0.9.3-models.scorer filter=lfs diff=lfs merge=lfs -text
