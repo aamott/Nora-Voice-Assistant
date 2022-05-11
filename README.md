@@ -5,11 +5,20 @@ A voice assistant written in python
 ### Essentials
 - [x] Speech to Text engines 🗣️
     - [X] Audio Recording class 🎤
-- [ ] Text to Speech engines 🔊
-    - [ ] Audio Playback class 🎵
+- [ ] Text to Speech engines 👂
+    - [ ] Audio Playback class  🎧
 - [X] Intent Parser - Now using [Padaos](https://github.com/MycroftAI/padaos) 🤔
 - [ ] Wakeword ⏰
-- [ ] Basic skills 🤹🏻‍♀️
+
+### Basic Skills 🤹🏻‍♀️
+- [X] Hello World 👋
+- [ ] Music Player 🎵
+- [ ] Weather 🌍
+- [ ] News 📰
+- [ ] Calculator 📈
+- [ ] To Do List 📋
+- [ ] Calendar, Time, and Reminder 📅
+- [ ] Notes 📝
 
 ### Next step
 - [ ] Settings Manager 🔧
