@@ -24,7 +24,7 @@ class IntentParser:
                     or None if no intent is detected
         """
         intent = self.intents.calc_intent(user_input)
-        if intent:
+        if intent["name"]:
             # add the intent callback (since padaos can't store it)
             intent_callback = self.intent_callbacks[intent["name"]]
             intent["callback"] = intent_callback
