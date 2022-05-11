@@ -1,3 +1,7 @@
+#################################
+# NORA
+# Nora is a voice assistant built on simplicity.
+#################################
 from time import sleep
 import core_utils.speech_to_text_getter as stt_getter
 import core_utils.text_to_speech_getter as tts_getter
