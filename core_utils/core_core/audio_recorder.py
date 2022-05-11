@@ -12,8 +12,8 @@ import io
 
 class AudioRecorder:
 
-    def __init__(self):
-        sd.default.samplerate = 48000
+    def __init__(self, samplerate=48000):
+        sd.default.samplerate = samplerate
         self.samplerate = sd.default.samplerate
 
         self.min_threshold = 0
@@ -22,13 +22,16 @@ class AudioRecorder:
         self.max_frames_silence = 50  # how many frames of silence before recording stops - filters false silence
         self.recorded_audio = None
 
-    def calibrate_silence(self, sample_time=1, channels=1):
+    def calibrate_silence(self, samplerate : int = None, channels=1, sample_time=1):
         """ Sample silence for a specified time. Use for auto-adjusting the threshold 
             Args:
                 sample_time (int): number of seconds to sample
             Returns:
                 int: silence threshold
         """
+        if not samplerate:
+            samplerate = self.samplerate
+
         with sd.InputStream(
                 channels=channels,
                 # samplerate=self.default_samplerate,
@@ -84,9 +87,10 @@ class AudioRecorder:
 
 
     def get_recording(self,
-               samplerate,
+               samplerate : int = None,
                channels=1,
-               max_recording_seconds=8):
+               filename=None,
+               max_recording_seconds=8) -> np.ndarray:
         """Record audio from the microphone for a specified time.
             Args:
                 samplerate (int): sample rate of the audio. Defaults to 48000.
@@ -122,6 +126,9 @@ class AudioRecorder:
         except Exception as e:
             print("Failed to record:", e)
             raise e
+
+        # flatten the recorded audio
+        return self.recorded_audio.flatten()
 
         # return the recorded audio
         return self.recorded_audio
