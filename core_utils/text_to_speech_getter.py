@@ -4,12 +4,12 @@
 #############################
 
 
-def get_tts_object(tts_type="stub"):
+def get_tts_object(tts_type="print"):
     # TODO: get settings for TTS
     # tts_type = settings.get_setting("tts_type")
 
     # Import the selected Speech To Text module
-    if tts_type == "stub":
+    if tts_type == "print":
         import core_utils.text_to_speech.command_line_tts as TTS
     elif tts_type == "google":
         import core_utils.text_to_speech.google_tts as TTS
