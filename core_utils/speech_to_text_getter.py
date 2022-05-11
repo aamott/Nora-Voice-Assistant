@@ -4,8 +4,7 @@
 #############################
 
 
-def get_stt_object():
-    stt_type = "stub"
+def get_stt_object(stt_type="stub"):
     # TODO: get settings for STT
     # stt_type = settings.get_setting("stt_type")
 
