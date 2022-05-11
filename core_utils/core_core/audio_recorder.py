@@ -13,29 +13,31 @@ import io
 class AudioRecorder:
 
     def __init__(self):
+        sd.default.samplerate = 48000
+        self.samplerate = sd.default.samplerate
+
         self.min_threshold = 0
         self.frames_of_silence = 0
         self.recording = False
-
         self.max_frames_silence = 50  # how many frames of silence before recording stops - filters false silence
-
         self.recorded_audio = None
 
-    def sample_silence(self, samplerate=48000, channels=1, sample_time=1):
+    def calibrate_silence(self, sample_time=1, channels=1):
         """ Sample silence for a specified time. Use for auto-adjusting the threshold 
             Args:
-                samplerate (int): sample rate of the audio
-                channels (int): number of channels
                 sample_time (int): number of seconds to sample
             Returns:
                 int: silence threshold
         """
-        with sd.InputStream(channels=1, samplerate=48000,
-                            dtype="int16") as stream:
-            data = stream.read(sample_time * samplerate)
+        with sd.InputStream(
+                channels=channels,
+                # samplerate=self.default_samplerate,
+                dtype="int16") as stream:
+            data = stream.read(sample_time * self.samplerate)
             self.min_threshold = np.max(data[0])
 
         return self.min_threshold
+
 
     def callback(self, indata, num_frames, time, status):
         """ This is called (from a separate thread) for each audio block.
@@ -82,13 +84,12 @@ class AudioRecorder:
 
 
     def get_recording(self,
-               samplerate=48000,
+               samplerate,
                channels=1,
-               filename=None,
                max_recording_seconds=8):
         """Record audio from the microphone for a specified time.
             Args:
-                samplerate (int): sample rate of the audio
+                samplerate (int): sample rate of the audio. Defaults to 48000.
                 channels (int): number of channels
                 filename (str): filename to save the audio to
                 max_recording_seconds (int): maximum number of seconds to record
@@ -96,6 +97,9 @@ class AudioRecorder:
             Returns:
                 ndarray [int16]: audio data
         """
+        if not samplerate:
+            samplerate = self.samplerate
+
         # reset values for recording
         self.frames_of_silence = 0
         self.recorded_audio = None
@@ -104,9 +108,9 @@ class AudioRecorder:
 
         try:
             # try to start the recording
-            with sd.InputStream(channels=1,
+            with sd.InputStream(channels=channels,
                                 callback=self.callback,
-                                samplerate=48000,
+                                samplerate=samplerate,
                                 dtype="int16"):
                 # wait for recording to finish
                 while self.recording:
@@ -136,18 +140,18 @@ class AudioRecorder:
                 max_recording_seconds (int): maximum number of seconds to record
 
             Returns:
-                bytes: audio data wav file
+                BytesIO: audio data wav file as a BytesIO object. Can be treated like a file.
         """
         audio_array = self.get_recording(samplerate=samplerate,
                                             channels=channels,
                                             filename=filename,
                                             max_recording_seconds=max_recording_seconds)
 
-        # convert to wav
+        # convert to wav BytesIO object
         wav_file = io.BytesIO()
         write(wav_file, samplerate, audio_array)
         wav_file.seek(0)
-        return wav_file.read()
+        return wav_file
 
 
 
@@ -156,10 +160,10 @@ if __name__ == "__main__":
     recorder = AudioRecorder()
 
     print("Getting threshold... Shhhh...")
-    threshold = recorder.sample_silence()
+    threshold = recorder.calibrate_silence()
 
     print("Recording...")
-    audio = recorder.get_recording_as_wav()
+    audio = recorder.get_recording_as_wav().read()
 
     print("Playing the recording...")
     import pygame
