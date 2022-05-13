@@ -31,6 +31,7 @@ class SettingsManager:
         """ Gets the value of the setting using a path
             Parameters:
                 keys (string): path to the setting, separated by "."
+                                    For example, "speech.stt.google.credentials"
             
             Returns: dict or single value 
         """
@@ -52,6 +53,7 @@ class SettingsManager:
         """ Sets the value of the setting using a path
             Parameters:
                 setting_path (string): path to the setting, separated by "."
+                                                For example, "speech.stt.google.credentials"
                 value (any): value to set 
                 
                 Returns:
