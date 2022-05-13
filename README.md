@@ -7,8 +7,8 @@ A voice assistant written in python
     - [X] Audio Recording class 🎤
 - [ ] Text to Speech engines 👂
     - [ ] Audio Playback class  🎧
-- [X] Intent Parser - Now using [Padaos](https://github.com/MycroftAI/padaos) 🤔
-- [ ] Wakeword ⏰
+- [X] Intent Parser -  [Padaos](https://github.com/MycroftAI/padaos) 🤔
+- [ ] Wakeword - [Porcupine](https://pypi.org/project/pvporcupine/) ⏰
 
 ### Basic Skills 🤹🏻‍♀️
 - [X] Hello World 👋
