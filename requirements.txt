@@ -13,3 +13,6 @@ ibm-watson
 # audio
 pygame
 sounddevice
+
+# Settings
+pyyaml
