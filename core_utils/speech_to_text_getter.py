@@ -3,7 +3,7 @@
 #   - gets an instance of the selected Speech To Text module
 #############################
 
-
+# TODO: Should we move this into audio_utils?
 def get_stt_object(stt_type="stub"):
     # TODO: get settings for STT
     # stt_type = settings.get_setting("stt_type")

@@ -4,6 +4,7 @@
 #############################
 
 
+# TODO: Should we move this into audio_utils?
 def get_tts_object(tts_type="print"):
     # TODO: get settings for TTS
     # tts_type = settings.get_setting("tts_type")
