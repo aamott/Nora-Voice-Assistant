@@ -7,7 +7,7 @@ from yaml.loader import SafeLoader
 
 class SettingsManager:
 
-    def init(self, settings_file=None):
+    def __init__(self, settings_file=None):
         if settings_file is None:
             settings_file = "settings.yaml"
 
@@ -82,7 +82,7 @@ class SettingsManager:
 
 if __name__ == "__main__":
     settings_manager = SettingsManager()
-    settings_manager.init()
+    settings_manager.__init__()
     # Get a nonexistant setting
     print("Test:", settings_manager.get_setting("test"))
     
