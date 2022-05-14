@@ -3,40 +3,48 @@
 # Nora is a voice assistant built on simplicity.
 #################################
 from time import sleep
-import core_utils.speech_to_text_getter as stt_getter
-import core_utils.text_to_speech_getter as tts_getter
+from core_utils.core_core.settings_manager import SettingsManager
+from core_utils.settings_tool import SettingsTool
 import core_utils.intent_parser as intent_parser
 import core_utils.skill_creator as skill_creator
+from core_utils.audio_utils import AudioUtils
 
 
-# get the STT object - can currently be 'stub', 'google', 'deepspeech'
-stt = stt_getter.get_stt_object(stt_type="stub")
+#######################
+# Setup
+#######################
+settings_manager = SettingsManager()
 
-# get the TTS object - can currently be 'print', 'google', 'pyttsx3'
-tts = tts_getter.get_tts_object(tts_type="pyttsx3")
+audio_utils_settings_tool = SettingsTool(settings_manager, setting_path="audio utils")
+audio_utils = AudioUtils(settings_tool=settings_manager)
 
 # import the skills
-skills = skill_creator.import_skills()
+skills = skill_creator.import_skills(settings_manager=settings_manager)
 
 # initialize the intent parser
-intent_parser = intent_parser.IntentParser(skills)
+intent_settings_tool = SettingsTool(settings_manager=settings_manager,
+                                    setting_path='intent parser')
+intent_parser = intent_parser.IntentParser(skills,
+                                           settings_tool=intent_settings_tool)
 
 # calibrating
-print("Calibrating...")
-stt.calibrate_audio()
+print("Calibrating... Shhh...")
+audio_utils.calibrate_silence()
+print("Calibrated!")
+
 
 ########################################
 # main loop
 ########################################
-tts.say("Hello, I am Nora. I am a virtual assistant.")
+audio_utils.say("Hello, I am Nora. I am a virtual assistant.")
 while True:
     # TODO: Remove when wakeword is implemented
     sleep(5)
 
     # get the audio
     print("Listening...")
-    text = stt.listen()
-    tts.say("You said: " + text)
+    text = audio_utils.listen()
+    audio_utils.say("You said: " + text)
 
     # get the intent
     intent = intent_parser.parse_intent(text)
@@ -45,4 +53,4 @@ while True:
     if intent is not None:
         intent["callback"](intent)
     else:
-        tts.say("No intent detected")
+        audio_utils.say("No intent detected")

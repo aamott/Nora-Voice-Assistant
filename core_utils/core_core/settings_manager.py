@@ -14,7 +14,6 @@ class SettingsManager:
         # Load the settings
         with open(settings_file) as file:
             self.settings = yaml.load(file, Loader=SafeLoader)
-            print("Settings: \n", self.settings)
 
 
     def save_settings(self, settings_file=None):

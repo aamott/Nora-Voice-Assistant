@@ -6,13 +6,15 @@
 from numpy import ndarray
 # from core_utils.core_core.audio_player import AudioPlayer
 from core_utils.core_core.audio_recorder import AudioRecorder
+from core_utils.settings_tool import SettingsTool
 import core_utils.speech_to_text_getter as stt_getter
 import core_utils.text_to_speech_getter as tts_getter
 
 
 class AudioUtils:
 
-    def __init__(self):
+    def __init__(self, settings_tool: SettingsTool):
+        self.settings_tool=settings_tool
         # Audio Setup
         # self._audio_player = AudioPlayer()
         self._audio_recorder = AudioRecorder()

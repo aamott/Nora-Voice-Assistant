@@ -5,13 +5,15 @@
 #   intents:  Intent Container
 ####################
 from padaos import IntentContainer
+from core_utils.settings_tool import SettingsTool
 
 
 class IntentParser:
 
-    def __init__(self, skills):
+    def __init__(self, skills, settings_tool: SettingsTool):
         """Initialize the IntentParser
         """
+        self.settings_tool = settings_tool
         self.skills = skills
         self.intents = IntentContainer()
         self.intent_callbacks = {}
