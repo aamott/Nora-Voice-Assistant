@@ -1,12 +1,30 @@
 # Nora-Voice-Assistant
-A voice assistant written in python
+Nora is a voice assistant built on the concept of modularity, ease of design and development, and a flexible and extensible architecture. Its original intent was to explore the concept of a web UI that allows for a user to edit routines (and even skills themselves) through the user of a block programming language. Now, this Web UI is planned to take over settings as well, and in the future may include a text-based way to interact with the voice assistant. 
+
+
+## Installation
+1. Install Python 3.8 or higher (might work with older versions)
+
+2. Install the requirements.txt file.
+```
+pip install -r requirements.txt
+```
+
+3. Run with `python3 nora.py`
+
+
+## Background
+Nora is built off of modular components. Each piece (i.e. speech recognition, text to speech, etc.) should be able to be replaced by another module accepting and receiving the same data and continue to function without any changes to the code. 
+Skills are the core concept of a voice assistant. Each skill is a set of related functions a user can call on. For example, a music player skill might allow the user to say, “play Party in the USA” as well as “pause the music.” Skills should be developable by almost anyone with a basic knowledge of coding.
+
+
 
 ## TODO: 
 ### Essentials
 - [x] Speech to Text engines 🗣️
     - [X] Audio Recording class 🎤
-- [ ] Text to Speech engines 👂
-    - [ ] Audio Playback class  🎧
+- [X] Text to Speech engines 👂
+    - [ ] Use Audio Playback class  🎧
 - [X] Intent Parser -  [Padaos](https://github.com/MycroftAI/padaos) 🤔
 - [ ] Wakeword - [Porcupine](https://pypi.org/project/pvporcupine/) ⏰
 
@@ -21,7 +39,7 @@ A voice assistant written in python
 - [ ] Notes 📝
 
 ### Next step
-- [ ] Settings Manager 🔧
+- [X] Settings Manager 🔧
 - [ ] Channels class📡
 - [ ] Routine Manager 📦
 
