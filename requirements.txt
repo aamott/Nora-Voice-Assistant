@@ -2,17 +2,23 @@
 padaos
 
 # Speech Recognition
+speechrecognition
 deepspeech
 azure-cognitiveservices-speech
-
 
 # Text to Speech
 gTTS>=2.2.3
 ibm-watson
+pyttsx3
+
+# Wakeword
+pvporcupine
 
 # audio
 pygame
 sounddevice
+scipy
+playsound==1.2.2 # TODO: remove this dependency
 
 # Settings
 pyyaml
