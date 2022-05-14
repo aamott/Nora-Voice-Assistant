@@ -95,7 +95,6 @@ if __name__ == "__main__":
 
         def __init__(self):
             super().__init__()
-            self.description = "Hello World"
 
         def intent_creator(self, register_intent: callable):
             """ registers intents using register_intent

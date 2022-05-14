@@ -1,12 +1,13 @@
 ###########################
-# Records until silence
+# Audio Recorder
+# Contains tools to record audio
 ###########################
 
 import sounddevice as sd
 import numpy as np
 import time
 
-from scipy.io.wavfile import read, write
+from scipy.io.wavfile import write
 import io
 
 
@@ -21,6 +22,7 @@ class AudioRecorder:
         self.recording = False
         self.max_frames_silence = 50  # how many frames of silence before recording stops - filters false silence
         self.recorded_audio = None
+
 
     def calibrate_silence(self, samplerate : int = None, channels=1, sample_time=1):
         """ Sample silence for a specified time. Use for auto-adjusting the threshold 
@@ -42,7 +44,7 @@ class AudioRecorder:
         return self.min_threshold
 
 
-    def callback(self, indata, num_frames, time, status):
+    def _process_frame(self, indata, num_frames, time, status):
         """ This is called (from a separate thread) for each audio block.
             It adds audio to the recorded_audio buffer. If speaking isn't detected
             above the threshold for enough frames, it will send the recording kill signal (self.recording = False).
@@ -95,7 +97,7 @@ class AudioRecorder:
             Args:
                 samplerate (int): sample rate of the audio. Defaults to 48000.
                 channels (int): number of channels
-                filename (str): filename to save the audio to
+                filename (str): filename to save the audio to (not implemented) - TODO
                 max_recording_seconds (int): maximum number of seconds to record
 
             Returns:
@@ -113,7 +115,7 @@ class AudioRecorder:
         try:
             # try to start the recording
             with sd.InputStream(channels=channels,
-                                callback=self.callback,
+                                callback=self._process_frame,
                                 samplerate=samplerate,
                                 dtype="int16"):
                 # wait for recording to finish
@@ -129,9 +131,6 @@ class AudioRecorder:
 
         # flatten the recorded audio
         return self.recorded_audio.flatten()
-
-        # return the recorded audio
-        return self.recorded_audio
 
 
     def get_recording_as_wav(self,
@@ -161,6 +160,7 @@ class AudioRecorder:
         return wav_file
 
 
+    
 
 
 if __name__ == "__main__":
