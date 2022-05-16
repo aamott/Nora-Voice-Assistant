@@ -62,10 +62,10 @@ class AudioUtils:
     def stop(self):
         pass
 
-    def play_soundeffect(self, filename: str = None, audio_data: ndarray = None):
+    def play_sound(self, filename: str = None, audio_data: ndarray = None):
         pass
 
-    def stop_soundeffects(self):
+    def stop_sound(self):
         pass
 
 
