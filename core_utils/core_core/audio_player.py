@@ -9,32 +9,42 @@ from pygame import mixer
 #########################################
 
 
-mixer.init()
+
 
 
 class AudioPlayer:
 # base standard volume 
-    volume = 1
+    def __init__():
+        mixer.init()
+        volume = 1
 
 
-    def play_audio(x):
-        mixer.Sound.load(x)
-        mixer.Sound.play(x)
-
-
-
-    def audio_pause():
-
-        mixer.Sound.pause()  
+    def play(self, filename:str = None, audio_data:ndarray = None):
+        mixer.music.load()
+        mixer.music.play()
 
 
 
-    def audio_resume():
-        mixer.Sound.unpause()
+    def pause():
+
+        mixer.music.pause()  
 
 
 
-    def audio_stop():
+    def resume():
+        mixer.music.unpause()
+
+
+
+    def stop():
+        mixer.music.stop()
+
+
+    def play_sound(self, filename:str = None, audio_data:ndarray = None):
+        mixer.Sound.load()
+        mixer.Sound.play()
+
+    def stop_sound(self):
         mixer.Sound.stop()
 
 
