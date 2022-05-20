@@ -16,6 +16,7 @@ class SettingsManager:
             self.settings = yaml.load(file, Loader=SafeLoader)
 
 
+    # TODO: make this thread safe
     def save_settings(self, settings_file=None):
         """ Saves the settings to the settings file"""
         if settings_file is None:
@@ -74,6 +75,9 @@ class SettingsManager:
                 settings[keys] = value
 
         set_value(setting_path, value, self.settings)
+
+        # save the settings
+        self.save_settings()
 
 
 
