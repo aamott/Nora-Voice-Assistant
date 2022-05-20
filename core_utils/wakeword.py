@@ -29,10 +29,21 @@ class Wakeword:
 
         # load the settings
         key = self.settings_tool.get_setting("key")
+        sensitivities = self.settings_tool.get_setting("sensitivities")
+        keywords = self.settings_tool.get_setting("keywords")
+
+        # validate the settings
+        if sensitivities is None:
+            sensitivities = [0.5]
+        if keywords is None:
+            keywords = ["picovoice"]
 
         # load the wakeword
         self.porcupine = pvporcupine.create(access_key=key,
-                                            keywords=['picovoice'])
+                                            keywords=['picovoice'], 
+                                            sensitivities=sensitivities,)
+        if self.porcupine is None:
+            raise Exception("Failed to load porcupine using API key: " + key)
 
 
     def wait_for_wakeword_callback(self, audio_data) -> bool:
@@ -71,6 +82,7 @@ class Wakeword:
             samplerate=16000,
             channels=1,
             timeout=timeout)
+
 
     def __del__(self):
         self.porcupine.delete()
