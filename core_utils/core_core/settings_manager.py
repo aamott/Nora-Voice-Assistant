@@ -68,10 +68,10 @@ class SettingsManager:
                 if keys not in settings:
                     settings[keys] = {}
                 # If value is none, delete the setting
-                if value is None:
-                    del settings[keys]
-                else:
-                    settings[keys] = value
+                # if value is None:
+                #     del settings[keys]
+                # else:
+                settings[keys] = value
 
         set_value(setting_path, value, self.settings)
 
