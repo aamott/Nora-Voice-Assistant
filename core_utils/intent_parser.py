@@ -21,7 +21,7 @@ class IntentParser:
         self.set_up_skills()
 
 
-    def parse_intent(self, user_input):
+    def parse_intent(self, user_input) -> dict:
         """Parses the user input
             Returns:
                 intent ( {'name':str, 'callback':callable, 'entities': {'<entity_name>': value}} )
