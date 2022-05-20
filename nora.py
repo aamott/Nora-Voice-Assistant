@@ -70,8 +70,8 @@ wakeword = Wakeword(settings_tool=wakeword_settings_tool,
 ########################################
 audio_utils.say("Hello, I am Nora. I am a virtual assistant.")
 while True:
+    # TODO: Move wakeword into a separate thread and use a queue (fed by the wakeword_detected_callback)
+    # to pass user input to the main thread. Add a lock to recording so that the wakeword doesn't start recording while the user is speaking.
     # wait for wakeword
     wakeword.await_wakeword()
-    # loop()
-    # sleep(10)
     print("Wakeword detected. Looping again!\n")
