@@ -185,6 +185,8 @@ class AudioRecorder:
                 done_recording = frame_processor_callback(indata)
             return done_recording
 
+        timeout_time = time.time() + timeout if timeout else None
+
 
         # Start recording
         with sd.InputStream(callback=process_frame,
@@ -196,7 +198,8 @@ class AudioRecorder:
             stream.start()
             # Wait for timeout or until recording is stopped
             while not done_recording:
-                if timeout is not None and time.time() - timeout > 0:
+                # check timeout
+                if timeout_time and time.time() - timeout > timeout_time: 
                     break
                 time.sleep(0.1)
 
