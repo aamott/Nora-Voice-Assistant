@@ -1,6 +1,8 @@
 ######################################
 # pyttsx3 Text to Speech
 ######################################
+from winsound import SND_FILENAME, PlaySound
+import os
 from core_utils.text_to_speech.tts_abstract import TTS as TTS_Abstract
 import pyttsx3
 
@@ -26,8 +28,15 @@ class TTS(TTS_Abstract):
 
 
     def say(self, text):
-        self.engine.say(text)
+        # TODO: currently, if we use "say" in different threads, even at different times, it breaks.
+        # self.engine.say(text)
+        # Workaround: save to a file and play that.
+        self.engine.save_to_file(text, "temp.mp3")
         self.engine.runAndWait()
+        PlaySound("temp.mp3", SND_FILENAME)
+
+        # remove the file
+        os.remove("temp.mp3")
 
 
 
