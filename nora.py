@@ -16,7 +16,7 @@ from core_utils.audio_utils import AudioUtils
 settings_manager = SettingsManager()
 
 audio_utils_settings_tool = SettingsTool(settings_manager, setting_path="audio utils")
-audio_utils = AudioUtils(settings_tool=settings_manager)
+audio_utils = AudioUtils(settings_tool=audio_utils_settings_tool)
 
 # import the skills
 skills = skill_creator.import_skills(settings_manager=settings_manager)
