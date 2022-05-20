@@ -31,17 +31,14 @@ class SettingsTool:
         return self.settings_manager.get_setting(self.setting_path + "." + keys)
 
 
-    def set_setting(self, setting_path, value) -> bool:
+    def set_setting(self, setting_path, value):
         """ Sets the value of the setting using a path
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
-                value (any): value to set 
-                
-                Returns:
-                    bool: True if the setting was set, False otherwise 
+                value (any): value to set
         """
-        return self.settings_manager.set_setting(self.setting_path + "." + setting_path, value)
+        self.settings_manager.set_setting(self.setting_path + "." + setting_path, value)
 
     
     def save_settings(self) -> bool:

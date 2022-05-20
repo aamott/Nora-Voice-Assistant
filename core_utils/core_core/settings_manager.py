@@ -17,7 +17,7 @@ class SettingsManager:
 
 
     # TODO: make this thread safe
-    def save_settings(self, settings_file=None):
+    def save_settings(self, settings_file=None) -> bool:
         """ Saves the settings to the settings file"""
         if settings_file is None:
             settings_file = "settings.yaml"
@@ -25,6 +25,9 @@ class SettingsManager:
         # Save the settings
         with open(settings_file, 'w') as file:
             yaml.dump(self.settings, file)
+
+        # TODO: return True if the settings were saved, False otherwise
+        return True
 
 
     def get_setting(self, keys):
@@ -55,9 +58,6 @@ class SettingsManager:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
                 value (any): value to set 
-                
-                Returns:
-                    bool: True if the setting was set, False otherwise 
         """
         def set_value(keys, value, settings):
             if "." in keys:
