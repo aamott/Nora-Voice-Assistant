@@ -13,8 +13,9 @@ import io
 
 class AudioRecorder:
 
-    def __init__(self, samplerate=48000):
+    def __init__(self, samplerate=48000, channels=1):
         sd.default.samplerate = samplerate
+        sd.default.channels = channels
         self.samplerate = sd.default.samplerate
 
         self.min_threshold = 0
@@ -160,7 +161,44 @@ class AudioRecorder:
         return wav_file
 
 
-    
+    def record_continuous(self,
+                          frame_processor_callback: callable,
+                          frame_length: int = 1248,
+                          samplerate=16000,
+                          channels=1,
+                          timeout: int = None):
+        """ Record audio from the microphone in a continuous loop.
+            Args:
+                frame_processor (callable->bool): function to pass audio frames to. 
+                                    Should accept numpy array of audio data and return True if done recording.
+                                    The callback must have this signature:
+                                        frame_processor(indata: numpy.ndarray) -> bool
+
+                timeout (int): number of seconds to record before stopping. If none is set, will run until frame_processor returns False.
+        """
+        done_recording = False
+
+        # Create callback function that accepts audio frames and sets processing flag to True if recording should continue
+        def process_frame(indata, num_frames, time, status):
+            nonlocal done_recording
+            if not done_recording:
+                done_recording = frame_processor_callback(indata)
+            return done_recording
+
+
+        # Start recording
+        with sd.InputStream(callback=process_frame,
+                            samplerate=samplerate or self.samplerate,
+                            dtype="int16",
+                            blocksize=frame_length,
+                            channels=channels
+                            ) as stream:
+            stream.start()
+            # Wait for timeout or until recording is stopped
+            while not done_recording:
+                if timeout is not None and time.time() - timeout > 0:
+                    break
+                time.sleep(0.1)
 
 
 if __name__ == "__main__":

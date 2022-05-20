@@ -53,17 +53,22 @@ class AudioUtils:
     def play(self, filename:str = None, audio_data:ndarray = None):
         pass
 
+
     def pause(self):
         pass
+
 
     def resume(self):
         pass
 
+
     def stop(self):
         pass
 
+
     def play_sound(self, filename: str = None, audio_data: ndarray = None):
         pass
+
 
     def stop_sound(self):
         pass
@@ -89,6 +94,44 @@ class AudioUtils:
                                                                         filename=filename,
                                                                         max_recording_seconds=max_recording_seconds)
         return recording
+
+
+    def record_continuous(self,
+                          frame_processor_callback: callable,
+                          frame_length=1248,
+                          samplerate=16000,
+                          channels=1,
+                          timeout=None):
+        """ Record audio from the microphone in a continuous loop.
+            Args:
+                frame_processor_callback (callable->bool): function to pass audio frames to. 
+                                    Should accept numpy array of audio data, which is split into channels, and return True if recording should continue. Audio data is split into frames of length frame_length.
+                                    A frame is a single point of audio data, represented by an number. Each frame has channels, usually 1 or 2.
+                                    audio data is an array of frames.
+                                    audio data can be visualized as follows:
+                                        audio_data = [frame1, frame2, frame3, ...]
+                                        frame1 = [channel1_data, channel2_data, ...]
+                                        channel1_data = 60
+                                    15       .                          .''.
+                                    10     .' .                       .'    '..     .
+                                    5    ..'    '.                 .'''         '..''   '..       .
+                                    ------------------------------------------------------------
+                                    -5            '...   .''..'                           '...'    '.    .''...'
+                                    -10              '.'                                            '.'
+                                    -15
+                                        Each point is a frame.
+
+                                    The callback must have this signature:
+                                        frame_processor(indata: numpy.ndarray[frame][channel]) -> bool
+
+                timeout (int): number of seconds to record before stopping. If none is set, will run until frame_processor returns False.
+        """
+        self._audio_recorder.record_continuous(
+            frame_processor_callback=frame_processor_callback,
+            frame_length=frame_length,
+            samplerate=samplerate,
+            channels=channels,
+            timeout=timeout)
 
 
     def calibrate_silence(self) -> int:
