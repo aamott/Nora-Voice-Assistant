@@ -43,6 +43,14 @@ class SettingsTool:
         """
         return self.settings_manager.set_setting(self.setting_path + "." + setting_path, value)
 
+    
+    def save_settings(self) -> bool:
+        """ Saves the settings to disk
+            Returns:
+                bool: True if the settings were saved, False otherwise 
+        """
+        return self.settings_manager.save_settings()
+
 
 
 if __name__ == "__main__":
