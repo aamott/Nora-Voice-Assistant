@@ -33,14 +33,18 @@ class Wakeword:
         keywords = self.settings_tool.get_setting("keywords")
 
         # validate the settings
+        if key is None:
+            self.settings_tool.set_setting("key", None) # add a place to put a key
+            raise ValueError("key is not set")
         if sensitivities is None:
             sensitivities = [0.5]
         if keywords is None:
+            self.settings_tool.set_setting("keywords", None)
             keywords = ["picovoice"]
 
         # load the wakeword
         self.porcupine = pvporcupine.create(access_key=key,
-                                            keywords=['picovoice'], 
+                                            keywords=['picovoice'],
                                             sensitivities=sensitivities,)
         if self.porcupine is None:
             raise Exception("Failed to load porcupine using API key: " + key)
@@ -87,7 +91,7 @@ class Wakeword:
     def __del__(self):
         self.porcupine.delete()
 
-        
+
 
 if __name__ == "__main__":
     # test the wakeword
