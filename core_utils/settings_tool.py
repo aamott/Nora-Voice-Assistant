@@ -8,7 +8,7 @@ from core_utils.core_core.settings_manager import SettingsManager
 
 class SettingsTool:
 
-    def __init__(self, settings_manager : SettingsManager, setting_path: str) -> None:
+    def __init__(self, settings_manager : SettingsManager, setting_path: str='') -> None:
         """ Initializes the settings tool
 
         Args:
