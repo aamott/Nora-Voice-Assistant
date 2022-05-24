@@ -161,6 +161,49 @@ class AudioRecorder:
         return wav_file
 
 
+    # def record_continuous_using_callback(self,
+    #                       frame_processor_callback: callable,
+    #                       frame_length: int = 1248,
+    #                       samplerate=16000,
+    #                       channels=1,
+    #                       timeout: int = None):
+    #     """ Record audio from the microphone in a continuous loop.
+    #         Args:
+    #             frame_processor (callable->bool): function to pass audio frames to.
+    #                                 Should accept numpy array of audio data and return True if done recording.
+    #                                 The callback must have this signature:
+    #                                     frame_processor(indata: numpy.ndarray) -> bool
+
+    #             timeout (int): number of seconds to record before stopping. If none is set, will run until frame_processor returns False.
+    #     """
+    #     done_recording = False
+
+    #     # Create callback function that accepts audio frames and sets processing flag to True if recording should continue
+    #     def process_frame(indata, num_frames, time, status):
+    #         nonlocal done_recording
+    #         if not done_recording:
+    #             done_recording = frame_processor_callback(indata)
+    #         return done_recording
+
+    #     timeout_time = time.time() + timeout if timeout else None
+
+
+    #     # Start recording
+    #     with sd.InputStream(callback=process_frame,
+    #                         samplerate=samplerate or self.samplerate,
+    #                         dtype="int16",
+    #                         blocksize=frame_length,
+    #                         channels=channels
+    #                         ) as stream:
+    #         stream.start()
+    #         # Wait for timeout or until recording is stopped
+    #         while not done_recording:
+    #             # check timeout
+    #             if timeout_time and time.time() - timeout > timeout_time:
+    #                 break
+    #             time.sleep(0.1)
+
+
     def record_continuous(self,
                           frame_processor_callback: callable,
                           frame_length: int = 1248,
@@ -169,39 +212,26 @@ class AudioRecorder:
                           timeout: int = None):
         """ Record audio from the microphone in a continuous loop.
             Args:
-                frame_processor (callable->bool): function to pass audio frames to. 
+                frame_processor (callable->bool): function to pass audio frames to.
                                     Should accept numpy array of audio data and return True if done recording.
                                     The callback must have this signature:
                                         frame_processor(indata: numpy.ndarray) -> bool
-
+                frame_length (int): number of frames to record per iteration
+                samplerate (int): sample rate of the audio
+                channels (int): number of channels
                 timeout (int): number of seconds to record before stopping. If none is set, will run until frame_processor returns False.
         """
-        done_recording = False
-
-        # Create callback function that accepts audio frames and sets processing flag to True if recording should continue
-        def process_frame(indata, num_frames, time, status):
-            nonlocal done_recording
-            if not done_recording:
-                done_recording = frame_processor_callback(indata)
-            return done_recording
-
-        timeout_time = time.time() + timeout if timeout else None
-
-
-        # Start recording
-        with sd.InputStream(callback=process_frame,
-                            samplerate=samplerate or self.samplerate,
+        with sd.InputStream(samplerate=samplerate or self.samplerate,
                             dtype="int16",
                             blocksize=frame_length,
                             channels=channels
                             ) as stream:
-            stream.start()
-            # Wait for timeout or until recording is stopped
-            while not done_recording:
-                # check timeout
-                if timeout_time and time.time() - timeout > timeout_time: 
+            while True:
+                # process
+                data, _ = stream.read(frame_length)
+                if frame_processor_callback(data): #returns true if done recording
                     break
-                time.sleep(0.1)
+
 
 
 if __name__ == "__main__":
