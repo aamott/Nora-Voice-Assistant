@@ -28,15 +28,16 @@ class TTS(TTS_Abstract):
 
 
     def say(self, text):
-        # TODO: currently, if we use "say" in different threads, even at different times, it breaks.
-        # self.engine.say(text)
-        # Workaround: save to a file and play that.
-        self.engine.save_to_file(text, "temp.mp3")
+        self.engine.say(text)
         self.engine.runAndWait()
-        PlaySound("temp.mp3", SND_FILENAME)
 
+        # Leaving this here for now, for when we come back to threading. 
+        # When we threaded before, the code hung with the .say() call, and this fixed it.
+        # Workaround: save to a file and play that.
+        # self.engine.save_to_file(text, "temp.mp3")
+        # PlaySound("temp.mp3", SND_FILENAME)
         # remove the file
-        os.remove("temp.mp3")
+        # os.remove("temp.mp3")
 
 
 
