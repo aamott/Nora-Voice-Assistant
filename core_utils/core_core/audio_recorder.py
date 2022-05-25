@@ -63,8 +63,8 @@ class AudioRecorder:
         # TODO: If average volume of a block is less than half(?)
         #           of the average volume of the whole, it is probably silence.
         #           Readjust threshold.
-        if status:
-            print(status)
+        # if status:
+        #     print(status)
 
         max_velocity = np.max(indata)
 

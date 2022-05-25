@@ -75,4 +75,3 @@ while True:
     # to pass user input to the main thread. Add a lock to recording so that the wakeword doesn't start recording while the user is speaking.
     # wait for wakeword
     wakeword.await_wakeword()
-    print("Wakeword detected. Looping again!\n")

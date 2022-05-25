@@ -19,7 +19,7 @@ class STT( STT_Abstract ):
         self.audio_recorder = AudioRecorder(samplerate=16000)
 
         self.ds = Model(model_file)
-        print("Samplerate of Deepspeech Model: ", self.ds.sampleRate())
+        # print("Samplerate of Deepspeech Model: ", self.ds.sampleRate())
 
 
     def calibrate_audio(self):

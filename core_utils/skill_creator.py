@@ -35,7 +35,6 @@ def import_skills(settings_manager: SettingsManager, channels: Channels) -> list
                                          setting_path=settings_path)
 
             # Create the skill
-            print("Importing skill:", skill_module.Skill.name)
             skill = skill_module.Skill(settings_tool=settings_tool, channels=channels)
 
             if skill_name_is_unique(skill.name, skills):
