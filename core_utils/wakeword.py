@@ -22,7 +22,7 @@ from core_utils.settings_tool import SettingsTool
 class Wakeword:
 
     def __init__(self, settings_tool: SettingsTool, audio_utils: AudioUtils,
-                 wakeword_detected_callback):
+                 wakeword_detected_callback: callable = None):
         self.settings_tool = settings_tool
         self.audio_utils = audio_utils
         self.wakeword_detected_callback = wakeword_detected_callback
@@ -70,7 +70,8 @@ class Wakeword:
         # if wakeword was detected
         if keyword_index >= 0:
             # call the wakeword_detected_callback
-            self.wakeword_detected_callback()
+            if self.wakeword_detected_callback is not None:
+                self.wakeword_detected_callback()
             return True
         else:
             return False

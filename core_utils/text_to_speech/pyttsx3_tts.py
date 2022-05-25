@@ -31,12 +31,13 @@ class TTS(TTS_Abstract):
         self.engine.say(text)
         self.engine.runAndWait()
 
-        # Leaving this here for now, for when we come back to threading. 
-        # When we threaded before, the code hung with the .say() call, and this fixed it.
-        # Workaround: save to a file and play that.
+        # # Leaving this here for now, for when we come back to threading.
+        # # When we threaded before, the code hung with the .say() call, and this fixed it.
+        # # Workaround: save to a file and play that.
         # self.engine.save_to_file(text, "temp.mp3")
         # PlaySound("temp.mp3", SND_FILENAME)
-        # remove the file
+        # self.engine.runAndWait()
+        # # remove the file
         # os.remove("temp.mp3")
 
 
