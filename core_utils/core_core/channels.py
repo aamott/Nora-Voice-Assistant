@@ -7,7 +7,7 @@
 #   - subscribe(callback, channel_name)
 #################################################
 
-class Channel:
+class Channels:
     def __init__(self):
         self.channels = {}
 
@@ -49,13 +49,13 @@ class Channel:
     def get_channels(self):
         """ Get names of all the channels."""
         return self.channels.keys()
-        
+
 
 
 ################
 # Test
 if __name__ == "__main__":
-    channel = Channel()
+    channel = Channels()
     def callback(message):
         print(message)
     channel.subscribe(callback, "test")
