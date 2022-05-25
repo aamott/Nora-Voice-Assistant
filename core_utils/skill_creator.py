@@ -6,39 +6,44 @@ SKILLS_FOLDER = "skills"
 
 import importlib
 import os
+from core_utils.core_core.channels import Channels
 
 from core_utils.core_core.settings_manager import SettingsManager
 from core_utils.settings_tool import SettingsTool
 
 
-def import_skills(settings_manager: SettingsManager):
+def import_skills(settings_manager: SettingsManager, channels: Channels) -> list:
     """ Imports all skills. 
         Skill names must be unique.
 
         Returns:
             skills (list[class]): a list of skills 
     """
+    # Get the skill module paths
     skills = []
     skill_module_paths = get_skill_module_paths()
 
+    # Import the skills
     for module_path in skill_module_paths:
         try:
-            # Create the skill, passing in the settings manager
+            # Import the skill
             skill_module = importlib.import_module(module_path)
+
+            # Prepare tools for skill
             settings_path = "skill." + skill_module.Skill.name
             settings_tool = SettingsTool(settings_manager=settings_manager,
                                          setting_path=settings_path)
-            print("Importing skill:", skill_module.Skill.name)
-            skill = skill_module.Skill(settings_tool=settings_tool)
 
-            # Add skill to list
+            # Create the skill
+            print("Importing skill:", skill_module.Skill.name)
+            skill = skill_module.Skill(settings_tool=settings_tool, channels=channels)
+
             if skill_name_is_unique(skill.name, skills):
                 skills.append(skill)
                 print("Skill " + skill.name + " imported.")
 
-            # Error catching
             else:
-                raise Exception("Skill name '{}' is not unique. Not importing.".format(skill.name))
+                raise Exception("Skill name '{}' is not unique.".format(skill.name))
 
         except Exception as e:
             print("Error importing skill:", module_path, "Error:", e)

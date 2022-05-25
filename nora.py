@@ -2,7 +2,7 @@
 # NORA
 # Nora is a voice assistant built on simplicity.
 #################################
-from time import sleep
+from core_utils.core_core.channels import Channels
 from core_utils.core_core.settings_manager import SettingsManager
 from core_utils.settings_tool import SettingsTool
 import core_utils.intent_parser as intent_parser
@@ -14,6 +14,7 @@ from core_utils.wakeword import Wakeword
 #######################
 # Setup
 #######################
+channels = Channels()
 settings_manager = SettingsManager()
 
 # initialize audio utilities
@@ -26,7 +27,7 @@ audio_utils.calibrate_silence()
 print("Calibration complete!")
 
 # import the skills
-skills = skill_creator.import_skills(settings_manager=settings_manager)
+skills = skill_creator.import_skills(settings_manager=settings_manager, channels=channels)
 
 # initialize the intent parser
 intent_settings_tool = SettingsTool(settings_manager=settings_manager,
