@@ -27,7 +27,7 @@ audio_utils.calibrate_silence()
 print("Calibration complete!")
 
 # import the skills
-skills = skill_creator.import_skills(settings_manager=settings_manager, channels=channels)
+skills = skill_creator.import_skills(settings_manager=settings_manager, channels=channels, audio_utils=audio_utils)
 
 # initialize the intent parser
 intent_settings_tool = SettingsTool(settings_manager=settings_manager,
@@ -50,7 +50,6 @@ def loop():
 
     # run the intent
     if intent_data is not None:
-        print("Running intent: " + intent_data["name"])
         intent_data["callback"](intent_data)
     else:
         audio_utils.say("No intent detected")

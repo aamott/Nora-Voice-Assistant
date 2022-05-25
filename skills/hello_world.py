@@ -4,15 +4,16 @@
 from skills import base_skill
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
+from core_utils.audio_utils import AudioUtils
 
 class Skill(base_skill.Skill):
     name = "Hello World Skill"
 
 
-    def __init__(self, settings_tool: SettingsTool, channels: Channels) -> None:
-        super().__init__()
+    def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_utils: AudioUtils):
         self.settings_tool = settings_tool
         self.channels = channels
+        self.audio_utils = audio_utils
 
 
     def intent_creator(self, register_intent: callable):
@@ -24,3 +25,4 @@ class Skill(base_skill.Skill):
 
     def hello_world_intent(self, intent_data):
         print("Hello World!")
+        self.audio_utils.say("Hello World!")

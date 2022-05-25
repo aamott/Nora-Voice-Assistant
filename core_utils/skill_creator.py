@@ -6,13 +6,14 @@ SKILLS_FOLDER = "skills"
 
 import importlib
 import os
+from core_utils.audio_utils import AudioUtils
 from core_utils.core_core.channels import Channels
 
 from core_utils.core_core.settings_manager import SettingsManager
 from core_utils.settings_tool import SettingsTool
 
 
-def import_skills(settings_manager: SettingsManager, channels: Channels) -> list:
+def import_skills(settings_manager: SettingsManager, channels: Channels, audio_utils: AudioUtils) -> list:
     """ Imports all skills. 
         Skill names must be unique.
 
@@ -35,7 +36,7 @@ def import_skills(settings_manager: SettingsManager, channels: Channels) -> list
                                          setting_path=settings_path)
 
             # Create the skill
-            skill = skill_module.Skill(settings_tool=settings_tool, channels=channels)
+            skill = skill_module.Skill(settings_tool=settings_tool, channels=channels, audio_utils=audio_utils)
 
             if skill_name_is_unique(skill.name, skills):
                 skills.append(skill)
