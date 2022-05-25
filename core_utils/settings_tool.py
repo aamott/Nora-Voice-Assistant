@@ -48,6 +48,17 @@ class SettingsTool:
         """
         return self.settings_manager.save_settings()
 
+    
+    def get_sub_tool(self, setting_path: str):
+        """ Gets a sub tool for a setting path
+            Parameters:
+                setting_path (string): path to the setting, separated by "."
+                                                For example, "speech.stt.google.credentials"
+            Returns:
+                SettingsTool: The sub tool
+        """
+        return SettingsTool(self.settings_manager, self.setting_path + "." + setting_path)
+
 
 
 if __name__ == "__main__":

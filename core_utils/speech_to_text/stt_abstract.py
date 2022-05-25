@@ -3,14 +3,20 @@
 # All STT classes must inherit from this class
 #######################################
 from abc import ABC, abstractmethod
+from core_utils.core_core.channels import Channels
+from core_utils.settings_tool import SettingsTool
 from core_utils.core_core.audio_recorder import AudioRecorder
 
 class STT(ABC):
     # The id of the object as it will appear in the json
     name = "Abstract_STT" # Replace this with the actual implementation
 
-    def __init__(self):
-        self.audio_recorder = AudioRecorder()
+    @abstractmethod
+    def __init__(self, settings_tool: SettingsTool, channels: Channels,
+                 audio_recorder: AudioRecorder):
+        self.settings_tool = settings_tool
+        self.channels = channels
+        self.audio_recorder = audio_recorder
 
     @abstractmethod
     def calibrate_audio(self):

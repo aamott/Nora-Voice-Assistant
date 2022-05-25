@@ -5,22 +5,34 @@
 #################################
 from numpy import ndarray
 # from core_utils.core_core.audio_player import AudioPlayer
-from core_utils.core_core.audio_recorder import AudioRecorder
+from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
+from core_utils.core_core.audio_recorder import AudioRecorder
 import core_utils.speech_to_text_getter as stt_getter
 import core_utils.text_to_speech_getter as tts_getter
 
 
 class AudioUtils:
 
-    def __init__(self, settings_tool: SettingsTool):
+    def __init__(self, channels: Channels,
+                 settings_tool: SettingsTool,
+                 stt_type: str = "google",
+                 tts_type: str = "pyttsx3"):
         self.settings_tool=settings_tool
         # Audio Setup
         # self._audio_player = AudioPlayer()
         self._audio_recorder = AudioRecorder()
-        # Speech Setup
-        self._stt = stt_getter.get_stt_object(stt_type="stub")
-        self._tts = tts_getter.get_tts_object(tts_type="pyttsx3")
+
+        # Speech to Text Setup
+        stt_settings_tool = settings_tool.get_sub_tool("speech_to_text")
+        self._stt = stt_getter.get_stt_object(
+            stt_module=stt_type,
+            channels=channels,
+            settings_tool=stt_settings_tool,
+            audio_recorder=self._audio_recorder)
+        # Text to Speech Setup
+        # tts_settings_tool = settings_tool.get_sub_tool("text_to_speech")
+        self._tts = tts_getter.get_tts_object(tts_type=tts_type)
 
 
 
@@ -104,7 +116,7 @@ class AudioUtils:
     #                       timeout=None):
     #     """ Record audio from the microphone in a continuous loop.
     #         Args:
-    #             frame_processor_callback (callable->bool): function to pass audio frames to. 
+    #             frame_processor_callback (callable->bool): function to pass audio frames to.
     #                                 Should accept numpy array of audio data, which is split into channels, and return True if recording should continue. Audio data is split into frames of length frame_length.
     #                                 A frame is a single point of audio data, represented by an number. Each frame has channels, usually 1 or 2.
     #                                 audio data is an array of frames.

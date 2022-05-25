@@ -2,6 +2,8 @@
 # Google Cloud Speech-to-Text
 #######################################
 from core_utils.speech_to_text.stt_abstract import STT as STT_Abstract
+from core_utils.core_core.channels import Channels
+from core_utils.settings_tool import SettingsTool
 from core_utils.core_core.audio_recorder import AudioRecorder
 import speech_recognition as sr
 
@@ -10,8 +12,12 @@ class STT( STT_Abstract ):
     # The id of the object as it will appear in the json
     name = "Google_STT"
 
-    def __init__(self, credentials_file='credentials.json'):
-        self.audio_recorder = AudioRecorder()
+    def __init__(self, settings_tool: SettingsTool, channels: Channels,
+                 audio_recorder: AudioRecorder):
+        self.settings_tool = settings_tool
+        self.channels = channels
+        self.audio_recorder = audio_recorder
+
         self.recognizer = sr.Recognizer()
 
 
@@ -28,6 +34,7 @@ class STT( STT_Abstract ):
         """
         # record
         audio_file = self.audio_recorder.get_recording_as_wav()
+        print("Done recording")
 
         # convert to AudioData object
         # Obtained from https://stackoverflow.com/questions/61961587/can-i-do-recognition-from-numpy-array-in-python-speechrecognition

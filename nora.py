@@ -67,7 +67,7 @@ settings_manager = SettingsManager()
 
 # initialize audio utilities
 audio_utils_settings_tool = SettingsTool(settings_manager, setting_path="audio utils")
-audio_utils = AudioUtils(settings_tool=audio_utils_settings_tool)
+audio_utils = AudioUtils(settings_tool=audio_utils_settings_tool, channels=channels)
 
 # import the skills
 skills = skill_creator.import_skills(settings_manager=settings_manager, channels=channels, audio_utils=audio_utils)
