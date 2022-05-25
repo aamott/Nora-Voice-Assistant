@@ -43,7 +43,7 @@ def loop():
     # listen for the user's response
     print("Listening...")
     text = audio_utils.listen()
-    audio_utils.say("You said: " + text)
+    print("You said: " + text)
 
     # get the intent
     intent_data = intent_parser.parse_intent(text)
