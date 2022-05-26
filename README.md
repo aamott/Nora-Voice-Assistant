@@ -84,6 +84,10 @@ Example of using register_intent (continuing at the ellipsis):
 
 
 4.  Skills may use the provided `settings_tool` of type `SettingsTool`, channels of type `Channels`, and `audio_utils` of type `AudioUtils`. 
+
+It is important to note that classes must be imported as though they are being viewed from `nora.py` and not relative to the skill doing the importing. Otherwise, we couldn't have access to many of the core elements used in a skill, like those described next. 
+
+
 ## SettingsTool
 Passed in as  `settings_tool: SettingsTool` and imported with `from core_utils.settings_tool import SettingsTool`. SettingsTool manages settings for whatever class it is set up for. Skills receive a SettingsTool with the path set to `skills.<skill_name>` replacing `<skill_name>` with the skill's actual name. For example, `skills.hello_world`. Settings saved here will show up in the settings.yaml file as follows:  
 ``` yaml
@@ -115,7 +119,6 @@ Now, the settings.yaml file has changed.
                 chocolate: best
 ```
 
-It is important to note that classes must be imported as though they are being viewed from `nora.py` and not relative to the skill doing the importing. Otherwise, we couldn't have access to many of the core elements used in a skill, like those described next. 
 
 ## Channels
 Channels allow skills to communicate with each other and the core system. If one skill wants to receive messages from another skill, it must `subscribe` to a channel the other skill is `publishing` to. For example, two functions could use Channels as follows:
