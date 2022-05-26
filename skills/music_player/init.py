@@ -7,7 +7,7 @@ from core_utils.settings_tool import SettingsTool
 from core_utils.audio_utils import AudioUtils
 
 
-class Skill(base_skill.Skill):
+class Skill(base_skill.BaseSkill):
     name = "Music Player"
 
     def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_utils: AudioUtils):

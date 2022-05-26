@@ -6,7 +6,7 @@ from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
 from core_utils.audio_utils import AudioUtils
 
-class Skill(base_skill.Skill):
+class Skill(base_skill.BaseSkill):
     name = "Hello World Skill"
 
 
