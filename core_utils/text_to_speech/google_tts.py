@@ -12,7 +12,7 @@ from playsound import playsound
 
 class TTS(TTS_Abstract):
     # The id of the object as it will appear in the json
-    id = "Google_TTS"
+    name = "Google_TTS"
 
     def __init__(self, settings_tool: SettingsTool, channels: Channels):
         self.settings_tool = settings_tool
@@ -28,3 +28,9 @@ class TTS(TTS_Abstract):
         # play speech then remove the file
         playsound(path.abspath(filename).replace("\\", "/"))
         remove(filename)
+
+
+    def populate_settings_tool(self):
+        """ Populates the settings tool with the settings for this TTS object """
+        # self.settings_tool.set_setting("language", None)
+        pass

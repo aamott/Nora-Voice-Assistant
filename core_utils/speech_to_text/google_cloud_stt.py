@@ -55,3 +55,10 @@ class STT( STT_Abstract ):
 
         # with self.mic as source:
         #     audioData = self.sr.listen(source)
+
+
+    def populate_settings_tool(self):
+        """ Populates the settings tool with the settings for this STT object
+            If values already exist, they will be left alone
+        """
+        pass

@@ -35,7 +35,7 @@ class Wakeword:
         # validate the settings
         if key is None:
             self.settings_tool.set_setting("key", None) # add a place to put a key
-            raise ValueError("key is not set")
+            raise ValueError("Porcupine API key is not set")
         if sensitivities is None:
             sensitivities = [0.5]
         if keywords is None:
@@ -87,10 +87,6 @@ class Wakeword:
             samplerate=16000,
             channels=1,
             timeout=timeout)
-
-
-    def __del__(self):
-        self.porcupine.delete()
 
 
 

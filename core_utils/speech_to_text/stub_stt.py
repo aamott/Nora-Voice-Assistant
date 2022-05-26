@@ -22,3 +22,6 @@ class STT( STT_Abstract ):
     def listen(self):
         text = "hello world"
         return text
+
+    def populate_settings_tool(self):
+        pass

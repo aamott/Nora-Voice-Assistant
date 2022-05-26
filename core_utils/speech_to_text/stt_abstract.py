@@ -34,3 +34,10 @@ class STT(ABC):
             str -- The text of the audio
         """
         pass
+
+    @abstractmethod
+    def populate_settings_tool(self):
+        """ Populates the settings tool with the settings for this STT object
+            If values already exist, they will be left alone
+        """
+        pass

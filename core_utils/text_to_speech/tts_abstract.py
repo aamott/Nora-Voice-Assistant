@@ -23,3 +23,10 @@ class TTS(ABC):
                 text (str): the text to be spoken
         """
         pass
+
+
+    @abstractmethod
+    def populate_settings_tool(self):
+        """ Populates the settings tool with the settings for this STT object
+        """
+        pass

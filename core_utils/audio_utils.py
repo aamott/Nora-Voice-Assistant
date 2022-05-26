@@ -16,8 +16,8 @@ class AudioUtils:
 
     def __init__(self, channels: Channels,
                  settings_tool: SettingsTool,
-                 stt_type: str = "google",
-                 tts_module: str = "pyttsx3"):
+                 stt_type: str = "Google_STT",
+                 tts_module: str = "pyttsx3_TTS"):
         self.settings_tool=settings_tool
         # Audio Setup
         # self._audio_player = AudioPlayer()
