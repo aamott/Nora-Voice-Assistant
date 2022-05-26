@@ -57,6 +57,8 @@ def await_wakeword_thread():
 
 def shutdown_system():
     """ Shuts down the system. """
+    print("Save settings")
+    settings_manager.save_settings()
     print("Shutting down...")
     audio_utils.say("Shutting down")
     print(shutdown_event.is_set())
