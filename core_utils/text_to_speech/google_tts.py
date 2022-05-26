@@ -1,6 +1,8 @@
 ######################################
 # Google Text to Speech
 ######################################
+from core_utils.core_core.channels import Channels
+from core_utils.settings_tool import SettingsTool
 from core_utils.text_to_speech.tts_abstract import TTS as TTS_Abstract
 from gtts import gTTS
 # TODO: Replace playsound with audio_player
@@ -12,7 +14,9 @@ class TTS(TTS_Abstract):
     # The id of the object as it will appear in the json
     id = "Google_TTS"
 
-    def __init__(self, ):
+    def __init__(self, settings_tool: SettingsTool, channels: Channels):
+        self.settings_tool = settings_tool
+        self.channels = channels
         pass
 
     def say(self, text):

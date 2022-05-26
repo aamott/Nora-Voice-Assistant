@@ -17,7 +17,7 @@ class AudioUtils:
     def __init__(self, channels: Channels,
                  settings_tool: SettingsTool,
                  stt_type: str = "google",
-                 tts_type: str = "pyttsx3"):
+                 tts_module: str = "pyttsx3"):
         self.settings_tool=settings_tool
         # Audio Setup
         # self._audio_player = AudioPlayer()
@@ -31,8 +31,11 @@ class AudioUtils:
             settings_tool=stt_settings_tool,
             audio_recorder=self._audio_recorder)
         # Text to Speech Setup
-        # tts_settings_tool = settings_tool.get_sub_tool("text_to_speech")
-        self._tts = tts_getter.get_tts_object(tts_type=tts_type)
+        tts_settings_tool = settings_tool.get_sub_tool("text_to_speech")
+        self._tts = tts_getter.get_tts_object(
+            tts_module=tts_module,
+            channels=channels,
+            settings_tool=tts_settings_tool)
 
 
 
