@@ -28,6 +28,8 @@ def consume_input():
     """ Consumes the input from the queue. 
     Returns True if the exit command was received. """
     text = speech_queue.get()
+    if shutdown_event.is_set():
+        return
     intent_data = intent_parser.parse_intent(text)
 
     # run the intent
@@ -41,6 +43,10 @@ def await_wakeword_thread():
     """ Thread for the wakeword. """
     while not shutdown_event.is_set():
         wakeword.await_wakeword()
+        # TODO: find a more immediate way to kill the thread. 
+        #  It currently waits until await_wakeword is done running.
+        if shutdown_event.is_set():
+            break
 
         print("Listening...")
         text = audio_utils.listen()
@@ -65,7 +71,7 @@ channels = Channels()
 settings_manager = SettingsManager()
 
 # initialize audio utilities
-audio_utils_settings_tool = SettingsTool(settings_manager, setting_path="audio utils")
+audio_utils_settings_tool = SettingsTool(settings_manager, setting_path="audio_utils")
 audio_utils = AudioUtils(settings_tool=audio_utils_settings_tool, channels=channels)
 
 # import the skills
@@ -96,12 +102,10 @@ print("Calibration complete!")
 import signal
 import sys
 
-
 def signal_handler(sig, frame):
     print('You pressed Ctrl+C!')
     shutdown_system()
     sys.exit(0)
-
 
 signal.signal(signal.SIGINT, signal_handler)
 
