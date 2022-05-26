@@ -94,7 +94,7 @@ class AudioUtils:
     ###########################
 
     def get_recording(self, samplerate=48000, channels=1, filename=None, max_recording_seconds=8) -> ndarray:
-        """Record audio from the microphone for a specified time.
+        """Record audio from the microphone for a specified time or until silence is detected.
             Args:
                 samplerate (int): sample rate of the audio. Defaults to 48000.
                 channels (int): number of channels
@@ -104,10 +104,11 @@ class AudioUtils:
             Returns:
                 ndarray [int16]: audio data
         """
-        recording = self._audio_recorder.record_audio(samplerate=samplerate,
-                                                                        channels=channels,
-                                                                        filename=filename,
-                                                                        max_recording_seconds=max_recording_seconds)
+        recording = self._audio_recorder.get_recording(
+            samplerate=samplerate,
+            channels=channels,
+            filename=filename,
+            max_recording_seconds=max_recording_seconds)
         return recording
 
 
