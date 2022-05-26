@@ -10,14 +10,11 @@ from core_utils.audio_utils import AudioUtils
 class BaseSkill(ABC):
     @abstractmethod
     def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_utils: AudioUtils):
-        """ Initialize the Skill
-
-        """
+        """ Initialize the Skill"""
         pass
 
 
     @abstractmethod
     def intent_creator(self, register_intent: callable):
-        """ registers intents using register_intent
-        """
+        """ registers intents using register_intent """
         pass

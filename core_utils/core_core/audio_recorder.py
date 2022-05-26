@@ -94,7 +94,7 @@ class AudioRecorder:
                channels=1,
                filename=None,
                max_recording_seconds=8) -> np.ndarray:
-        """Record audio from the microphone for a specified time.
+        """Record audio from the microphone for a specified time or until silence is detected.
             Args:
                 samplerate (int): sample rate of the audio. Defaults to 48000.
                 channels (int): number of channels
