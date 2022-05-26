@@ -39,15 +39,14 @@ def consume_input():
 
 def await_wakeword_thread():
     """ Thread for the wakeword. """
-    text = ''
-    while text != exit:
+    while not shutdown_event.is_set():
         wakeword.await_wakeword()
 
         print("Listening...")
         text = audio_utils.listen()
-        print("You said: " + text)
-
-        speech_queue.put(text)
+        if text is not None:
+            print("You said: " + text)
+            speech_queue.put(text)
 
 
 def shutdown_system():
@@ -92,6 +91,19 @@ print("Calibrating...")
 audio_utils.calibrate_silence()
 print("Calibration complete!")
 
+
+# CTRL+C handler
+import signal
+import sys
+
+
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C!')
+    shutdown_system()
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
 
 ########################################
 # main loop
