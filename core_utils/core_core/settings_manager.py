@@ -80,6 +80,17 @@ class SettingsManager:
         self.save_settings()
 
 
+    def setting_exists(self, setting_path):
+        """ Checks if the setting exists
+            Parameters:
+                setting_path (string): path to the setting, separated by "."
+                                                For example, "speech.stt.google.credentials"
+
+            Returns:
+                bool: True if the setting exists, False otherwise
+        """
+        setting = self.get_setting(setting_path)
+        return setting is not None
 
 
 

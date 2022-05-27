@@ -49,6 +49,17 @@ class SettingsTool:
         return self.settings_manager.save_settings()
 
     
+    def setting_exists(self, setting_path) -> bool:
+        """ Checks if the setting exists
+            Parameters:
+                setting_path (string): path to the setting, separated by "."
+                                                For example, "speech.stt.google.credentials"
+            Returns:
+                bool: True if the setting exists, False otherwise
+        """
+        return self.settings_manager.setting_exists(self.setting_path + "." + setting_path)
+
+    
     def get_sub_tool(self, setting_path: str):
         """ Gets a sub tool for a setting path
             Parameters:
