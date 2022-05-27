@@ -65,7 +65,12 @@ class IntentParser:
                                       intent_name=unique_intent_name)
 
             # Tell the skill to register its intents
-            skill.intent_creator(register_intent_skill)
+            try: 
+                skill.intent_creator(register_intent_skill)
+            except AttributeError:
+                print("Skill " + skill.name + " does not have an intent_creator method.")
+            except Exception as e:
+                print("Error registering intents for skill " + skill.name + ": " + str(e))
 
 
 
