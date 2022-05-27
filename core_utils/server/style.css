@@ -64,3 +64,13 @@ main #page-title {
     line-height: 0.8;
     color: var(--title-text-color);
 }
+main #content {
+    padding: 20px;
+}
+input, textarea, select {
+    border: 1px solid var(--outline);
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px;
+    display: block;
+}

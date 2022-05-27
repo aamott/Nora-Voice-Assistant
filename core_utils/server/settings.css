@@ -5,9 +5,6 @@ main {
     max-width: 1100px;
 }
 
-main #content {
-    padding: 20px;
-}
 main .content-box {
     margin-bottom: 30px;
     padding: 10px 20px;
@@ -25,12 +22,4 @@ main .content-box .subsection {
 }
 main .content-box .subsection h2 {
     font-size: 1.3em;
-}
-
-input, textarea, select {
-    border: 1px solid var(--outline);
-    border-radius: 5px;
-    padding: 5px;
-    margin-bottom: 10px;
-    display: block;
 }
