@@ -18,3 +18,9 @@ class BaseSkill(ABC):
     def intent_creator(self, register_intent: callable):
         """ registers intents using register_intent """
         pass
+
+
+    def populate_settings(self):
+        """ Populates the settings if they don't exist.
+            This function acts as a stub unless overridden """
+        pass
