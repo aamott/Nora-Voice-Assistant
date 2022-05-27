@@ -1,3 +1,7 @@
+# Web Server
+fastapi
+uvicorn[standard]
+
 # intents
 padaos
 

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
+
+    <link rel="stylesheet" href="settings.css">
+    <title>Document</title>
+</head>
+<body>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="index.htm">Home</a></li>
+            <li><a href="settings-management.htm">Settings</a></li>
+            <li><a href="routines-management.htm">Routines</a></li>
+            <!-- System settings: includes wakeword, speech to text, and text to speech -->
+            <li><a href="#general">System</a></li> 
+            <!-- Skills: Includes subsections for skills -->
+            <li><a href="#skills">Skills</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div id="page-title">
+            <h1>Settings</h1>
+            <p>Manage your settings</p>
+        </div>
+
+        <div id="content">
+
+            <section class="content-box">
+                <h1>System</h1>
+                <p class="description">General system settings</p>
+                <form action="settings-management.php" method="post">
+                    <div class="form-group">
+                        <label for="wakeword">Wakeword</label>
+                        <select name="wakeword" id="wakeword">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="speech-to-text">Speech to Text</label>
+                        <select name="speech-to-text" id="speech-to-text">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="text-to-speech">Text to Speech</label>
+                        <select name="text-to-speech" id="text-to-speech">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select name="language" id="language">
+                            <option value="en-US">English</option>
+                            <option value="es-US">Spanish</option>
+                            <option value="fr-US">French</option>
+                            <option value="de-US">German</option>
+                            <option value="it-US">Italian</option>
+                            <option value="ja-US">Japanese</option>
+                            <option value="ko-US">Korean</option>
+                            <option value="pt-US">Portuguese</option>
+                            <option value="ru-US">Russian</option>
+                            <option value="zh-US">Chinese</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="voice">Voice</label>
+                        <select name="voice" id="voice">
+                            <option value="en-US-Wavenet-A">Wavenet A</option>
+                            <option value="en-US-Wavenet-B">Wavenet B</option>
+                            <option value="en-US-Wavenet-C">Wavenet C</option>
+                            <option value="en-US-Wavenet-D">Wavenet D</option>
+                            <option value="en-US-Wavenet-E">Wavenet E</option>
+                            <option value="en-US-Wavenet-F">Wavenet F</option>
+                            <option value="en-US-Wavenet-G">Wavenet G</option>
+                            <option value="en-US-Wavenet-H">Wavenet H</option>
+                            <option value="en-US-Wavenet-I">Wavenet I</option>
+                            <option value="en-US-Wavenet-J">Wavenet J</option>
+                            <option value="en-US-Wavenet-K">Wavenet K</option>
+                        </select>
+                    </div>
+            </section>
+
+            <section class="content-box">
+                <h1>Skills Settings</h1>
+                <p class="description">Manage your skills</p>
+                <div class="form-group">
+                    <label for="skill-name">Skill Name</label>
+                    <input type="text" name="skill-name" id="skill-name">
+                </div>
+                <div class="form-group">
+                    <label for="skill-description">Skill Description</label>
+                    <input type="text" name="skill-description" id="skill-description">
+                </div>
+                <div class="form-group">
+                    <label for="skill-category">Skill Category</label>
+                    <select name="skill-category" id="skill-category">
+                        <option value="general">General</option>
+                        <option value="music">Music</option>
+                        <option value="news">News</option>
+                        <option value="weather">Weather</option>
+                        <option value="sports">Sports</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="travel">Travel</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="social">Social</option>
+                        <option value="finance">Finance</option>
+                        <option value="health">Health</option>
+                        <option value="science">Science</option>
+                        <option value="business">Business</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="education">Education</option>
+                        <option value="food">Food</option>
+                        <option value="religion">Religion</option>
+                        <option value="family">Family</option>
+                        <option value="travel">Travel</option>
+                        <option value="work">Work</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- show separate settings for each skill, including the hello world skill, weather skill, and music skill  -->
+                <div class="subsection" id="hello-world-skill">
+                    <h2>Hello World Skill</h2>
+                    <p class="description">This skill is used to greet the user when they wake up.</p>
+                    <!-- phrase to wake up to -->
+                    <div class="form-group">
+                        <label for="wake-phrase">Wake Phrase</label>
+                        <input type="text" name="wake-phrase" id="wake-phrase">
+                    </div>
+                    <div class="form-group">
+                        <label for="hello-world-language">Language to say hello in</label>
+                        <select name="hello-world-language" id="hello-world-language">
+                            <option value="en-US">English</option>
+                            <option value="es-US">Spanish</option>
+                            <option value="fr-US">French</option>
+                            <option value="de-US">German</option>
+                            <option value="it-US">Italian</option>
+                            <option value="ja-US">Japanese</option>
+                            <option value="ko-US">Korean</option>
+                            <option value="pt-US">Portuguese</option>
+                            <option value="ru-US">Russian</option>
+                            <option value="zh-US">Chinese</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="subsection" id="weather-skill">
+                    <h2>Weather Skill</h2>
+                    <p class="description">This skill is used to get the weather for a location.</p>
+                    <div class="form-group">
+                        <label for="weather-location">Location</label>
+                        <input type="text" name="weather-location" id="weather-location">
+                    </div>
+                    <div class="form-group">
+                        <label for="weather-language">Language to say weather in</label>
+                        <select name="weather-language" id="weather-language">
+                            <option value="en-US">English</option>
+                            <option value="es-US">Spanish</option>
+                            <option value="fr-US">French</option>
+                            <option value="de-US">German</option>
+                            <option value="it-US">Italian</option>
+                            <option value="ja-US">Japanese</option>
+                            <option value="ko-US">Korean</option>
+                            <option value="pt-US">Portuguese</option>
+                            <option value="ru-US">Russian</option>
+                            <option value="zh-US">Chinese</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="subsection" id="music-skill">
+                    <h2>Music Skill</h2>
+                    <p class="description">This skill is used to play music.</p>
+                    <div class="form-group">
+                        <label for="music-folder">Music folder</label>
+                        <input type="text" name="music-folder" id="music-folder">
+                    </div>
+                </div>  
+
+            </section>
+
+            
+
+        </div>
+    </main>
+
+</body>
+</html>
