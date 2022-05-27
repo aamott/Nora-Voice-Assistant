@@ -27,25 +27,39 @@ class Wakeword:
         self.audio_utils = audio_utils
         self.wakeword_detected_callback = wakeword_detected_callback
 
-        # load the settings
+        # populate the settings tool
+        self.populate_settings()
+
+        # get settings
         key = self.settings_tool.get_setting("key")
         sensitivities = self.settings_tool.get_setting("sensitivities")
         keywords = self.settings_tool.get_setting("keywords")
+        keyword_paths = self.settings_tool.get_setting("model_path")
 
         # validate the settings
         if key is None:
-            self.settings_tool.set_setting("key", None) # add a place to put a key
             raise ValueError("Porcupine API key is not set")
-        if sensitivities is None:
-            sensitivities = [0.5]
-        if keywords is None:
-            self.settings_tool.set_setting("keywords", None)
-            keywords = ["picovoice"]
+
+        keywords = keywords or ["picovoice"]
+        sensitivities = sensitivities or [0.5]
+        if type(keywords) is not list:
+            keywords = keywords.to_list()
+
+        # make keyword path None or list
+        if keyword_paths is not None and type(keyword_paths) is not list:
+            keyword_paths = [keyword_paths]
+
+        if keyword_paths is not None and len(keyword_paths) != len(sensitivities):
+            # fill sensitivity list with default values
+            sensitivities = [i * sensitivities[0] for i in range(0, len(keyword_paths))]
+        elif len(keywords) != len(sensitivities):
+            sensitivities = [ i * sensitivities[0] for i in range(0, len(keywords)) ]
 
         # load the wakeword
         self.porcupine = pvporcupine.create(access_key=key,
-                                            keywords=['picovoice'],
-                                            sensitivities=sensitivities,)
+                                            keywords=keywords,
+                                            sensitivities=sensitivities,
+                                            keyword_paths=keyword_paths)
         if self.porcupine is None:
             raise Exception("Failed to load porcupine using API key: " + key)
 
@@ -87,6 +101,15 @@ class Wakeword:
             samplerate=16000,
             channels=1,
             timeout=timeout)
+
+
+    def populate_settings(self):
+        """ Populates the settings tool with the settings needed for wakeword.
+        """
+        self.settings_tool.add_setting("key", None)
+        self.settings_tool.add_setting("sensitivities", None)
+        self.settings_tool.add_setting("keywords", None)
+        self.settings_tool.add_setting("model_path", None)
 
 
 

@@ -41,6 +41,16 @@ class SettingsTool:
         self.settings_manager.set_setting(self.setting_path + "." + setting_path, value)
 
     
+    def add_setting(self, setting_path, value):
+        """ Adds a setting to the settings manager
+            Parameters:
+                setting_path (string): path to the setting, separated by "."
+                                                For example, "speech.stt.google.credentials"
+                value (any): value to set
+        """
+        self.settings_manager.add_setting(self.setting_path + "." + setting_path, value)
+
+    
     def save_settings(self) -> bool:
         """ Saves the settings to disk
             Returns:

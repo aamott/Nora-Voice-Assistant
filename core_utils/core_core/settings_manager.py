@@ -79,6 +79,17 @@ class SettingsManager:
         # save the settings
         self.save_settings()
 
+    
+    def add_setting(self, setting_path, value):
+        """ Adds a setting to the settings manager
+            Parameters:
+                setting_path (string): path to the setting, separated by "."
+                                                For example, "speech.stt.google.credentials"
+                value (any): value to set
+        """
+        if not self.setting_exists(setting_path):
+            self.set_setting(setting_path, value)
+
 
     def setting_exists(self, setting_path):
         """ Checks if the setting exists
