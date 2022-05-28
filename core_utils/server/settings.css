@@ -17,7 +17,7 @@ main .content-box .description {
     font-style: italic;   
 }
 main .content-box .subsection {
-    margin-top: 20px;
+    margin-top: 32px;
     border-top: 1px solid var(--outline);
 }
 main .content-box .subsection h2 {
