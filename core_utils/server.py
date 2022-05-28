@@ -6,35 +6,67 @@
 ################################
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
+
+import contextlib
+import time
+import threading
+import uvicorn
 
 from core_core import channels, settings_manager
 
 
-class Server(FastAPI):
-    def __init__(self, channels: channels.Channels, settings_manager: settings_manager.SettingsManager):
+def create_app(channels: channels.Channels,
+               settings_manager: settings_manager.SettingsManager) -> FastAPI:
+    app = FastAPI()
 
-        self.channels = channels
-        self.settings_manager = settings_manager
+    channels = channels
+    settings_manager = settings_manager
 
-        super().__init__(title="Core", description="Core Server")
-        self.mount("/", StaticFiles(directory="server"), name="site")
-
-        # self.app.add_event_handler("startup", self.startup)
-        # self.app.add_event_handler("shutdown", self.shutdown)
-
-
-
-        @self.get("/")
-        async def root():
-            return {"message": "Hello World"}
+    @app.get("/")
+    async def root():
+        # redirect to index.htm
+        return RedirectResponse(url="/index.htm")
 
 
-        @self.get("/settings")
-        async def read_user_me():
-            return {"settings": "some settings"}
+    @app.get("/settings")
+    async def read_user_me():
+        return {"settings": "some settings"}
 
 
-# Launch the server
-server = Server(channels.Channels(), settings_manager.SettingsManager())
-# server.app.run(host="
-app=server
+    app.mount("/", StaticFiles(directory="core_utils/server"), name="site")
+
+    return app
+
+
+class Server(uvicorn.Server):
+
+    def install_signal_handlers(self):
+        pass
+
+    @contextlib.contextmanager
+    def run_in_thread(self):
+        thread = threading.Thread(target=self.run)
+        thread.start()
+        try:
+            while not self.started:
+                time.sleep(1e-3)
+            yield
+        finally:
+            self.should_exit = True
+            thread.join()
+
+
+
+if __name__ == "__main__":
+    # Launch the server
+    app = create_app(
+        channels.Channels(),
+        settings_manager.SettingsManager(settings_file="settings.yaml"))
+    config = uvicorn.Config(app=app, host="127.0.0.1", port=5000, log_level="info")
+    server = Server(config=config)
+
+    with server.run_in_thread():
+        while True:
+            time.sleep(1)
+            # code can be run in here while the server is going
