@@ -1,9 +1,15 @@
-####################
+###########################
 # IntentParser
+# The intent parser is responsible for detecting intents.
+# It does this by taking a list of skills and asking each one
+# to register its intents through the _register_intent function.
+# When an intent is detected, sassiness (and other personality traits)
+# are calculated and the intent data is returned.
 # Core Objects:
 #   skills: list of skill objects
 #   intents:  Intent Container
-####################
+###########################
+import random
 from padaos import IntentContainer
 from core_utils.settings_tool import SettingsTool
 
@@ -19,16 +25,58 @@ class IntentParser:
         self.intent_callbacks = {}
 
         self.set_up_skills()
+        
+        # get sass level
+        self.sass_level = self.settings_tool.get_setting("sass_level")
+        if not self.sass_level:
+            self.sass_level = 1
+            self.settings_tool.set_setting("sass_level", self.sass_level)
+
+    
+    ###########################
+    # Personality
+    ###########################
+
+    def get_response_sassiness(self) -> int:
+        """ Returns the sassiness of the response. Random based on the sass level.
+            Returns:
+                int: 0-10
+        """
+        # get a multiplier between 0 and 1
+        sass_multiplier = random.uniform(0, 1)
+        sassiness: int = int(self.sass_level * sass_multiplier)
+        return sassiness
+
+    
+    def set_sass_level(self, sass_level: int):
+        """Sets the sass level
+            Parameters:
+                sass_level (int): the sass level to set
+        """
+        # check that sass_level is between 0 and 10
+        self.sass_level = sass_level
+        self.settings_tool.set_setting("sass_level", self.sass_level)
 
 
     def parse_intent(self, user_input) -> dict:
         """Parses the user input
             Returns:
-                intent ( {'name':str, 'callback':callable, 'entities': {'<entity_name>': value}} )
-                    or None if no intent is detected
+                dict: the intent and its parameters
+                The dict will be in the format:
+                    {
+                        intent_name: str,
+                        entities: {
+                            "entity_name": value
+                            ...
+                        }
+                        callback: callable,
+                        sassiness: int,
+                    }
         """
         intent = self.intents.calc_intent(user_input)
         if intent["name"]:
+            # add sassiness to the intent
+            intent["sassiness"] = self.get_response_sassiness()
             # add the intent callback (since padaos can't store it)
             intent_callback = self.intent_callbacks[intent["name"]]
             intent["callback"] = intent_callback
