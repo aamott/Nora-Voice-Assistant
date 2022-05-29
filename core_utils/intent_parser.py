@@ -21,19 +21,24 @@ class IntentParser:
         """Initialize the IntentParser
         """
         self.settings_tool = settings_tool
+        self.channels = channels
         self.skills = skills
         self.intents = IntentContainer()
         self.intent_callbacks = {}
 
         self.set_up_skills()
-        
+
         # get sass level
         self.sass_level = self.settings_tool.get_setting("sass_level")
         if not self.sass_level:
             self.sass_level = 1
             self.settings_tool.set_setting("sass_level", self.sass_level)
 
-    
+        # subscribe set_sass_level to the set_sass_level channel
+        self.channels.subscribe(self.set_sass_level, "set_sass_level")
+
+
+
     ###########################
     # Personality
     ###########################
@@ -48,7 +53,7 @@ class IntentParser:
         sassiness: int = int(self.sass_level * sass_multiplier)
         return sassiness
 
-    
+
     def set_sass_level(self, sass_level: int):
         """Sets the sass level
             Parameters:
@@ -59,13 +64,18 @@ class IntentParser:
         self.settings_tool.set_setting("sass_level", self.sass_level)
 
 
-    def parse_intent(self, user_input) -> dict:
+    ###########################
+    # Intent Management
+    ###########################
+    def parse_intent(self, user_phrase) -> dict:
         """Parses the user input
+
             Returns:
                 dict: the intent and its parameters
                 The dict will be in the format:
                     {
                         intent_name: str,
+                        user_input: str,
                         entities: {
                             "entity_name": value
                             ...
@@ -74,8 +84,10 @@ class IntentParser:
                         sassiness: int,
                     }
         """
-        intent = self.intents.calc_intent(user_input)
+        intent = self.intents.calc_intent(user_phrase)
         if intent["name"]:
+            # put the user's input into the intent
+            intent["user_phrase"] = user_phrase
             # add sassiness to the intent
             intent["sassiness"] = self.get_response_sassiness()
             # add the intent callback (since padaos can't store it)
@@ -114,10 +126,10 @@ class IntentParser:
                                       intent_name=unique_intent_name)
 
             # Tell the skill to register its intents
-            try: 
+            try:
                 skill.intent_creator(register_intent_skill)
-            except AttributeError:
-                print("Skill " + skill.name + " does not have an intent_creator method.")
+            except AttributeError as e:
+                print("Skill " + skill.name + " may not have an intent_creator method. Error: ", e)
             except Exception as e:
                 print("Error registering intents for skill " + skill.name + ": " + str(e))
 
