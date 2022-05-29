@@ -5,7 +5,7 @@
 #       https://stackoverflow.com/questions/61577643/python-how-to-use-fastapi-and-uvicorn-run-without-blocking-the-thread
 ################################
 from socket import create_server
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
@@ -44,7 +44,7 @@ def create_app(channels: channels.Channels,
 
     @app.get("/")
     async def root():
-        # redirect to index.htm
+        # redirect to the home page
         return RedirectResponse(url="/index.htm")
 
 
@@ -52,9 +52,11 @@ def create_app(channels: channels.Channels,
     async def get_settings():
         return settings_manager.get_settings()
 
-    
+
     @app.get("/settings/{setting_path}")
-    async def get_setting(setting_path: str):
+    async def get_setting(setting_path: str = Query(
+        title="Get setting",
+        description="Get a setting by dot-separated path")):
         return settings_manager.get_setting(setting_path)
 
 
