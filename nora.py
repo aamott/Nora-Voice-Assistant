@@ -43,7 +43,7 @@ def await_wakeword_thread():
     """ Thread for the wakeword. """
     while not shutdown_event.is_set():
         wakeword.await_wakeword()
-        # TODO: find a more immediate way to kill the thread. 
+        # TODO: find a more immediate way to kill the thread.
         #  It currently waits until await_wakeword is done running.
         if shutdown_event.is_set():
             break
@@ -126,4 +126,4 @@ while not shutdown_event.is_set():
     consume_input()
 
 # stop any system threads
-wakeword_thread.join()
+wakeword_thread.join(1)
