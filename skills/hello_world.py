@@ -18,11 +18,24 @@ class Skill(base_skill.BaseSkill):
 
     def intent_creator(self, register_intent: callable):
         """ registers intents using register_intent """
+        # Register the hello_world_intent function. 
+        # This will be called whenever intent_phrases are detected.
+        intent_phrases = ["hello (world | )"] # this translates to "hello world" or "hello"
         register_intent(intent_callback=self.hello_world_intent,
-                        intent_phrases=["hello (world | )"],
+                        intent_phrases=intent_phrases,
                         intent_name="say_hello")
 
 
     def hello_world_intent(self, intent_data):
-        print("Hello World!")
+        """ hello world intent 
+            This function is called when the intent is detected.
+            Parameters:
+                intent_data (dict): the intent data
+        """
         self.audio_utils.say("Hello World!")
+
+        # Some skills may want to implement sassiness or other personality traits. 
+        # Every intent has a "sassiness" attribute that is automatically generated
+        # by the intent parser. Its value is a number between 0 and 10.
+        if intent_data.get("sassiness") > 3:
+            self.audio_utils.say("I'm sassy!")
