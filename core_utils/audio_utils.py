@@ -58,6 +58,7 @@ class AudioUtils:
         Args:
             text (str): The text to speak.
         """
+        print("+ ", text)
         self._tts.say(text)
 
 
