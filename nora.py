@@ -43,7 +43,7 @@ def await_wakeword_thread():
     """ Thread for the wakeword. """
     while not shutdown_event.is_set():
         wakeword.await_wakeword()
-        # TODO: find a more immediate way to kill the thread. 
+        # TODO: find a more immediate way to kill the thread.
         #  It currently waits until await_wakeword is done running.
         if shutdown_event.is_set():
             break
@@ -83,7 +83,7 @@ skills = skill_creator.import_skills(settings_manager=settings_manager, channels
 intent_settings_tool = SettingsTool(settings_manager=settings_manager,
                                     setting_path='intent parser')
 intent_parser = intent_parser.IntentParser(skills,
-                                           settings_tool=intent_settings_tool)
+                                           settings_tool=intent_settings_tool, channels=channels,)
 
 # initialize wakeword
 wakeword_settings_tool = SettingsTool(settings_manager=settings_manager,
@@ -126,4 +126,4 @@ while not shutdown_event.is_set():
     consume_input()
 
 # stop any system threads
-wakeword_thread.join()
+wakeword_thread.join(1)

@@ -5,12 +5,13 @@
 #   intents:  Intent Container
 ####################
 from padaos import IntentContainer
+from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
 
 
 class IntentParser:
 
-    def __init__(self, skills, settings_tool: SettingsTool):
+    def __init__(self, skills, settings_tool: SettingsTool, channels: Channels):
         """Initialize the IntentParser
         """
         self.settings_tool = settings_tool
@@ -65,7 +66,12 @@ class IntentParser:
                                       intent_name=unique_intent_name)
 
             # Tell the skill to register its intents
-            skill.intent_creator(register_intent_skill)
+            try: 
+                skill.intent_creator(register_intent_skill)
+            except AttributeError:
+                print("Skill " + skill.name + " does not have an intent_creator method.")
+            except Exception as e:
+                print("Error registering intents for skill " + skill.name + ": " + str(e))
 
 
 

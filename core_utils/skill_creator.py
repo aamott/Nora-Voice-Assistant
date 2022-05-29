@@ -37,6 +37,7 @@ def import_skills(settings_manager: SettingsManager, channels: Channels, audio_u
 
             # Create the skill
             skill = skill_module.Skill(settings_tool=settings_tool, channels=channels, audio_utils=audio_utils)
+            skill.populate_settings()
 
             if skill_name_is_unique(skill.name, skills):
                 skills.append(skill)
