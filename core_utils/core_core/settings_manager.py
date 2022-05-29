@@ -30,6 +30,11 @@ class SettingsManager:
         return True
 
 
+    def get_settings(self):
+        """ Returns the settings """
+        return self.settings
+
+
     def get_setting(self, keys):
         """ Gets the value of the setting using a path
             Parameters:

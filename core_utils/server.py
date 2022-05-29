@@ -49,8 +49,13 @@ def create_app(channels: channels.Channels,
 
 
     @app.get("/settings")
-    async def read_user_me():
-        return {"settings": "some settings"}
+    async def get_settings():
+        return settings_manager.get_settings()
+
+    
+    @app.get("/settings/{setting_path}")
+    async def get_setting(setting_path: str):
+        return settings_manager.get_setting(setting_path)
 
 
     app.mount("/", StaticFiles(directory="core_utils/server"), name="site")
