@@ -37,5 +37,5 @@ class Skill(base_skill.BaseSkill):
         # Some skills may want to implement sassiness or other personality traits. 
         # Every intent has a "sassiness" attribute that is automatically generated
         # by the intent parser. Its value is a number between 0 and 10.
-        if intent_data.get("sassiness") > 3:
-            self.audio_utils.say("I'm sassy!")
+        if intent_data.get("sassiness") > 5:
+            self.audio_utils.say("I'm feeling sassy!")
