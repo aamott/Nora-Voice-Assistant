@@ -92,7 +92,7 @@ wakeword = Wakeword(settings_tool=wakeword_settings_tool,
                     audio_utils=audio_utils)
 
 
-channels.subscribe("shutdown_system", shutdown_system)
+channels.subscribe(shutdown_system, "shutdown")
 
 # calibrating audio
 print("Calibrating...")
