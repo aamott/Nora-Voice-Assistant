@@ -83,7 +83,7 @@ skills = skill_creator.import_skills(settings_manager=settings_manager, channels
 intent_settings_tool = SettingsTool(settings_manager=settings_manager,
                                     setting_path='intent parser')
 intent_parser = intent_parser.IntentParser(skills,
-                                           settings_tool=intent_settings_tool)
+                                           settings_tool=intent_settings_tool, channels=channels,)
 
 # initialize wakeword
 wakeword_settings_tool = SettingsTool(settings_manager=settings_manager,

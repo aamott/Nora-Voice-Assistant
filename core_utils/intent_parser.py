@@ -11,12 +11,13 @@
 ###########################
 import random
 from padaos import IntentContainer
+from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
 
 
 class IntentParser:
 
-    def __init__(self, skills, settings_tool: SettingsTool):
+    def __init__(self, skills, settings_tool: SettingsTool, channels: Channels):
         """Initialize the IntentParser
         """
         self.settings_tool = settings_tool
