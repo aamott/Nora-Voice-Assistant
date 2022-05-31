@@ -1,11 +1,6 @@
 @import "style.css";
-main {
-    background: var(--background-white);
-    margin-left: var(--nav-width);
-    max-width: 1100px;
-}
 
-main .content-box {
+main .settings-group {
     margin-bottom: 30px;
     padding: 10px 20px;
     border-radius: 10px;
@@ -13,13 +8,13 @@ main .content-box {
     background-color: var(--secondary-blue-white);
     line-height: 1.5;
 }
-main .content-box .description {
+main .settings-group .description {
     font-style: italic;   
 }
-main .content-box .subsection {
+main .settings-group .subsection {
     margin-top: 32px;
     border-top: 1px solid var(--outline);
 }
-main .content-box .subsection h2 {
+main .settings-group .subsection h2 {
     font-size: 1.3em;
 }

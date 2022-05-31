@@ -57,7 +57,7 @@ nav ul li a:hover {
     background-color: var(--secondary-blue-white);
 }
 
-main #page-title {
+#page-title {
     margin: 0 20px 10px;
     text-align: center;
     border-bottom: var(--outline) solid 3px; 
@@ -65,7 +65,13 @@ main #page-title {
     line-height: 0.8;
     color: var(--title-text-color);
 }
-main #content {
+
+main {
+    background: var(--background-white);
+    margin-left: var(--nav-width);
+    max-width: 1100px;
+}
+main .content {
     padding: 20px;
 }
 input, textarea, select {
