@@ -29,7 +29,7 @@ class Skill(base_skill.BaseSkill):
 
     def update_sass(self, intent_data):
         """ update sassiness levels"""
-        sassiness = intent_data.get("sassiness")
+        sassiness = intent_data['entities'].get("sassiness")
         try:
             sassiness = int(sassiness)
         except ValueError:
