@@ -43,52 +43,6 @@ function populateSettings(settings) {
     main_page.appendChild( generalSettings );
 }
 
-// // populate settings item
-// function populateSettingsGroup(key, item, parent=null, groupName='') {
-//     // create group
-//     let group = document.createElement('form');
-//     group.innerHTML = `<h3>${key}</h3>`;
-//     group.classList.add('settings-group');
-//     group.id = groupName + '.' + key;
-
-//     // create group items
-//     for (let itemKey in item) {
-//         if (typeof item[itemKey] === 'number') {
-//             // if item is an integer, make it a number input
-//             group.innerHTML += `<label for="${itemKey}">${itemKey}</label>
-//                                 <input type="number" id="${itemKey}" value="${item[itemKey]}">`;
-//         } else  if (typeof item[itemKey] === 'boolean') {
-//             // if item is a boolean, make it a checkbox
-//             group.innerHTML += `<label for="${itemKey}">${itemKey}</label>
-//                                 <input type="checkbox" id="${itemKey}" ${item[itemKey] ? 'checked' : ''}>`;
-//         } else if (Array.isArray(item[itemKey])) {
-//             // if an item is an array, make it a select input
-//             label = document.createElement('label');
-//             label.innerHTML = `<label for="${itemKey}">${itemKey}</label>`
-//             group.appendChild(label);
-//             select = document.createElement('select');
-//             select.id = itemKey;
-//             for (subitem of item[itemKey]) {
-//                 select.appendChild(new Option(subitem, subitem));
-//             }
-//             group.appendChild(select);
-//         } else if (typeof item[itemKey] === 'object') {
-//             // if item is an object, recursively call this function
-//             populateSettingsGroup( itemKey, item[ itemKey ], group, groupName + '.' + key );
-//         } else if (typeof item[itemKey] === 'string' || item[itemKey] === null) {
-//             // if an item is a string or null, make it a text input
-//             group.innerHTML += `<label for="${itemKey}">${itemKey}</label>
-//                                 <input type="text" id="${itemKey}" value="${item[itemKey]}">`;
-//         }
-//     }
-
-//     // add group to settings
-//     if (parent) {
-//         parent.appendChild(group);
-//     } else {
-//         document.getElementById('settings').appendChild(group);
-//     }
-// }
 
 /**
  * 
@@ -104,10 +58,10 @@ function initSettings(setting, settings_path='', name='', parent=null) {
     }
 
     // settingElement will either be made into a group (div) or a setting (input/label)
-    settingElement = null
+    let settingElement = null
 
     // It's a settings group
-    if ( setting.constructor == Object && typeof setting !== 'string' ) {
+    if ( setting.constructor == Object) {
 
         // Create group
         let group = document.createElement('div');
@@ -115,6 +69,7 @@ function initSettings(setting, settings_path='', name='', parent=null) {
         group.classList.add('settings-group');
         group.id = settings_path;
 
+        // Add group to parent
         parent.appendChild( group );
 
         for (key in setting) {
@@ -122,28 +77,13 @@ function initSettings(setting, settings_path='', name='', parent=null) {
             initSettings( setting[ key ], settings_path + '.' + key, name = key, parent = group );
         }
 
-
     // It's a setting
     } else {
-        console.log("Found setting: " + name);
         settingElement = getSettingsElement(setting, settings_path, name);
 
-        if (settingElement == parent) {
-            console.log("Warning! Setting is parent!");
-            return;
-        }
+        // Add the setting to the parent
         parent.appendChild( settingElement );
-        console.log( "Added setting to parent. " + typeof settingElement );
     }
-
-    // add the setting to the settings page
-    // if ( parent ){//&& parent != settingElement) {
-    //     parent.appendChild( settingElement );
-    //     console.log("Added setting to parent. " + typeof settingElement);
-    // } //else {
-    //     document.getElementById( 'settings' ).appendChild( settingElement );
-    //     console.log("Added setting to settings. " + typeof settingElement);
-    // }
 }
 
 
@@ -155,30 +95,27 @@ function initSettings(setting, settings_path='', name='', parent=null) {
  * @returns {HTMLElement}
  */
 function getSettingsElement(setting, settings_path='', name='') {
-    // if key is not a group, it is a setting
-    console.log( "Setting: " + settings_path );
-
     // Create a new element for the setting
     let settingElement = document.createElement( 'div' );
     settingElement.classList.add( 'setting' );
     settingElement.id = settings_path;
-    settingElement.innerHTML = `<h3>${name}</h3>`;
+    // settingElement.innerHTML = `<h3>${name}</h3>`;
 
     // if the setting is a number, make it a number input
     if ( typeof setting === 'number' ) {
-        settingElement.innerHTML += `<label for="${settings_path}">${settings_path}</label>
+        settingElement.innerHTML += `<label for="${settings_path}">${name}</label>
                                  <input type="number" id="${settings_path}" value="${setting}">`;
 
     // if the setting is a boolean, make it a checkbox
     } else if ( typeof setting === 'boolean' ) {
-        settingElement.innerHTML += `<label for="${settings_path}">${settings_path}</label>
+        settingElement.innerHTML += `<label for="${settings_path}">${name}</label>
                                  <input type="checkbox" id="${settings_path}" ${setting ? 'checked' : ''}>`;
 
     // if the setting is an array, make it a select input
     } else if ( Array.isArray( setting ) ) {
         // create a label for the select
         label = document.createElement( 'label' );
-        label.innerHTML = `<label for="${settings_path}">${settings_path}</label>`
+        label.innerHTML = `<label for="${settings_path}">${name}</label>`
         settingElement.appendChild( label );
 
         // create a select element
@@ -191,7 +128,7 @@ function getSettingsElement(setting, settings_path='', name='') {
     
     // if the setting is a string or null, make it a text input
     } else if ( typeof setting === 'string' || setting === null ) {
-        settingElement.innerHTML += `<label for="${settings_path}">${settings_path}</label>
+        settingElement.innerHTML += `<label for="${settings_path}">${name}</label>
                                  <input type="text" id="${settings_path}" value="${setting}">`;
     }
     
