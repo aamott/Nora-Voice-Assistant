@@ -30,6 +30,9 @@ body {
 h1, h2, h3, h4, h5, h6 {
     color: var(--title-text-color);
 }
+button {
+    font-family: 'Open Sans', sans-serif;
+}
 nav {
     background-color: var(--nav-background);
     position: fixed;

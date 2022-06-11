@@ -1,20 +1,61 @@
 @import "style.css";
 
+:root {
+    --setting-spacing: 30px;
+}
+
 main .settings-group {
+    display: flex;
+    flex-direction: column;
+
     margin-bottom: 30px;
     padding: 10px 20px;
     border-radius: 10px;
+    line-height: 1.5;
+    
     border: 1px solid var(--outline);
     background-color: var(--secondary-blue-white);
-    line-height: 1.5;
 }
 main .settings-group .description {
     font-style: italic;   
 }
-main .settings-group .subsection {
-    margin-top: 32px;
-    border-top: 1px solid var(--outline);
+/* any group child of a group */
+.settings-group>.settings-group {
+    order: 1;
 }
-main .settings-group .subsection h2 {
-    font-size: 1.3em;
+.settings-group form {
+    order: 0;
+    margin-bottom: var(--setting-spacing);
 }
+
+.settings-group button {
+    padding: 6px 12px;
+    border: 1px solid rgb(43, 43, 43);
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color:hsl(0, 0%, 10%);
+    background-color: var(--title-text-color);
+}
+
+/* only first level subgroups */
+/* main #settings>.settings-group>.settings-group {
+    border: none;
+    border-radius: 0; */
+    /* padding-left: 0; */
+    /* border-top: 2px solid var(--outline);
+    border-left: 2px solid var(--outline);
+    position: relative;
+    margin-bottom: 0;
+}
+main #settings>.settings-group>.settings-group::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 80px;
+    top: -2px;
+    left: -2px;
+    border-top: 2px solid var(--secondary-blue-white);
+    border-left: 2px solid var(--secondary-blue-white);
+} */

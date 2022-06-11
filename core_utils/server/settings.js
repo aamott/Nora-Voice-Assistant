@@ -86,7 +86,6 @@ function initSettings(setting, settings_path='', name='', parent=null) {
 
             // only add the element to the form if it's not a group
             if ( !is_group && typeof element === 'object' ) {
-                console.log("here");
                 form_elements.push( element );
             }
         }
@@ -95,7 +94,7 @@ function initSettings(setting, settings_path='', name='', parent=null) {
         if ( form_elements.length > 0 ) {
             let form = document.createElement('form');
             form.classList.add('settings-form');
-            form.innerHTML = `<h4>${name}</h4>`;
+            // form.innerHTML = `<h4>${name}</h4>`;
             
             
             // Add all the elements to the form
@@ -106,7 +105,7 @@ function initSettings(setting, settings_path='', name='', parent=null) {
             // submit button
             form.innerHTML += `<button type="submit">Save</button>`;
 
-            
+
             // Add the form to the group
             group.appendChild( form );
         }
