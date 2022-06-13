@@ -52,7 +52,7 @@ class AudioPlayer:
 # Test
 ##############
 if __name__ == "__main__":
-    TEST_FILEPATH = ""
+    TEST_FILEPATH = "test assets/background.mp3"
 
     if TEST_FILEPATH:
         player = AudioPlayer()
