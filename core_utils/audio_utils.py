@@ -3,9 +3,7 @@
 # Allows easy access to audio recording, playback, and user voice input
 # through Audio_Recorder and Audio_Player
 #################################
-from signal import pause
 from numpy import ndarray
-# from core_utils.core_core.audio_player import AudioPlayer
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
 from core_utils.core_core.audio_recorder import AudioRecorder
