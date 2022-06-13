@@ -14,6 +14,9 @@ class AudioPlayer:
         mixer.init()
         volume = 1
 
+        # voice
+        self.voice_channel = mixer.Channel(0)
+
 
     def play(self, filename:str = None):
         mixer.music.load(filename)
@@ -37,12 +40,13 @@ class AudioPlayer:
 
 
     def play_sound(self, filename:str = None):
-        mixer.Sound.load(filename)
-        mixer.Sound.play()
+        newsound = mixer.Sound(filename)
+        newsound.play()
+
 
     def stop_sound(self):
         mixer.Sound.stop()
-
+        
 
 
 # def audio_increase_volume():
@@ -56,9 +60,21 @@ if __name__ == "__main__":
 
     if TEST_FILEPATH:
         player = AudioPlayer()
+
+        print("Test Music Player")
+        print("Playing:", TEST_FILEPATH)
         player.play(filename=TEST_FILEPATH)
-        sleep(10)
+        sleep(4)
+        print("Stopping")
         player.stop()
+
+        print("Test Sound Player")
+        print("Playing:", TEST_FILEPATH)
+        player.play_sound(filename=TEST_FILEPATH)
+        sleep(4)
+        print("Stopping")
+        player.stop_sound()
+
 
     else:
         print("No test filepath specified.")
