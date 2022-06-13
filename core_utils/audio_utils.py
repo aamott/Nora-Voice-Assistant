@@ -3,6 +3,7 @@
 # Allows easy access to audio recording, playback, and user voice input
 # through Audio_Recorder and Audio_Player
 #################################
+from signal import pause
 from numpy import ndarray
 # from core_utils.core_core.audio_player import AudioPlayer
 from core_utils.core_core.channels import Channels
@@ -10,6 +11,7 @@ from core_utils.settings_tool import SettingsTool
 from core_utils.core_core.audio_recorder import AudioRecorder
 import core_utils.speech_to_text_getter as stt_getter
 import core_utils.text_to_speech_getter as tts_getter
+from core_utils.core_core.audio_player import AudioPlayer
 
 
 class AudioUtils:
@@ -20,7 +22,7 @@ class AudioUtils:
                  tts_module: str = "pyttsx3_TTS"):
         self.settings_tool=settings_tool
         # Audio Setup
-        # self._audio_player = AudioPlayer()
+        self._audio_player = AudioPlayer()
         self._audio_recorder = AudioRecorder()
 
         # Speech to Text Setup
@@ -66,28 +68,28 @@ class AudioUtils:
     # Playback
     ###########################
 
-    def play(self, filename:str = None, audio_data:ndarray = None):
-        pass
+    def play(self, filename:str = None):
+        self._audio_player.play(filename)
 
 
     def pause(self):
-        pass
+        self._audio_player.pause()
 
 
     def resume(self):
-        pass
+        self._audio_player.resume()
 
 
     def stop(self):
-        pass
+        self._audio_player.stop()
 
 
-    def play_sound(self, filename: str = None, audio_data: ndarray = None):
+    def play_sound(self, filename: str = None):
         pass
 
 
     def stop_sound(self):
-        pass
+        self._audio_player.stop_sound()
 
 
     ###########################

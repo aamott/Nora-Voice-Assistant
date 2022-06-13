@@ -1,4 +1,6 @@
 from pygame import mixer
+import wave
+import numpy as np
 
 
 
@@ -14,34 +16,34 @@ from pygame import mixer
 
 class AudioPlayer:
 # base standard volume 
-    def __init__():
+    def __init__(self):
         mixer.init()
         volume = 1
 
 
-    def play(self, filename:str = None, audio_data:ndarray = None):
-        mixer.music.load()
+    def play(self, filename:str = None):
+        mixer.music.load(filename)
         mixer.music.play()
 
 
 
-    def pause():
+    def pause(self):
 
         mixer.music.pause()  
 
 
 
-    def resume():
+    def resume(self):
         mixer.music.unpause()
 
 
 
-    def stop():
+    def stop(self):
         mixer.music.stop()
 
 
-    def play_sound(self, filename:str = None, audio_data:ndarray = None):
-        mixer.Sound.load()
+    def play_sound(self, filename:str = None):
+        mixer.Sound.load(filename)
         mixer.Sound.play()
 
     def stop_sound(self):
