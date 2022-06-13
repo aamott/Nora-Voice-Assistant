@@ -1,21 +1,15 @@
+#########################################
+# Audio Player
+#########################################
+from time import sleep
 from pygame import mixer
 import wave
 import numpy as np
 
 
 
-
-#########################################
-# basic audio oupt and commands
-# play, pause, resume, and etc
-#########################################
-
-
-
-
-
 class AudioPlayer:
-# base standard volume 
+    # base standard volume
     def __init__(self):
         mixer.init()
         volume = 1
@@ -29,7 +23,7 @@ class AudioPlayer:
 
     def pause(self):
 
-        mixer.music.pause()  
+        mixer.music.pause()
 
 
 
@@ -52,3 +46,19 @@ class AudioPlayer:
 
 
 # def audio_increase_volume():
+
+
+##############
+# Test
+##############
+if __name__ == "__main__":
+    TEST_FILEPATH = ""
+
+    if TEST_FILEPATH:
+        player = AudioPlayer()
+        player.play(filename=TEST_FILEPATH)
+        sleep(10)
+        player.stop()
+
+    else:
+        print("No test filepath specified.")
