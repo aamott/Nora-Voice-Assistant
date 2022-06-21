@@ -207,10 +207,16 @@ function saveSettings(formId) {
         settings[textarea.id] = textarea.value;
     }
 
-    // Get all the selects in the form
+    // Get all the selects in the form. Combine options into arrays.
     let selects = form.getElementsByTagName('select');
     for (let select of selects) {
-        settings[select.id] = select.value;
+        let options = select.getElementsByTagName('option');
+        let values = [];
+        // Combine all the options into an array.
+        for (let option of options) {
+            values.push(option.value);
+        }
+        settings[select.id] = values;
     }
 
     // Send the settings to the server
