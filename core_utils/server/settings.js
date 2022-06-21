@@ -221,10 +221,14 @@ function saveSettings(formId) {
 // Function to send settings to the server
 function sendSettings(settings_path, settings) {
     // Send the settings to the server one by one
-    for (key in settings) {
+    if (typeof(settings) !== 'object') {
+        console.log('Settings must be an object');
+        return;
+    }
+    for (let key in settings) {
         let setting = settings[key];
-        let setting_path = settings_path + '.' + key;
-        sendSetting(setting_path, setting);
+        // let setting_path = settings_path + '.' + key;
+        sendSetting( key, setting );
     }
 }
 
