@@ -26,7 +26,7 @@ function populateSettings(settings) {
     generalSettings.innerHTML = `<h2>General</h2>`;
     generalSettings.settingsPath = '';
 
-    for (key in settings) {
+    for (let key in settings) {
         if ( !key ) {
             continue;
         }
@@ -80,7 +80,7 @@ function initSettings(setting, settings_path='', name='', parent=null) {
         // Stores the elements for a form at the end of the group
         let form_elements = [];
 
-        for (key in setting) {
+        for (let key in setting) {
             // Group is passed by reference. This will add a bunch of child elements to the group.
             let element, is_group;
             [element, is_group] = initSettings( setting[ key ], settings_path + '.' + key, /*name*/ key, /*parent*/ group );
@@ -99,7 +99,7 @@ function initSettings(setting, settings_path='', name='', parent=null) {
             form.settingsPath = settings_path;
             
             // Add all the elements to the form
-            for (element of form_elements) {
+            for (let element of form_elements) {
                 form.appendChild( element );
             }
 
@@ -158,7 +158,7 @@ function getSettingsElement(setting, settings_path='', name='') {
         // create a select element
         select = document.createElement( 'select' );
         select.id = settings_path;
-        for ( subitem of setting ) {
+        for ( let subitem of setting ) {
             select.appendChild( new Option( subitem, subitem ) );
         }
         settingElement.appendChild( select );
@@ -182,7 +182,7 @@ function saveSettings(formId) {
 
     // Get all the inputs in the form
     let inputs = form.getElementsByTagName('input');
-    for (input of inputs) {
+    for (let input of inputs) {
         // if the input is a checkbox, get the value as a boolean
         if ( input.type === 'checkbox' ) {
             settings[input.id] = input.checked;
@@ -203,13 +203,13 @@ function saveSettings(formId) {
 
     // Get all the textareas in the form
     let textareas = form.getElementsByTagName('textarea');
-    for (textarea of textareas) {
+    for (let textarea of textareas) {
         settings[textarea.id] = textarea.value;
     }
 
     // Get all the selects in the form
     let selects = form.getElementsByTagName('select');
-    for (select of selects) {
+    for (let select of selects) {
         settings[select.id] = select.value;
     }
 

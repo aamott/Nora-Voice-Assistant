@@ -48,7 +48,7 @@ def create_app(channels: channels.Channels,
 
     class Setting(BaseModel):
         # name: str
-        value: Union[str, int, float, bool, list]
+        value: Union[int, float, bool, list, str]
 
     @app.get("/")
     async def root():
