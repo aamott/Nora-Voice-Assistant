@@ -12,6 +12,7 @@ from fastapi.responses import RedirectResponse
 import contextlib
 import time
 import threading
+from pydantic import BaseModel
 import uvicorn
 
 from core_core import channels, settings_manager
@@ -42,6 +43,10 @@ def create_app(channels: channels.Channels,
     channels = channels
     settings_manager = settings_manager
 
+    class Setting(BaseModel):
+        # name: str
+        value: str
+
     @app.get("/")
     async def root():
         # redirect to the home page
@@ -55,11 +60,30 @@ def create_app(channels: channels.Channels,
 
     @app.get("/settings/{setting_path}")
     async def get_setting(setting_path: str = Query(
-        title="Get setting",
-        description="Get a setting by dot-separated path")):
+            title="Get setting",
+            description="Get a setting by dot-separated path")):
         return settings_manager.get_setting(setting_path)
 
 
+    @app.put("/settings/{setting_path}")
+    async def put_setting(
+            setting_path: str,
+            value: str = Setting ):
+        # TODO: Do we need to filter the value?
+
+        return settings_manager.set_setting(setting_path, value)
+
+
+    @app.post("/settings/{setting_path}")
+    async def post_setting(
+            setting_path: str,
+            value: Setting):
+        setting_value = value.value
+        print("Setting: " + setting_path + " = " + setting_value)
+        settings_manager.set_setting(setting_path, value.value)
+
+
+    # Create endpoints for all the html files
     app.mount("/", StaticFiles(directory="core_utils/server"), name="site")
 
     return app
@@ -79,6 +103,26 @@ def create_server(channels: channels.Channels,
 
     return server
 
+
+################################
+# Helper Functions
+################################
+# Function to store the users dictionary in a pickle file.
+def store_users(users: dict):
+    import pickle
+    with open("users.pickle", "wb") as file:
+        pickle.dump(users, file)
+
+
+# Function to load the users dictionary from a pickle file.
+def load_users():
+    import pickle
+    try:
+        with open("users.pickle", "rb") as file:
+            users = pickle.load(file)
+    except FileNotFoundError:
+        users = {}
+    return users
 
 
 if __name__ == "__main__":
