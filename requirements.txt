@@ -1,7 +1,9 @@
 # Web Server
 fastapi
 uvicorn[standard]
-pyjwt[crypto]
+"python-jose[cryptography]"
+python-multipart
+"passlib[bcrypt]"
 
 # intents
 padaos
