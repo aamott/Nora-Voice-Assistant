@@ -6,8 +6,8 @@
 ################################
 from typing import Union
 from socket import create_server
-from fastapi import FastAPI, Query, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import FastAPI, Query, status, Depends
+from fastapi.security import HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
@@ -41,14 +41,21 @@ class Server(uvicorn.Server):
 def create_app(channels: channels.Channels,
                settings_manager: settings_manager.SettingsManager) -> FastAPI:
     app = FastAPI()
-    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
+    token_auth_scheme = HTTPBearer()
     channels = channels
     settings_manager = settings_manager
 
     class Setting(BaseModel):
         # name: str
         value: Union[int, float, bool, list, str]
+
+    @app.get("/private")
+    def private(token: str = Depends(token_auth_scheme)):
+        """A valid access token is required to access this route"""
+
+        result = token.credentials
+        return result
+
 
     @app.get("/")
     async def root():
@@ -93,7 +100,7 @@ def create_app(channels: channels.Channels,
 
 
     # Create endpoints for all the html files
-    app.mount("/", StaticFiles(directory="core_utils/server"), name="site")
+    app.mount("/", StaticFiles(directory="core_utils/server/pages"), name="site")
 
     return app
 
