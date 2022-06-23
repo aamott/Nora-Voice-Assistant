@@ -1,6 +1,10 @@
 .vscode/*
+__pycache__/*
 */__pycache__/*
 */*/__pycache__/*
+*/*/*/__pycache__/*
 settings.yaml
 wakewords/*.ppn
 core_utils/server/.config
+core_utils/server_resources/database/users.yaml
+core_utils/server_resources/.config
