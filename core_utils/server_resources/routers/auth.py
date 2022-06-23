@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from ..database.users_db import UserDatabase
+from ..dependencies import get_current_admin_user
 
 
 
@@ -51,7 +52,12 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-router = APIRouter()
+router = APIRouter(
+    tags=["auth"],
+    responses={404: {
+        "description": "Not found"
+    }},
+)
 
 
 def verify_password(plain_password, password_hash):
@@ -91,31 +97,31 @@ def create_access_token(data: dict,
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        token_data = TokenData(username=username)
-    except JWTError:
-        raise credentials_exception
-    user = get_user(users_dict, username=token_data.username)
-    if user is None:
-        raise credentials_exception
-    return user
+# async def get_current_user(token: str = Depends(oauth2_scheme)):
+#     credentials_exception = HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"},
+#     )
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         username: str = payload.get("sub")
+#         if username is None:
+#             raise credentials_exception
+#         token_data = TokenData(username=username)
+#     except JWTError:
+#         raise credentials_exception
+#     user = get_user(users_dict, username=token_data.username)
+#     if user is None:
+#         raise credentials_exception
+#     return user
 
 
-async def get_current_active_user(
-        current_user: User = Depends(get_current_user)):
-    if current_user.auth_level < AuthLevels.BASIC:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+# async def get_current_admin_user(
+#         current_user: User = Depends(get_current_user)):
+#     if current_user.auth_level < AuthLevels.ADMIN:
+#         raise HTTPException(status_code=400, detail="Inactive user")
+#     return current_user
 
 
 @router.post("/token", response_model=Token)
@@ -136,11 +142,11 @@ async def login_for_access_token(
 
 
 @router.get("/users/me/", response_model=User)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+async def read_users_me(current_user: User = Depends(get_current_admin_user)):
     return current_user
 
 
 @router.get("/users/me/items/")
 async def read_own_items(
-        current_user: User = Depends(get_current_active_user)):
+        current_user: User = Depends(get_current_admin_user)):
     return [{"item_id": "Foo", "owner": current_user.username}]
