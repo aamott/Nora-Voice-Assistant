@@ -1,6 +1,7 @@
 # Web Server
 fastapi
 uvicorn[standard]
+pyjwt[crypto]
 
 # intents
 padaos
