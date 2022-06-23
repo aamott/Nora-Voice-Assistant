@@ -6,6 +6,7 @@
     --background-white: hsl(0, 0%, 100%);
 
     --nav-width: 200px;
+    --top-bar-height: 50px;
 }
 @media (prefers-color-scheme: dark) {
     :root {
@@ -33,13 +34,31 @@ h1, h2, h3, h4, h5, h6 {
 button {
     font-family: 'Open Sans', sans-serif;
 }
+#top-bar {
+    background: var(--nav-background);
+    width: 100%;
+    height: var(--top-bar-height);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--background-white);
+}
+#top-bar button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+}
 nav {
     background-color: var(--nav-background);
     position: fixed;
     top: 0;
     left: 0;
     width: var(--nav-width);
-    height: 100%;
+    height: calc(100% - var(--top-bar-height));
+    margin-top: var(--top-bar-height);
     padding: 20px;
 }
 nav ul {

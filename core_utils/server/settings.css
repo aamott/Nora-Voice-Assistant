@@ -15,6 +15,8 @@ main .settings-group {
     
     border: 1px solid var(--outline);
     background-color: var(--secondary-blue-white);
+
+    min-width: min-content;
 }
 main .settings-group .description {
     font-style: italic;   
@@ -39,14 +41,17 @@ main .settings-group .description {
 }
 
 /* only first level subgroups */
-/* main #settings>.settings-group>.settings-group {
+main #settings>.settings-group>.settings-group {
     border: none;
-    border-radius: 0; */
+    border-radius: 0;
     /* padding-left: 0; */
-    /* border-top: 2px solid var(--outline);
-    border-left: 2px solid var(--outline);
+    border-top: 2px solid var(--outline);
+    /* border-left: 2px solid var(--outline); */
     position: relative;
     margin-bottom: 0;
+}
+main #settings>.settings-group>.settings-group>.settings-group {
+    margin-left: 6%;
 }
 main #settings>.settings-group>.settings-group::after {
     content: '';
@@ -57,5 +62,5 @@ main #settings>.settings-group>.settings-group::after {
     top: -2px;
     left: -2px;
     border-top: 2px solid var(--secondary-blue-white);
-    border-left: 2px solid var(--secondary-blue-white);
-} */
+    /* border-left: 2px solid var(--secondary-blue-white); */
+}
