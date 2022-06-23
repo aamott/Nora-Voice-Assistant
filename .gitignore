@@ -3,3 +3,4 @@
 */*/__pycache__/*
 settings.yaml
 wakewords/*.ppn
+core_utils/server/.config
