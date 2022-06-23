@@ -7,11 +7,8 @@
 from typing import Union
 from socket import create_server
 from fastapi import FastAPI, Query, status, Depends, Response
-from fastapi.security import HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
-
-from server_resources.utils import VerifyToken
 
 import contextlib
 import time
@@ -20,6 +17,9 @@ from pydantic import BaseModel
 import uvicorn
 
 from core_core import channels, settings_manager
+
+# get routers
+from server_resources.routers import auth, settings
 
 
 class Server(uvicorn.Server):
@@ -43,70 +43,20 @@ class Server(uvicorn.Server):
 def create_app(channels: channels.Channels,
                settings_manager: settings_manager.SettingsManager) -> FastAPI:
     app = FastAPI()
-    token_auth_scheme = HTTPBearer()
+
+    # include routes
+    app.include_router(auth.router)
+    app.include_router(settings.router)
+
     channels = channels
     settings_manager = settings_manager
 
-
-
-    class Setting(BaseModel):
-        # name: str
-        value: Union[int, float, bool, list, str]
-
-    # TODO: Remove when testing is done
-    @app.get("/private")
-    def private(response: Response, token: str = Depends(token_auth_scheme)):
-        """A valid access token is required to access this route"""
-
-        result = VerifyToken(token.credentials).verify()
-
-        if result.get("status"):
-            response.status_code = status.HTTP_400_BAD_REQUEST
-            return result
-    
-        return result
 
 
     @app.get("/")
     async def root():
         # redirect to the home page
         return RedirectResponse(url="/index.htm")
-
-
-    @app.get("/settings")
-    async def get_settings():
-        return settings_manager.get_settings()
-
-
-    @app.get("/settings/{setting_path}")
-    async def get_setting(setting_path: str = Query(
-            title="Get setting",
-            description="Get a setting by dot-separated path")):
-        return settings_manager.get_setting(setting_path)
-
-
-    # # TODO: Test endpoint
-    @app.put("/settings/{setting_path}")
-    async def put_setting(
-            setting_path: str,
-            value: Setting):
-        # TODO: Do we need to filter the value?
-        # setting_path = setting_path.replace("/", ".")
-        #  check if the setting exists
-        if not settings_manager.setting_exists(setting_path):
-            # set the setting and return 201 Created
-            status_code = status.HTTP_201_CREATED
-
-        return settings_manager.set_setting(setting_path, value.value)
-
-
-    @app.post("/settings/{setting_path}")
-    async def post_setting(
-            setting_path: str,
-            setting_value: Setting):
-        # setting_value = value.value
-        # print("Setting: " + setting_path + " = " + setting_value)
-        settings_manager.set_setting(setting_path, setting_value.value)
 
 
     # Create endpoints for all the html files
