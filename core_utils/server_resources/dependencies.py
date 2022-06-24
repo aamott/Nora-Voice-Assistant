@@ -4,15 +4,17 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from .database.users_db import UserDatabase
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 
+from .utils import get_env_config
 
 # to get a string like this run:
 # openssl rand -hex 32
 # TODO: Create a unique SECRET_KEY in the .config
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+config = get_env_config()
+SECRET_KEY = config.get("SECRET_KEY")
+ALGORITHM = config.get("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(config.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

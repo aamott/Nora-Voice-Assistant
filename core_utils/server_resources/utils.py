@@ -1,62 +1,54 @@
 """utils.py
+This code was modified from
+https://auth0.com/blog/build-and-secure-fastapi-server-with-auth0/
 """
+# Should be a full path to the config file relative to the parent directory
+CONFIG_PATH = "core_utils/server_resources/.config"
 
 import os
-import jwt
 from configparser import ConfigParser
+from secrets import token_bytes
+from base64 import b64encode
 
-
-def set_up():
-    """Sets up configuration for the app"""
+def get_env_config():
+    """Sets up configuration for the app
+    
+    """
 
     env = os.getenv("ENV", ".config")
 
     if env == ".config":
         config = ConfigParser()
-        config.read(".config")
-        config = config["AUTH0"]
+        config.read(CONFIG_PATH)
+
+        try:
+            config = config["OAUTH"]
+        except KeyError:
+            # create a new config file and fill it with the default values
+            config = ConfigParser()
+            NEW_SECRET_KEY = b64encode(token_bytes(32)).decode()
+            config["OAUTH"] = {
+                "SECRET_KEY": NEW_SECRET_KEY,
+                "ALGORITHM": "HS256",
+                "ACCESS_TOKEN_EXPIRE_MINUTES": 30
+            }
+            with open(CONFIG_PATH, "w") as file:
+                config.write(file)
+
+            raise KeyError("No configuration found in " + CONFIG_PATH)
+
     else:
+        print("Warning! Using a generated key. It will be gone by the end of the sess")
         config = {
-            "DOMAIN": os.getenv("DOMAIN", "your.domain.com"),
-            "API_AUDIENCE": os.getenv("API_AUDIENCE", "your.audience.com"),
-            "ISSUER": os.getenv("ISSUER", "https://your.domain.com/"),
-            "ALGORITHMS": os.getenv("ALGORITHMS", "RS256"),
+            "SECRET_KEY":
+            os.getenv("SECRET_KEY", None ),
+            "ALGORITHM":
+            os.getenv("ALGORITHM", "HS256"),
+            "ACCESS_TOKEN_EXPIRE_MINUTES":
+            os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
         }
+        if not config["SECRET_KEY"]:
+            print("No secret key set. Generating a new key.\n")
+            config["SECRET_KEY"] = b64encode(token_bytes(32)).decode()
+
     return config
-
-
-
-class VerifyToken():
-    """Does all the token verification using PyJWT"""
-
-    def __init__(self, token):
-        self.token = token
-        self.config = set_up()
-
-        # This gets the JWKS from a given URL and does processing so you can
-        # use any of the keys available
-        jwks_url = f'https://{self.config["DOMAIN"]}/.well-known/jwks.json'
-        self.jwks_client = jwt.PyJWKClient(jwks_url)
-
-    def verify(self):
-        # This gets the 'kid' from the passed token
-        try:
-            self.signing_key = self.jwks_client.get_signing_key_from_jwt(
-                self.token).key
-        except jwt.exceptions.PyJWKClientError as error:
-            return {"status": "error", "msg": error.__str__()}
-        except jwt.exceptions.DecodeError as error:
-            return {"status": "error", "msg": error.__str__()}
-
-        try:
-            payload = jwt.decode(
-                self.token,
-                self.signing_key,
-                algorithms=self.config["ALGORITHMS"],
-                audience=self.config["API_AUDIENCE"],
-                issuer=self.config["ISSUER"],
-            )
-        except Exception as e:
-            return {"status": "error", "message": str(e)}
-
-        return payload
