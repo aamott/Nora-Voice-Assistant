@@ -4,16 +4,14 @@
 # Starting and stopping the server:
 #       https://stackoverflow.com/questions/61577643/python-how-to-use-fastapi-and-uvicorn-run-without-blocking-the-thread
 ################################
-from typing import Union
 from socket import create_server
-from fastapi import FastAPI, Query, status, Depends, Response
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
 import contextlib
 import time
 import threading
-from pydantic import BaseModel
 import uvicorn
 
 from core_core import channels, settings_manager
