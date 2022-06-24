@@ -78,8 +78,8 @@ def get_user(db, username: str):
         return UserInDB(**user_dict)
 
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
+def authenticate_user(user_db, username: str, password: str):
+    user = get_user(user_db, username)
     if not user:
         return False
     if not verify_password(password, user.password_hash):
