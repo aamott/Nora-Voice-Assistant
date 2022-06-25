@@ -13,7 +13,6 @@ function setup_page() {
 
             // This will not work if there is anything (including comments) before the target element!
             let elements = temp_container.childNodes; 
-            console.log(elements);
 
             // get the body's first child
             const body = document.querySelector( 'body' );
@@ -22,7 +21,6 @@ function setup_page() {
 
             // append elements to the beginning of the body
             for (let element of elements) {
-                console.log(element);
                 body.insertBefore( element, firstChild );
             }
         } )
