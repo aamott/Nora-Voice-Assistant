@@ -3,10 +3,22 @@
 // Populates and manages the settings page.
 //----------------------------------------------
 
+import Auth from './auth.js';
+
 // fetch settings json from server endpoint '/settings'
-function fetchSettings() {
-    fetch('/settings')
-        .then(response => response.json())
+async function fetchSettings() {
+    let auth = new Auth();
+
+    // fetch( '/settings/settings' )
+    auth.send_authorized_request("GET", '/settings/settings' )
+        .then(response => {
+            // check if the response is valid
+            if (response.ok) {
+                return response.json();
+            }
+            // else throw an error with the response status
+            throw new Error(response.status);
+        })
         .then(settings => populateSettings(settings))
         .catch(error => console.error('Error:', error));
 }
@@ -15,9 +27,9 @@ function fetchSettings() {
 /**
  * @param {Object} settings 
  */
-// populate settings page with data from server
+// populate the firsrt level of settings
 function populateSettings(settings) {
-    main_page = document.getElementById( 'settings' );
+    let main_page = document.getElementById( 'settings' );
 
     // make a group for the first level of settings
     let generalSettings = document.createElement( 'section' );
@@ -32,10 +44,10 @@ function populateSettings(settings) {
         }
         // if key is a group, create a new section
         if ( settings[key].constructor == Object ) {
-            initSettings( settings[ key ], settings_path = key, name = key, parent = main_page );
+            initSettings( settings[ key ], key, key, main_page );
         // if key is a setting, create a new setting and append it to the general settings element
         } else {
-            settingElement = getSettingsElement(settings[ key ], name=key);
+            let settingElement = getSettingsElement(settings[ key ], key);
             generalSettings.appendChild(settingElement);
         }
     }
@@ -53,7 +65,7 @@ function populateSettings(settings) {
  * @param {HTMLElement} parent 
  * @returns {[HTMLElement, bool]} html element, is element a group
  */
-// Make a function that will fetch all the settings and populate the page
+// Recursively goes through all the settings and creates a new element for each setting
 function initSettings(setting, settings_path='', name='', parent=null) {
     const IS_GROUP = true;
     const IS_SETTING = false;
@@ -104,7 +116,14 @@ function initSettings(setting, settings_path='', name='', parent=null) {
             }
 
             // submit button
-            form.innerHTML += `<button type='button' onclick='saveSettings("${form.id}")'>Save</button>`;
+            let submit_button = document.createElement('button');
+            submit_button.innerHTML = 'Save';
+            submit_button.addEventListener('click', function(e) {
+                e.preventDefault();
+                saveSettings( form.id );
+            }
+            );
+            form.appendChild( submit_button );
 
 
             // Add the form to the group
@@ -151,12 +170,12 @@ function getSettingsElement(setting, settings_path='', name='') {
     } else if ( Array.isArray( setting ) ) {
         // TODO: Try replacing the settingElement with the select input instead of appending it
         // create a label for the select
-        label = document.createElement( 'label' );
+        let label = document.createElement( 'label' );
         label.innerHTML = `<label for="${settings_path}">${name}</label>`
         settingElement.appendChild( label );
 
         // create a select element
-        select = document.createElement( 'select' );
+        let select = document.createElement( 'select' );
         select.id = settings_path;
         for ( let subitem of setting ) {
             select.appendChild( new Option( subitem, subitem ) );
@@ -255,3 +274,9 @@ function sendSetting(setting_path, setting) {
 
 // fetch settings once page is loaded
 window.addEventListener('load', fetchSettings);
+
+
+export {
+    fetchSettings,
+    saveSettings
+};

@@ -44,7 +44,7 @@ def create_app(channels: channels.Channels,
 
     # include routes
     app.include_router(auth.router)
-    app.include_router(settings.router)
+    app.include_router(settings.router, prefix="/settings")
 
     channels = channels
     settings_manager = settings_manager

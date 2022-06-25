@@ -6,7 +6,6 @@ from ..dependencies import current_user_is_admin
 from core_core.settings_manager import SettingsManager
 
 router = APIRouter(
-    prefix="/settings",
     tags=["settings"],
     dependencies=[Depends(current_user_is_admin)],
     responses={404: {"description": "Not found"}},
@@ -18,7 +17,7 @@ class Setting(BaseModel):
     value: Union[int, float, bool, list, str]
 
 
-@router.get("/")
+@router.get("/settings")
 async def get_settings():
     return settings_manager.get_settings()
 
