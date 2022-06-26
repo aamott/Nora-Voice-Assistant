@@ -34,7 +34,12 @@ h1, h2, h3, h4, h5, h6 {
 button {
     font-family: 'Open Sans', sans-serif;
 }
+button:hover {
+    cursor: pointer;
+}
 #top-bar {
+    position: sticky;
+    top: 0;
     background: var(--nav-background);
     width: 100%;
     height: var(--top-bar-height);
@@ -42,6 +47,7 @@ button {
     justify-content: space-between;
     padding: 0 10px;
     border-bottom: 1px solid var(--background-white);
+    z-index: 100;
 }
 #top-bar button {
     background: none;
@@ -77,6 +83,7 @@ nav ul li a {
 }
 nav ul li a:hover {
     background-color: var(--secondary-blue-white);
+    /* color: black; */
 }
 
 #page-title {
