@@ -4,7 +4,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from .database.users_db import UserDatabase
-from fastapi.security import OAuth2PasswordBearer
+# from fastapi.security import OAuth2PasswordBearer
+from .oauth2_password_bearer_cookie import OAuth2PasswordBearerCookie as OAuth2PasswordBearer
 
 from .utils import get_env_config
 

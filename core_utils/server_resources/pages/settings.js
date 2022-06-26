@@ -8,6 +8,11 @@ import Auth from './auth.js';
 // fetch settings json from server endpoint '/settings'
 async function fetchSettings() {
     let auth = new Auth();
+    // check auth token on a timer
+    const interval = 600;
+    setInterval(() => {
+        auth.check_token();
+    }, interval);
 
     // fetch( '/settings/settings' )
     auth.send_authorized_request("GET", '/settings/settings' )

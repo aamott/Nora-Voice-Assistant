@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Union
 
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
 from jose import jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -113,7 +114,42 @@ async def login_for_access_token(
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(data={"sub": user.username},
                                        expires_delta=access_token_expires)
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "expires_in": ACCESS_TOKEN_EXPIRE_MINUTES}
+
+
+@router.post("/login", response_model=Token)
+async def set_login_cookie(
+        form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(users_dict, form_data.username,
+                             form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(data={"sub": user.username},
+                                       expires_delta=access_token_expires)
+
+    content = {"access_token": access_token, "token_type": "bearer", "expires_in": ACCESS_TOKEN_EXPIRE_MINUTES * 60}
+    response = JSONResponse(content=content)
+    response.set_cookie(key="Authorization",
+                        value=f"Bearer {access_token}",
+                        max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+                        httponly=True,
+                        secure=True,
+                        samesite="Strict")
+                        
+    return response
+
+
+@router.post("/logout", response_model=Token)
+async def logout():
+    response = JSONResponse(content={"message": "Logged out"})
+    response.delete_cookie(key="Authorization")
+    return response
+    
 
 
 @router.get("/users/me/", response_model=User)
