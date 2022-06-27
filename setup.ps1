@@ -38,9 +38,15 @@ if ($full_path) {
     Write-Output ""
     Write-Output ""
 
-    # run 'python -m pip install -r requirements.txt'
+    # check if user is admin. Only install for the user if they are not admin.
+    $is_admin = [bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544")
+    $as_user = "--user"
+    if ($is_admin -eq $false) {
+        $as_user = ""
+    }
+
     Write-Output "Installing requirements..."
-    $install_result = Invoke-Expression -Command "& '${full_path}' -m pip install -r requirements.txt"
+    $install_result = Invoke-Expression -Command "& '${full_path}' -m pip install -r requirements.txt ${as_user}"
 
     Write-Output "Requirements installed."
 }
