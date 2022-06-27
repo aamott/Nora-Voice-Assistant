@@ -38,16 +38,9 @@ if ($full_path) {
     Write-Output ""
     Write-Output ""
 
-    # install everything in requirements.txt
-    $requirements_file = "requirements.txt"
-    if (-not (Test-Path $requirements_file)) {
-        Write-Output "Could not find '${requirements_file}'"
-        exit 1
-    }
-
     # run 'python -m pip install -r requirements.txt'
     Write-Output "Installing requirements..."
-    $install_result = Invoke-Expression -Command "& '${full_path}' -m pip install -r '${requirements_file}'"
+    $install_result = Invoke-Expression -Command "& '${full_path}' -m pip install -r requirements.txt"
 
     Write-Output "Requirements installed."
 }
