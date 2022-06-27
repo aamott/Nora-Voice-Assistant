@@ -3,8 +3,7 @@
 #########################################
 from time import sleep
 from pygame import mixer
-import wave
-import numpy as np
+
 
 
 
