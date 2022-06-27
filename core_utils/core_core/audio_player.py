@@ -16,6 +16,8 @@ class AudioPlayer:
         # voice
         self.voice_channel = mixer.Channel(0)
 
+        self.sounds = []
+
 
     def play(self, filename:str = None):
         mixer.music.load(filename)
@@ -39,12 +41,23 @@ class AudioPlayer:
 
 
     def play_sound(self, filename:str = None):
-        mixer.Sound.load(filename)
-        mixer.Sound.find_channel().play()
+        """Play Sound
+        :param filename (str): filename of wave file
+        :return: pygame.mixer.Sound
+        """
+        newsound = mixer.Sound(filename)
+        newsound.play()
+        self.sounds.append(newsound)
+        return newsound
+
 
     def stop_sound(self):
-        mixer.Sound.stop()
-        
+        """Stop all playing sounds
+             Does not stop music.
+        """
+        for sound in self.sounds:
+            sound.stop()
+
 
 
 # def audio_increase_volume():
@@ -54,24 +67,31 @@ class AudioPlayer:
 # Test
 ##############
 if __name__ == "__main__":
-    TEST_FILEPATH = "test assets/background.mp3"
+    MP3_FILEPATH = "test assets/background.mp3"
+    WAV_FILEPATH1 = "test assets/batman_theme_x.wav"
+    WAV_FILEPATH2 = "test assets/batman_music_sfx.wav"
 
-    if TEST_FILEPATH:
+    if MP3_FILEPATH:
         player = AudioPlayer()
 
-        print("Test Music Player")
-        print("Playing:", TEST_FILEPATH)
-        player.play(filename=TEST_FILEPATH)
-        sleep(4)
-        print("Stopping")
-        player.stop()
+        print("Test Sound Player")
+        print("Playing:", WAV_FILEPATH1)
+        player.play_sound(filename=WAV_FILEPATH1)
+        sleep(3)
 
         print("Test Sound Player")
-        print("Playing:", TEST_FILEPATH)
-        player.play_sound(filename=TEST_FILEPATH)
+        print("Playing:", WAV_FILEPATH2)
+        player.play_sound(filename=WAV_FILEPATH2)
         sleep(4)
         print("Stopping")
         player.stop_sound()
+
+        print("Test Music Player")
+        print("Playing:", MP3_FILEPATH)
+        player.play(filename=MP3_FILEPATH)
+        sleep(4)
+        print("Stopping")
+        player.stop()
 
 
     else:
