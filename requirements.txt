@@ -3,7 +3,7 @@ padaos
 
 # Speech Recognition
 speechrecognition
-deepspeech
+deepspeech; python_version == '3.9'
 azure-cognitiveservices-speech
 
 # Text to Speech
