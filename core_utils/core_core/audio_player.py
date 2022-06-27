@@ -39,9 +39,8 @@ class AudioPlayer:
 
 
     def play_sound(self, filename:str = None):
-        newsound = mixer.Sound(filename)
-        newsound.play()
-
+        mixer.Sound.load(filename)
+        mixer.Sound.find_channel().play()
 
     def stop_sound(self):
         mixer.Sound.stop()
