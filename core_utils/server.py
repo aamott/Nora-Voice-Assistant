@@ -19,7 +19,10 @@ from core_core import channels, settings_manager
 # get routers
 from server_resources.routers import auth, settings
 
-
+###########################
+# Server class
+# Manages a threaded instance of Uvicorn. 
+###########################
 class Server(uvicorn.Server):
 
     def install_signal_handlers(self):
@@ -40,6 +43,7 @@ class Server(uvicorn.Server):
 
 def create_app(channels: channels.Channels,
                settings_manager: settings_manager.SettingsManager) -> FastAPI:
+    """Create the configured FastAPI app instance"""
     app = FastAPI()
 
     # include routes
@@ -67,6 +71,8 @@ def create_app(channels: channels.Channels,
 
 def create_server(channels: channels.Channels,
                     settings_manager: settings_manager.SettingsManager):
+    """ Creates an instance of the server
+    """
     app = create_app(channels=channels, settings_manager=settings_manager)
 
     config = uvicorn.Config(app=app,
