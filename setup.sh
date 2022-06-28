@@ -1,8 +1,9 @@
 #!/bin/bash
 ##############################
-# setup.ps1
+# Setup script
+# Currently untested - use at your own risk
 ##############################
-
+echo "Warning: This script is not tested. Use at your own risk."
 ############################
 # Python executable
 echo ""
