@@ -8,32 +8,65 @@ Skills are the core concept of a voice assistant. Each skill is a set of related
 
 
 ## Installation
-1. Install Python 3.8 or higher (might work with older versions)
+Requirements:
+- Python >3.8 (==3.9 for deepspeech)
+- Git
+- Microphone - The nicer the better.
 
-2. clone the repository and enter the directory
+Once you have the requirements down, you can set up the repository.
+
+### Windows
+1. Clone the repository. You can either use `git clone` or download a zip file and unzip it to your desired location. 
 ``` bash
 git clone https://github.com/aamott/Nora-Voice-Assistant.git
+```
 
+2. Enter the directory
+```bash
 cd Nora-Voice-Assistant
 ```
 
-3. Install dependencies
+3. Run the setup script
 ``` bash
-pip3 install -r requirements.txt
+setup.ps1
 ```
 
-4. Run the server
+4. Run the assistant
+``` bash
+python nora.py
+```
+
+### Linux
+1. Clone the repository. You can either use `git clone` or download a zip file and unzip it to your desired location. 
+``` bash
+git clone https://github.com/aamott/Nora-Voice-Assistant.git
+```
+
+2. Enter the directory
+```bash
+cd Nora-Voice-Assistant
+```
+
+3. Run the setup script. You will be prompted for your password when it is ready to install the required pip packages.
+``` bash
+sh setup.sh
+```
+
+4. Run the assistant
 ``` bash
 python3 nora.py
 ```
 
-5. To get updates, run `git pull` from the root directory.
+To get updates, run `git pull` from the root directory.
+
 
 
 # Development
-The most helpful development right now is in the skill department. Skills are lacking right now as this is a beginning project, but it has a lot of room to grow. For a quick example, see the `hello_world` skill inside the `skills` folder. It's a single-file, very basic skill. 
-There are a few requirements all skills follow:
-1. A skill must inherit from the `BaseSkill` class. For example:
+For a quick example, see the `hello_world` skill inside the `skills` folder. It's a single-file, very basic skill. 
+There are a few requirements for all skills:
+
+## A skill must inherit from the `BaseSkill` class.
+For example:
 ``` python
 from skills import base_skill
 
@@ -41,21 +74,25 @@ class Skill(base_skill.BaseSkill):
     ...
 ```
 
-2. A skill must accept 3 parameters: `settings_tool` of type `SettingsTool`, channels of type `Channels`, and `audio_utils` of type `AudioUtils`. For example:
+## A skill must accept these 3 parameters:
+- `settings_tool` of type `SettingsTool`
+- `channels` of type `Channels`
+- `audio_utils` of type `AudioUtils`.
 ``` python
 ...
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
 from core_utils.audio_utils import AudioUtils
 
-class Skill(base_skill.BaseSkill):
+...
 
     def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_utils: AudioUtils):
         ...
 ```
 In case you don't know, `audio_utils: AudioUtils` simply means that audio_utils has to be an AudioUtils object. 
 
-3. The skill class must implement `BaseSkill`'s methods. One is the `__init__` function as mentioned above. The other is the `intent_creator`, which allows the skill to register intents. 
+## The skill class must implement `BaseSkill`'s methods.
+One is the `__init__` function as mentioned above. The other is the `intent_creator`, which allows the skill to register intents. 
 ``` python
     ...
 
@@ -88,23 +125,15 @@ Example of using register_intent (continuing at the ellipsis):
 It is important to note that classes must be imported as though they are being viewed from `nora.py` and not relative to the skill doing the importing. Otherwise, we couldn't have access to many of the core elements used in a skill, like those described next. 
 
 
+# A skill's resources
 ## SettingsTool
-Passed in as  `settings_tool: SettingsTool` and imported with `from core_utils.settings_tool import SettingsTool`. SettingsTool manages settings for whatever class it is set up for. Skills receive a SettingsTool with the path set to `skills.<skill_name>` replacing `<skill_name>` with the skill's actual name. For example, `skills.hello_world`. Settings saved here will show up in the settings.yaml file as follows:  
-``` yaml
-skills:
-    hello_world:
-        # Settings set in the hello world skill will show up here 
-        world_shape: round
-        foods:
-            ice_creams:
-                vanilla: good
-                strawberry: better
-                chocolate: best
-```
+Passed in as  `settings_tool: SettingsTool` and imported with `from core_utils.settings_tool import SettingsTool`. SettingsTool manages settings for whatever class it is set up for. Skills receive a SettingsTool with the path set to `skills.<skill_name>` replacing `<skill_name>` with the skill's actual name. For example, `skills.hello_world`. Settings saved here will show up in the settings.yaml file.  
 Settings paths are written in dot notation. For example, `setting_path = "foods.ice_creams.strawberry"`.  
-SettingsTool implements 2 core methods:  
+
+The most important methods of the SettingsTool are:  
 1. `get_setting(setting_path)` - Gets a setting by its path.
-2. `set_setting(setting_path, value)` - Sets the setting under setting_path to the value. If the path does not exist, it will be created. For example:
+2. `set_setting(setting_path, value)` - Sets the setting under setting_path to the value. If the path does not exist, it will be created. 
+
 ``` python
     ...
     setting_path = "foods.ice_creams.strawberry"
@@ -112,13 +141,6 @@ SettingsTool implements 2 core methods:
     self.settings_tool.set_setting(setting_path, value)
     ...
 ```
-Now, the settings.yaml file has changed.  
-``` yaml
-                ...
-                strawberry: bestest
-                chocolate: best
-```
-
 
 ## Channels
 Channels allow skills to communicate with each other and the core system. If one skill wants to receive messages from another skill, it must `subscribe` to a channel the other skill is `publishing` to. For example, two functions could use Channels as follows:
@@ -133,11 +155,11 @@ def say_hello():
     channels.publish(message ="hello, world!", channel = "hello_channel")
 
 # the function that will be subscribed
-def say_hello_louder(message):
+def yell(message):
     print( message.upper() )
 
-# subscribe the say_hello_louder function to the "hello_channel" channel
-channels.subscribe(callback=say_hello_louder, "hello_channel")
+# subscribe 'yell' to "hello_channel"
+channels.subscribe(yell, "hello_channel")
 
 say_hello()
 ```
@@ -150,7 +172,7 @@ HELLO, WORLD!
 A function can also unsubscribe and it will no longer receive messages:
 ``` python
 ...
-channels.unsubscribe(callback = say_hello_louder)
+channels.unsubscribe(yell)
 ```
 
 ## AudioUtils
