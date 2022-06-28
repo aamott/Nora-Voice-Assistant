@@ -67,6 +67,9 @@ elif [$user_set_python == "s"]; then
     echo "Skipping python installation"
 fi
 
+# install openssl
+eval "sudo apt-get install openssl"
+
 
 ############################
 # Set up settings.yaml
@@ -101,7 +104,7 @@ if [$create_settings_file == true]; then
     echo "https://console.picovoice.ai/"
 
     while [$access_key == ""]
-        $access_key = read -p "Access Key ('s' to skip)"
+        read -p "Access Key ('s' to skip)" access_key
         if [$access_key == "s"]; then
             echo "Skipping access key"
             $access_key = "<your access key>"
@@ -123,4 +126,12 @@ wakeword:
 "
     echo "Creating settings.yaml"
     echo $settings_string > settings.yaml
-}
+fi
+
+############################
+# Set up user.yaml
+echo ""
+echo ""
+
+# call the python setup script to create the user.yaml file.
+eval $full_path ./setup.py

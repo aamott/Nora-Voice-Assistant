@@ -64,7 +64,7 @@ Write-Output ""
 
 # check if settings.yaml exists. Only create if it doesn't or user wants to overwrite.
 $settings_file = "settings.yaml"
-$overwrite = $true
+$overwrite = $false
 if (Test-Path $settings_file) {
     $overwrite = Read-Host "Would you like to overwrite '${settings_file}? (y/N)'"
     if ($overwrite -eq "y") {
@@ -72,9 +72,7 @@ if (Test-Path $settings_file) {
         $overwrite = $true
     }
     else {
-        $overwrite = $false
         Write-Output "Skipping settings file creation"
-        exit 1
     }
 }
 
@@ -112,3 +110,19 @@ wakeword:
     Write-Output "Creating '${settings_file}'"
     $settings_string | Out-File -FilePath $settings_file
 }
+
+
+
+############################
+# Set up user.yaml
+Write-Output ""
+Write-Output ""
+
+# run the python script to create the user.yaml file.
+& $full_path ./setup.py
+
+############################
+# Finished
+Write-Output ""
+Write-Output ""
+Write-Output "Finished Setup"
