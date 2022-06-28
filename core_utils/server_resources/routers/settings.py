@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Query, status
 from pydantic import BaseModel
 
 from ..dependencies import current_user_is_admin
-from core_core.settings_manager import SettingsManager
+from ...core_core.settings_manager import SettingsManager
 
 router = APIRouter(
     tags=["settings"],

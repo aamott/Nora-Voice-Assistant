@@ -14,10 +14,11 @@ import time
 import threading
 import uvicorn
 
-from core_core import channels, settings_manager
+from .core_core.channels import Channels
+from .core_core.settings_manager import SettingsManager
 
 # get routers
-from server_resources.routers import auth, settings
+from .server_resources.routers import auth, settings
 
 ###########################
 # Server class
@@ -41,8 +42,8 @@ class Server(uvicorn.Server):
             thread.join()
 
 
-def create_app(channels: channels.Channels,
-               settings_manager: settings_manager.SettingsManager) -> FastAPI:
+def create_app(channels: Channels,
+               settings_manager: SettingsManager) -> FastAPI:
     """Create the configured FastAPI app instance"""
     app = FastAPI()
 
@@ -69,8 +70,8 @@ def create_app(channels: channels.Channels,
 
 
 
-def create_server(channels: channels.Channels,
-                    settings_manager: settings_manager.SettingsManager):
+def create_server(channels: Channels,
+                    settings_manager: SettingsManager):
     """ Creates an instance of the server
     """
     app = create_app(channels=channels, settings_manager=settings_manager)
@@ -106,8 +107,8 @@ def load_users():
 
 
 if __name__ == "__main__":
-    channels = channels.Channels()
-    settings_manager = settings_manager.SettingsManager(settings_file="settings.yaml")
+    channels = Channels()
+    settings_manager = SettingsManager(settings_file="settings.yaml")
     # Launch the server
     server = create_server(channels=channels, settings_manager=settings_manager)
 
