@@ -65,7 +65,7 @@ Write-Output ""
 
 # check if settings.yaml exists. Only create if it doesn't or user wants to overwrite.
 $settings_file = "settings.yaml"
-$overwrite = $false
+$overwrite = $true
 if (Test-Path $settings_file) {
     $overwrite = Read-Host "Would you like to overwrite '${settings_file}? (y/N)'"
     if ($overwrite -eq "y") {
@@ -73,6 +73,7 @@ if (Test-Path $settings_file) {
         $overwrite = $true
     }
     else {
+        $overwrite = $false
         Write-Output "Skipping settings file creation"
         exit 1
     }
