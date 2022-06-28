@@ -46,7 +46,7 @@ if ($full_path) {
     }
 
     Write-Output "Installing requirements..."
-    $install_result = Invoke-Expression -Command "& '${full_path}' -m pip install -r requirements.txt ${as_user}"
+    & $full_path -m pip install -r requirements.txt $as_user
 
     Write-Output "Requirements installed."
 }
