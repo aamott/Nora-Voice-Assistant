@@ -35,7 +35,11 @@ def get_env_config():
             with open(CONFIG_PATH, "w") as file:
                 config.write(file)
 
-            raise KeyError("No configuration found in " + CONFIG_PATH)
+            print("No configuration found in " + CONFIG_PATH + ". A new one has been created with the default values.")
+
+        config = ConfigParser()
+        config.read(CONFIG_PATH)
+        config = config["OAUTH"]
 
     else:
         print("Warning! Using a generated key. It will be gone by the end of the sess")
