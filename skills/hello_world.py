@@ -17,12 +17,38 @@ class Skill(base_skill.BaseSkill):
 
 
     def intent_creator(self, register_intent: callable):
-        """ registers intents using register_intent """
-        register_intent(intent_callback=self.hello_world_intent,
-                        intent_phrases=["hello (world | )"],
+        """ This function registers intents using register_intent.
+            Parameters: 
+                register_intent (callable): a function that can add an intent to Nora. """
+        # register the hello world intent
+        register_intent(
+                        # The intent callback is the function that is called when the intent is detected.
+                        intent_callback=self.hello_world_intent,
+                        # The intent phrase that will be recognized. 
+                        # Here, it will match 'hello world' or 'hello'. 
+                        intent_phrases=["Hello (world | )"],
+                        # The intent name. This is used to identify the intent. 
+                        # Good practice is to use a name like your function name.
                         intent_name="say_hello")
+
+        # register the hello name intent
+        register_intent(intent_callback=self.hello_name_intent,
+                        # We can add 'entities', or named values to look for, to the intent.
+                        intent_phrases=["Hello. My name is {name}"],
+                        intent_name="say_hello_name")
 
 
     def hello_world_intent(self, intent_data):
+        """This is the function that is called when the intent is detected."""
         print("Hello World!")
         self.audio_utils.say("Hello World!")
+
+
+    def hello_name_intent(self, intent_data):
+        """This is a slightly fancier version of the hello world intent.
+            It takes a name as a parameter and says hello to that name."""
+        # get the name entity from the intent. 
+        name = intent_data["entities"].get("name")
+
+        print("Hello " + name + "!")
+        self.audio_utils.say("Hello " + name + "!")
