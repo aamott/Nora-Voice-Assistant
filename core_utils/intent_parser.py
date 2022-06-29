@@ -25,13 +25,14 @@ class IntentParser:
     def parse_intent(self, user_input) -> dict:
         """Parses the user input
             Returns:
-                intent ( {'name':str, 'callback':callable, 'entities': {'<entity_name>': value}} )
+                intent ( {'name':str, 'original_phrase':str 'callback':callable, 'entities': {'<entity_name>': value}} )
                     or None if no intent is detected
         """
         intent = self.intents.calc_intent(user_input)
         if intent["name"]:
             # add the intent callback (since padaos can't store it)
             intent_callback = self.intent_callbacks[intent["name"]]
+            intent["original_phrase"] = user_input
             intent["callback"] = intent_callback
 
             return intent
@@ -66,7 +67,7 @@ class IntentParser:
                                       intent_name=unique_intent_name)
 
             # Tell the skill to register its intents
-            try: 
+            try:
                 skill.intent_creator(register_intent_skill)
             except AttributeError:
                 print("Skill " + skill.name + " does not have an intent_creator method.")
