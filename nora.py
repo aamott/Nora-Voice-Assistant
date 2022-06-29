@@ -12,6 +12,7 @@ import core_utils.intent_parser as intent_parser
 import core_utils.skill_creator as skill_creator
 from core_utils.audio_utils import AudioUtils
 from core_utils.wakeword import Wakeword
+from core_utils.server import create_server
 
 from threading import Thread, Event
 import queue
@@ -111,19 +112,23 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
+# Launch the server
+server = create_server(channels=channels, settings_manager=settings_manager)
+
 ########################################
 # main loop
 ########################################
-# startup fanciness
-audio_utils.say("Hello, I am Nora. I am a virtual assistant.")
+with server.run_in_thread():
+    # startup fanciness
+    audio_utils.say("Hello, I am Nora. I am a virtual assistant.")
 
-# start the wakeword thread
-wakeword_thread = Thread(target=await_wakeword_thread)
-wakeword_thread.start()
+    # start the wakeword thread
+    wakeword_thread = Thread(target=await_wakeword_thread)
+    wakeword_thread.start()
 
-# start the main loop
-while not shutdown_event.is_set():
-    consume_input()
+    # start the main loop
+    while not shutdown_event.is_set():
+        consume_input()
 
 # stop any system threads
 wakeword_thread.join(1)

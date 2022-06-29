@@ -212,6 +212,8 @@ The AudioUtils object is used for any audio control and interaction, including s
 - [ ] Routine Manager 📦
 
 ### Web Interface 🌐
-- [ ] Web Server 🚀
+- [ ] Web Server Backend - [FastAPI](https://fastapi.tiangolo.com/)
+    - [X] OAuth2 Authentication
+- [X] Settings Control 🔧
+- [ ] Routine Manager 📦
 - [ ] Skill Editor 📝
-- [ ] Settings Manager Frontend 🔧

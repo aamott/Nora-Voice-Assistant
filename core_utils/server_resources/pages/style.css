@@ -1,0 +1,112 @@
+:root {
+    --nav-background: hsl(200, 7%, 76%);
+    --text-color: hsl(0, 0%, 15%);
+    --secondary-blue-white: hsl(200, 21%, 88%);
+    --outline: hsl(0, 0%, 46%);
+    --background-white: hsl(0, 0%, 100%);
+
+    --nav-width: 200px;
+    --top-bar-height: 50px;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-white: hsl(0, 0%, 15%);
+        --nav-background: hsl(200, 1%, 25%);
+        --secondary-blue-white: hsl(190, 1%, 25%);
+        --outline: hsl(0, 0%, 46%);
+        --text-color: hsl(0, 8%, 85%);
+        --title-text-color: hsl(208, 58%, 63%);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+body {
+    background: var(--background-white);
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text-color);
+    margin: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: var(--title-text-color);
+}
+button {
+    font-family: 'Open Sans', sans-serif;
+}
+button:hover {
+    cursor: pointer;
+}
+#top-bar {
+    position: sticky;
+    top: 0;
+    background: var(--nav-background);
+    width: 100%;
+    height: var(--top-bar-height);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--background-white);
+    z-index: 100;
+}
+#top-bar button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+}
+nav {
+    background-color: var(--nav-background);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--nav-width);
+    height: calc(100% - var(--top-bar-height));
+    margin-top: var(--top-bar-height);
+    padding: 20px;
+}
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+nav ul li {
+    padding: 10px;
+    font-size: 1.3em;
+}
+nav ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+nav ul li a:hover {
+    background-color: var(--secondary-blue-white);
+    /* color: black; */
+}
+
+#page-title {
+    margin: 0 20px 10px;
+    text-align: center;
+    border-bottom: var(--outline) solid 3px; 
+    padding: 10px;
+    line-height: 0.8;
+    color: var(--title-text-color);
+}
+
+main {
+    background: var(--background-white);
+    margin-left: var(--nav-width);
+    max-width: 1100px;
+}
+main .content {
+    padding: 20px;
+}
+input, textarea, select {
+    border: 1px solid var(--outline);
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px;
+    display: block;
+}

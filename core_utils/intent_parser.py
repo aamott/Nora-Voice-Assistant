@@ -5,8 +5,8 @@
 #   intents:  Intent Container
 ####################
 from padaos import IntentContainer
-from core_utils.core_core.channels import Channels
-from core_utils.settings_tool import SettingsTool
+from .core_core.channels import Channels
+from .settings_tool import SettingsTool
 
 
 class IntentParser:
