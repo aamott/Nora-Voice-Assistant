@@ -199,6 +199,7 @@ The AudioUtils object is used for any audio control and interaction, including s
 ### Basic Skills 🤹🏻‍♀️
 - [X] Hello World 👋
 - [ ] Music Player 🎵
+    - [ ] Playback of mp3, ogg, and wav
 - [ ] Weather 🌍
 - [ ] News 📰
 - [ ] Calculator 📈
@@ -215,5 +216,6 @@ The AudioUtils object is used for any audio control and interaction, including s
 - [ ] Web Server Backend - [FastAPI](https://fastapi.tiangolo.com/)
     - [X] OAuth2 Authentication
 - [X] Settings Control 🔧
+- [ ] GUI for skills
 - [ ] Routine Manager 📦
 - [ ] Skill Editor 📝
