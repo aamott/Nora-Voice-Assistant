@@ -23,6 +23,7 @@ def create_settings_file():
                 overwrite = True
                 break
             elif user_input == "s":
+                skip = True
                 overwrite = False
                 break
             elif user_input == "a":
@@ -67,6 +68,7 @@ def create_settings_file():
 
 
 def make_user():
+    print("Setting up the server.")
     filepath = "./core_utils/server_resources/database/users.yaml"
 
     # Check if user.yaml exists:
@@ -82,6 +84,7 @@ def make_user():
                 break
             elif user_input == "s":
                 overwrite = False
+                skip = True
                 break
             elif user_input == "a":
                 overwrite = False
@@ -92,9 +95,9 @@ def make_user():
         print("Skipping user creation.")
     else:
         # Gather user input:
-        name = input("Name: ")
-        username = input("Username: ")
-        password = input("Password: ")
+        name = input("Enter your given name: ")
+        username = input("Enter your desired username: ")
+        password = input("Enter your password: ")
 
         # hash the password:
         pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
