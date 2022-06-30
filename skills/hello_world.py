@@ -1,6 +1,9 @@
-#######################
+###################################
 # Hello World Skill
-#######################
+# This skill serves as an example of how to create a skill.
+# To create your own skill, copy this file and modify it
+# to fit your needs.
+###################################
 from skills import base_skill
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool

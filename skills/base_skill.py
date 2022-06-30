@@ -1,7 +1,8 @@
-#########################
+######################################
 # Base Skill Class
-# The Base Class for all Skills
-#########################
+# The base class for all skills. All skills should inherit
+# from this class. This class is not meant to be used directly.
+######################################
 from abc import ABC, abstractmethod
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
