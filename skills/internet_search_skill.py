@@ -7,8 +7,8 @@ from core_utils.settings_tool import SettingsTool
 from core_utils.audio_utils import AudioUtils
 import webbrowser
 
-class Skill:
-    name = "Internet Search"
+class Skill(base_skill.BaseSkill):
+    name = "Internet Search Skill"
 
 def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_utils: AudioUtils):
     self.settings_tool = settings_tool
