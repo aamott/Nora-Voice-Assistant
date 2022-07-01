@@ -42,6 +42,20 @@ class AudioUtils:
     ###########################
     # Speech Interaction
     ###########################
+    def input(self, prompt: str) -> str:
+        """Prompt the user for input.
+
+        Args:
+            prompt (str): The prompt to say to the user.
+
+        Returns:
+            str: The user's input.
+        """
+        self.say(prompt)
+        text = self.listen()
+        return text
+
+
     def listen(self):
         """Listen for user input.
 
@@ -52,12 +66,15 @@ class AudioUtils:
         return text
 
 
-    def say(self, text):
+    def say(self, text: str):
         """Speak text.
 
         Args:
             text (str): The text to speak.
         """
+        # throw an error if the text is empty
+        if text == "" or text == None:
+            raise ValueError("Text to speak is empty.")
         print("+ ", text)
         self._tts.say(text)
 
