@@ -50,6 +50,7 @@ def create_app(channels: Channels,
     # include routes
     app.include_router(auth.router)
     app.include_router(settings.router, prefix="/settings")
+    settings.settings_manager = settings_manager
 
     channels = channels
     settings_manager = settings_manager
@@ -63,7 +64,7 @@ def create_app(channels: Channels,
 
 
     # Create endpoints for all the html files
-    app.mount("/", StaticFiles(directory="core_utils/server_resources/pages"), name="site")
+    app.mount("/", StaticFiles(directory="core_utils/server_resources/pages"), name="site", )
 
     return app
 
