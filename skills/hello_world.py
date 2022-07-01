@@ -14,6 +14,8 @@ class Skill(base_skill.BaseSkill):
 
 
     def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_utils: AudioUtils):
+        """ Initialize the skill. Don't remove any of the existing code, 
+            but feel free to add your own. """
         self.settings_tool = settings_tool
         self.channels = channels
         self.audio_utils = audio_utils
@@ -23,20 +25,20 @@ class Skill(base_skill.BaseSkill):
         """ This function registers intents using register_intent.
             Parameters: 
                 register_intent (callable): a function that can add an intent to Nora. """
-        # register the hello world intent
+        # register an intent to say "Hello world!" when the user says "hello" or "hello world"
         register_intent(
                         # The intent callback is the function that is called when the intent is detected.
                         intent_callback=self.hello_world_intent,
-                        # The intent phrase that will be recognized. 
-                        # Here, it will match 'hello world' or 'hello'. 
+                        # The intent phrase that will be recognized.
+                        # Here, it will match 'hello world' or 'hello'.
                         intent_phrases=["Hello (world | )"],
-                        # The intent name. This is used to identify the intent. 
+                        # The intent name. This is used to identify the intent.
                         # Good practice is to use a name like your function name.
                         intent_name="say_hello")
 
-        # register the hello name intent
-        register_intent(intent_callback=self.hello_name_intent,
-                        # We can add 'entities', or named values to look for, to the intent.
+        # register another intent to say hello to a specific name
+        register_intent(intent_callback=self.hello_user_intent,
+                        # We can add 'entities' (which are like parameters) to the intent.
                         intent_phrases=["Hello. My name is {name}"],
                         intent_name="say_hello_name")
 
@@ -47,10 +49,11 @@ class Skill(base_skill.BaseSkill):
         self.audio_utils.say("Hello World!")
 
 
-    def hello_name_intent(self, intent_data):
+    def hello_user_intent(self, intent_data):
         """This is a slightly fancier version of the hello world intent.
             It takes a name as a parameter and says hello to that name."""
-        # get the name entity from the intent. 
+        # intent_data looks like this:
+        # {'name': 'add_item', 'entities': {'item': 'potatoes', 'list_name': 'shopping'}}
         name = intent_data["entities"].get("name")
 
         print("Hello " + name + "!")
