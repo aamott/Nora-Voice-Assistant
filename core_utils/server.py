@@ -13,6 +13,8 @@ import contextlib
 import time
 import threading
 import uvicorn
+import mimetypes
+
 
 from .core_core.channels import Channels
 from .core_core.settings_manager import SettingsManager
@@ -22,7 +24,7 @@ from .server_resources.routers import auth, settings
 
 ###########################
 # Server class
-# Manages a threaded instance of Uvicorn. 
+# Manages a threaded instance of Uvicorn.
 ###########################
 class Server(uvicorn.Server):
 
@@ -46,6 +48,10 @@ def create_app(channels: Channels,
                settings_manager: SettingsManager) -> FastAPI:
     """Create the configured FastAPI app instance"""
     app = FastAPI()
+    mimetypes.init()
+    mimetypes.add_type('application/javascript', '.js')
+    mimetypes.add_type('text/css', '.css')
+    mimetypes.add_type('image/svg+xml', '.svg')
 
     # include routes
     app.include_router(auth.router)
@@ -64,7 +70,7 @@ def create_app(channels: Channels,
 
 
     # Create endpoints for all the html files
-    app.mount("/", StaticFiles(directory="core_utils/server_resources/pages"), name="site", )
+    app.mount("/", StaticFiles(directory="core_utils/server_resources/pages", html=True), name="static")
 
     return app
 
