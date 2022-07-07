@@ -32,4 +32,4 @@ class Skill(base_skill.BaseSkill):
 
     def populate_settings(self):
         if not self.settings_tool.setting_exists("introduction"):
-            self.settings_tool.set_setting(self.introduction)
+            self.settings_tool.set_setting("introduction", self.introduction)
