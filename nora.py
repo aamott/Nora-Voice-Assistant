@@ -59,13 +59,10 @@ def await_wakeword_thread():
             speech_queue.put(text)
 
 
-def shutdown_system():
+def shutdown_system(message=None):
     """ Shuts down the system. """
     print("Save settings")
     settings_manager.save_settings()
-    print("Shutting down...")
-    audio_utils.say("Shutting down")
-    print(shutdown_event.is_set())
     shutdown_event.set()
 
 
@@ -96,7 +93,7 @@ wakeword = Wakeword(settings_tool=wakeword_settings_tool,
                     audio_utils=audio_utils)
 
 
-channels.subscribe("shutdown_system", shutdown_system)
+channels.subscribe(shutdown_system, 'system')
 
 # calibrating audio
 print("Calibrating...")
