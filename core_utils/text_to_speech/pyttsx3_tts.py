@@ -5,6 +5,7 @@
 # Microsoft Zira Desktop
 # Microsoft Mark Desktop
 ######################################
+from os import remove
 from ..core_core.audio_player import AudioPlayer
 from ..core_core.channels import Channels
 from ..settings_tool import SettingsTool
@@ -18,6 +19,7 @@ class TTS(TTS_Abstract):
     def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_player: AudioPlayer):
         self.settings_tool = settings_tool
         self.channels = channels
+        self.audio_player = audio_player
 
         self.engine = pyttsx3.init()
 
@@ -47,8 +49,7 @@ class TTS(TTS_Abstract):
                 new_voice = voice
                 break
 
-        # if we didn't find the voice, use the default
-        if voice is None:
+            # if we didn't find the voice, use the default
             print("Voice not found, using default")
             new_voice = voices[0]
             self.settings_tool.set_setting("voice_name", new_voice.name)
@@ -67,17 +68,16 @@ class TTS(TTS_Abstract):
             Args:
                 text (str): the text to be spoken
         """
-        self.engine.say(text)
-        self.engine.runAndWait()
-
-        # # Leaving this here for now, for when we come back to threading.
-        # # When we threaded before, the code hung with the .say() call, and this fixed it.
-        # # Workaround: save to a file and play that.
-        # self.engine.save_to_file(text, "temp.mp3")
-        # PlaySound("temp.mp3", SND_FILENAME)
+        # self.engine.say(text)
         # self.engine.runAndWait()
-        # # remove the file
-        # os.remove("temp.mp3")
+
+        # save the speech to a file buffer
+
+        self.engine.save_to_file(text, "tts.wav")
+        self.engine.runAndWait()
+        self.audio_player.play_sound("tts.wav")
+        # remove the file
+        remove("tts.wav")
 
 
     def populate_settings_tool(self):
