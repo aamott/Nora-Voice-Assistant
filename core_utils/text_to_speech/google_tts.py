@@ -6,9 +6,7 @@ from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
 from core_utils.text_to_speech.tts_abstract import TTS as TTS_Abstract
 from gtts import gTTS
-# TODO: Replace playsound with audio_player
-from os import remove, path
-# from playsound import playsound
+from os import remove
 from pydub import AudioSegment
 
 
@@ -39,7 +37,6 @@ class TTS(TTS_Abstract):
 
         # remove the mp3 and wav files
         remove(filename)
-        # remove(filename + ".wav")
 
 
     def populate_settings_tool(self):
