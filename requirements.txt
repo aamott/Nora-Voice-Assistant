@@ -7,6 +7,7 @@ passlib[bcrypt]
 
 # intents
 padaos
+lingua_franca
 
 # Speech Recognition
 speechrecognition
@@ -29,3 +30,7 @@ playsound==1.2.2 # TODO: remove this dependency
 
 # Settings
 pyyaml
+
+# Skills -- TODO: Can these requirements be placed alongside
+# each skill to make skill creation easier?
+tinytag
