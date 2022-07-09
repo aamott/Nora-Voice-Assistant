@@ -32,7 +32,7 @@ class SettingsTool:
 
 
     def set_setting(self, setting_path, value):
-        """ Sets the value of the setting using a path
+        """ Sets the value of the setting using a path. Creates the setting if it doesn't exist.
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
@@ -41,14 +41,15 @@ class SettingsTool:
         self.settings_manager.set_setting(self.setting_path + "." + setting_path, value)
 
     
-    def add_setting(self, setting_path, value):
-        """ Adds a setting to the settings manager
+    def create_setting(self, setting_path, default_value=None):
+        """ Adds a setting to the settings manager without overwriting an existing value.
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
-                value (any): value to set
+                default_value (any): value to set if the setting does not exist
         """
-        self.settings_manager.add_setting(self.setting_path + "." + setting_path, value)
+        # settings_manager handles the creation of the setting
+        self.settings_manager.create_setting(self.setting_path + "." + setting_path, default_value)
 
     
     def save_settings(self) -> bool:

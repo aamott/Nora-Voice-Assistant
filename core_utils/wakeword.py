@@ -118,10 +118,10 @@ class Wakeword:
     def populate_settings(self):
         """ Populates the settings tool with the settings needed for wakeword.
         """
-        self.settings_tool.add_setting("key", None)
-        self.settings_tool.add_setting("sensitivities", None)
-        self.settings_tool.add_setting("keywords", None)
-        self.settings_tool.add_setting("model_path", None)
+        self.settings_tool.create_setting("key", None)
+        self.settings_tool.create_setting("sensitivities", None)
+        self.settings_tool.create_setting("keywords", None)
+        self.settings_tool.create_setting("model_path", None)
 
 
 
