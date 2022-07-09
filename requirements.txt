@@ -33,4 +33,7 @@ pyyaml
 
 # Skills -- TODO: Can these requirements be placed alongside
 # each skill to make skill creation easier?
+# Music Skill
 tinytag
+# Wolfram Alpha Skill
+wolframalpha
