@@ -13,6 +13,7 @@ if __name__ == "__main__":
     parent = os.path.dirname(current)
     sys.path.append(parent)
 
+from threading import Event
 import pvporcupine
 from core_utils.audio_utils import AudioUtils
 from core_utils.core_core.settings_manager import SettingsManager
@@ -67,11 +68,16 @@ class Wakeword:
     def wait_for_wakeword_callback(self, audio_data) -> bool:
         """ Callback function for wakeword detection. This function will be passed to the AudioRecorder.
             When the wakeword is detected, the wakeword_detected_callback function will be called.
+            If the shutdown_event is set, the function will return immediately.
             Args:
                 audio_data (ndarray): The audio data to process.
             Returns:
                 bool: Whether the wakeword was detected and recording is done. True if recording is done.
         """
+        # check if shutdown event is set
+        if self.shutdown_event is not None and self.shutdown_event.is_set():
+            return True
+
         # method 1 of flattening and sending only one channel
         audio_data = audio_data.transpose()[0]
 
@@ -91,9 +97,15 @@ class Wakeword:
             return False
 
 
-    def await_wakeword(self, timeout: int = None):
+    def await_wakeword(self, timeout: int = None, shutdown_event: Event = None):
         """ Await wakeword.
+            Args:
+                timeout (int): The timeout in seconds. If None, the function will wait indefinitely.
+                shutdown_event (Event): The shutdown event. If set, the function will return immediately.
         """
+
+        self.shutdown_event = shutdown_event
+
         # wait for wakeword. Record continously until wakeword is detected.
         self.audio_utils.record_continuous(
             frame_processor_callback=self.wait_for_wakeword_callback,

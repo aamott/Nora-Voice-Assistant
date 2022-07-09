@@ -41,9 +41,12 @@ def consume_input():
 
 
 def await_wakeword_thread():
-    """ Thread for the wakeword. """
+    """ Thread for the wakeword.
+    Loops and waits for the wakeword to be spoken. When it is,
+    it grabs the user's command.
+    """
     while not shutdown_event.is_set():
-        wakeword.await_wakeword()
+        wakeword.await_wakeword(shutdown_event=shutdown_event)
         # TODO: find a more immediate way to kill the thread.
         #  It currently waits until await_wakeword is done running.
         if shutdown_event.is_set():
