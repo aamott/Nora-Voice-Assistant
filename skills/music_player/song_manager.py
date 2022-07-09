@@ -14,11 +14,16 @@ import random
 
 ######################################
 # Song Database Class
-# This class is used to store and manage songs and playlists 
+# This class is used to store and manage songs and playlists
 ######################################
 class SongDatabase:
 
-    def __init__(self, music_dir:str=str(Path.home()) + "/Music"):
+    def __init__(self,
+                 music_dir: str = str(Path.home()) + "/Music",
+                 music_extensions=('.mp3', '.aac', '.cda', '.flac', '.ogg',
+                                   '.opus', '.wma', '.zab', 'm4a', '.wav'),
+                 playlist_extensions=('.asx', '.xspf', '.b4s', '.m3u',
+                                      'm3u8')):
         """Initializes the song database.
 
             Parameters:
@@ -35,7 +40,9 @@ class SongDatabase:
         # for keeping song of playback
         self.previous_songs = [] # [song, song, ...]
 
-        self.load_database(directory=music_dir)
+        self.load_database(directory=music_dir,
+                           music_extensions=music_extensions,
+                           playlist_extensions=playlist_extensions)
 
 
     #########################
@@ -129,9 +136,9 @@ class SongDatabase:
 
     def load_database(self,
                       directory=str(Path.home()) + "/Music",
-                      music_extension=('.mp3', '.aac', '.cda', '.flac', '.ogg',
+                      music_extensions:tuple=('.mp3', '.aac', '.cda', '.flac', '.ogg',
                                        '.opus', '.wma', '.zab', 'm4a', '.wav'),
-                      playlist_extension=('.asx', '.xspf', '.b4s', '.m3u',
+                      playlist_extensions:tuple=('.asx', '.xspf', '.b4s', '.m3u',
                                           'm3u8')):
         """ Loads the database of songs from a directory 
 
@@ -145,12 +152,15 @@ class SongDatabase:
             print("Directory does not exist")
             raise Exception("Directory does not exist")
 
+        # convert music_extensions and playlist_extensions to tuples
+        music_extensions = tuple(music_extensions)
+        playlist_extensions = tuple(playlist_extensions)
+
         for root, subfolder, files in os.walk(directory):
             for filename in files:
                 item_path = os.path.join(root, filename)
                 # MUSIC FILES
-                if music_extension and filename.lower().endswith(
-                        music_extension):
+                if music_extensions and filename.lower().endswith(music_extensions):
                     tags = TinyTag.get(item_path)
 
                     song_data = tags.as_dict()
@@ -198,8 +208,8 @@ class SongDatabase:
                         self.genres[tags.genre] = [song_data]
 
                 # PLAYLIST FILES
-                elif playlist_extension and filename.lower().endswith(
-                        playlist_extension):
+                elif playlist_extensions and filename.lower().endswith(
+                        playlist_extensions):
                     playlist_title = Path(item_path).stem
                     playlist_title = self.standardize_title(playlist_title)
 
@@ -317,10 +327,6 @@ class SongDatabase:
 
                 matching_albums.append((album_data, confidence))
 
-        # If there are no matches, return None
-        if not matching_albums:
-            return None
-
         # Sort the matching albums by confidence, max to min
         matching_albums.sort(key=lambda x: x[1], reverse=True)
 
@@ -337,7 +343,6 @@ class SongDatabase:
             Returns:
                 matches:
                     list[tuple[genre: dict, confidence: float]] (a list of songs in the genre)
-                    OR None (if no matches found)
         """
         # Do a fuzzy match of each genre name
         # matching_genres will look like this: [(genre_name:str, confidence:float), (genre_name:str, confidence:float), ...]
@@ -352,10 +357,6 @@ class SongDatabase:
                     'songs': genre_contents
                 }
                 matching_genres.append((genre_data, confidence))
-
-        # If there are no matches, return None
-        if not matching_genres:
-            return None
 
         # Sort the matching genres by confidence, max to min
         matching_genres.sort(key=lambda x: x[1], reverse=True)
@@ -373,7 +374,6 @@ class SongDatabase:
             Returns:
                 matches:
                     list[tuple[playlist: dict, confidence: float]] (a list of songs in the playlist)
-                    OR None (if no matches found)
         """
         # Do a fuzzy match of each playlist name
         # matching_playlists will look like this: [(playlist_name:str, confidence:float), (playlist_name:str, confidence:float), ...]
@@ -388,10 +388,6 @@ class SongDatabase:
                     'songs': playlist_contents
                 }
                 matching_playlists.append((playlist_data, confidence))
-
-        # If there are no matches, return None
-        if not matching_playlists:
-            return None
 
         # Sort the matching playlists by confidence, max to min
         matching_playlists.sort(key=lambda x: x[1], reverse=True)
@@ -409,7 +405,6 @@ class SongDatabase:
             Returns:
                 matches:
                     list[tuple[artist: dict, confidence: float]] (a list of songs in the artist)
-                    OR None (if no matches found)
         """
         # Do a fuzzy match of each artist name
         # matching_artists will look like this: [(artist_name:str, confidence:float), (artist_name:str, confidence:float), ...]
@@ -426,10 +421,6 @@ class SongDatabase:
                     'songs': artist_contents
                 }
                 matching_artists.append((artist_data, confidence))
-
-        # If there are no matches, return None
-        if not matching_artists:
-            return None
 
         # Sort the matching artists by confidence, max to min
         matching_artists.sort(key=lambda x: x[1], reverse=True)
@@ -448,7 +439,6 @@ class SongDatabase:
             Returns:
                 matches:
                     list[tuple[song: dict, confidence: float]] (a list of songs in the song)
-                    OR None (if no matches found)
         """
         # Do a fuzzy match of each song name
         # matching_songs will look like this: [(song_name:str, confidence:float), (song_name:str, confidence:float), ...]
@@ -473,10 +463,6 @@ class SongDatabase:
                     confidence = (confidence + artist_confidence) / 2
 
                 matching_songs.append((song_data, confidence))
-
-        # If there are no matches, return None
-        if not matching_songs:
-            return None
 
 
         # Sort the matching songs by confidence, max to min
