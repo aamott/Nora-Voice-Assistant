@@ -5,6 +5,7 @@
 # Microsoft Zira Desktop
 # Microsoft Mark Desktop
 ######################################
+from ..core_core.audio_player import AudioPlayer
 from ..core_core.channels import Channels
 from ..settings_tool import SettingsTool
 from .tts_abstract import TTS as TTS_Abstract
@@ -14,7 +15,7 @@ class TTS(TTS_Abstract):
     # The id of the object as it will appear in the json
     name = "pyttsx3_TTS"
 
-    def __init__(self, settings_tool: SettingsTool, channels: Channels):
+    def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_player: AudioPlayer):
         self.settings_tool = settings_tool
         self.channels = channels
 

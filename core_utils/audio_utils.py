@@ -35,7 +35,8 @@ class AudioUtils:
         self._tts = tts_getter.get_tts_object(
             tts_module=tts_module,
             channels=channels,
-            settings_tool=tts_settings_tool)
+            settings_tool=tts_settings_tool,
+            audio_player=self._audio_player)
 
 
 

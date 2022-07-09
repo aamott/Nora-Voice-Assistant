@@ -18,6 +18,7 @@ azure-cognitiveservices-speech
 gTTS>=2.2.3
 ibm-watson
 pyttsx3
+pydub
 
 # Wakeword
 pvporcupine

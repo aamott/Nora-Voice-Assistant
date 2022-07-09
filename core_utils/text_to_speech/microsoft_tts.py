@@ -10,7 +10,7 @@
 from core_utils.text_to_speech.tts_abstract import TTS as TTS_Abstract
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool  # for audio output
-# from core_utils.core_core.audio_player import AudioPlayer
+from core_utils.core_core.audio_player import AudioPlayer
 import azure.cognitiveservices.speech as speechsdk
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 
@@ -19,7 +19,7 @@ class TTS(TTS_Abstract):
     # The id of the object as it will appear in the json
     name = "MS_Voice_TTS"
 
-    def __init__(self, settings_tool: SettingsTool, channels: Channels): # TODO: uncomment when implemented - , audio_player: AudioPlayer=None):
+    def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_player: AudioPlayer):
         """ Microsoft's Text to Speech wrapper for Alfred
             Find your key and resource region under the 'Keys and Endpoint' tab in your Speech resource in Azure Portal
 
