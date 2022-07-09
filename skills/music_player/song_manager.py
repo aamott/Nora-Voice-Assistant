@@ -2,7 +2,7 @@
 # Song Database Class
 # This class is used to store and manage the songs in the database
 #
-# Code copied from a previous project:
+# Code adapted from a previous project:
 # https://github.com/aamott/Offline-Playback-Skill/blob/19.08/song_database_manager.py
 ############################
 import re
@@ -12,10 +12,10 @@ import os.path
 from tinytag import TinyTag
 import random
 
-##############################
+######################################
 # Song Database Class
-# This class is used to store and manage songs
-##############################
+# This class is used to store and manage songs and playlists 
+######################################
 class SongDatabase:
 
     def __init__(self, music_dir:str=str(Path.home()) + "/Music"):
@@ -23,17 +23,16 @@ class SongDatabase:
             Parameters:
                 music_dir    (the directory to search for music)
         """
-        # a track looks like this: {'filepath': str, 'title': str, 'artist': str, 'album': str, ...}
-        self.tracks = {} # {'song title': {'title': str, 'artist': str, 'album': str, ... }, ...}
-        self.artists = {}  # {'artist name': [tracks], ...}
-        self.albums = {} # {'album name': [tracks], ...}
-        self.genres = {} # {'genre name': [tracks], ...}
+        self.songs = {} # {'song title': {'title': str, 'artist': str, 'album': str, ... }, ...}
+        self.artists = {}  # {'artist name': [songs], ...}
+        self.albums = {} # {'album name': [songs], ...}
+        self.genres = {} # {'genre name': [songs], ...}
 
         # each playlist is a dict with a filepath and songs list
         self.playlists = {}  # {'playlist name': {'filepath': str, 'songs': [str, str, ...]}, ...}
 
-        # for keeping track of playback
-        self.previous_tracks = [] # [track, track, ...]
+        # for keeping song of playback
+        self.previous_songs = [] # [song, song, ...]
 
         self.load_database(directory=music_dir)
 
@@ -47,7 +46,7 @@ class SongDatabase:
             dict: (a dictionary of song metadata)
                 song metadata: {'filepath': str, 'title': str, 'artist': str, 'album': str, ...}
         """
-        song = random.choice(list(self.tracks.values()))
+        song = random.choice(list(self.songs.values()))
         return song
 
 
@@ -70,7 +69,7 @@ class SongDatabase:
 
     def read_playlist(self, filepath:str) -> list[str]:
         """Parses a playlist file and returns a list of songs
-        Supports m3u, m3u8, pls, xspf, and wpl formats
+        Supports m3u, m3u8, pls, xspf, wpl, and plain text with one song per line
         Parameters:
             filepath:str (the path to the playlist file)
         Returns:
@@ -124,12 +123,12 @@ class SongDatabase:
             return playlist
 
 
-    def load_database(
-        self,
-        directory=str(Path.home()) + "/Music",
-        music_extension=('.mp3', '.aac', '.cda', '.flac', '.ogg', '.opus',
-                         '.wma', '.zab'),  # TODO: add m4a support
-        playlist_extension=('.asx', '.xspf', '.b4s', '.m3u', 'm3u8')):
+    def load_database(self,
+                      directory=str(Path.home()) + "/Music",
+                      music_extension=('.mp3', '.aac', '.cda', '.flac', '.ogg',
+                                       '.opus', '.wma', '.zab', 'm4a', '.wav'),
+                      playlist_extension=('.asx', '.xspf', '.b4s', '.m3u',
+                                          'm3u8')):
         """ Loads the database of songs from a directory 
             Parameters:
                 directory:str (directory to load songs from)
@@ -158,9 +157,9 @@ class SongDatabase:
                     else:
                         title = Path(item_path).stem
                         title = self.standardize_title(title)
-                    self.tracks[title] = song_data
+                    self.songs[title] = song_data
 
-                    # ARTIST: creates a list of tracks under each artist
+                    # ARTIST: creates a list of songs under each artist
                     if (tags.artist is
                             None) and root != directory and directory != Path(
                                 root).parent and directory != Path(
@@ -176,7 +175,7 @@ class SongDatabase:
                         # otherwise, create a new list for the artist
                         self.artists[tags.artist] = [song_data]
 
-                    # ALBUM: adds a list of tracks to each album
+                    # ALBUM: adds a list of songs to each album
                     if tags.album is None and root != directory and directory != Path(
                             root).parent:
                         # if the album name is None, then it is the name of the parent folder
@@ -187,7 +186,7 @@ class SongDatabase:
                     else:
                         self.albums[tags.album] = [song_data]
 
-                    # GENRE: adds a list of tracks to each genre
+                    # GENRE: adds a list of songs to each genre
                     if tags.genre in self.genres:
                         self.genres[tags.genre].append(song_data)
                     else:
@@ -230,10 +229,10 @@ class SongDatabase:
         """ Searches the database for a query
             Parameters:
                 query:str  - the query to search for
-                type:str  - 'album', 'artist', 'genre', 'track', or 'playlist' or 'all'
+                type:str  - 'album', 'artist', 'genre', 'song', or 'playlist' or 'all'
             Returns:
                 matches: 
-                    list[tuple[album: dict{'title': str, 'song': data about song}, confidence: float]] (an ordered list of tuples of the form (album/artist/track data, confidence)) 
+                    list[tuple[album: dict{'title': str, 'song': data about song}, confidence: float]] (an ordered list of tuples of the form (album/artist/song data, confidence)) 
                     OR None (if no matches found) 
         """
         results:list[tuple[dict, float]] = []
@@ -253,15 +252,15 @@ class SongDatabase:
             result = self.search_playlists(query, confidence_threshold=confidence_threshold)
             if result:
                 results += result
-        if type == 'track' or type == 'all':
-            # get tracks, but make them the same format as albums, artists, etc.
-            tracks = self.search_tracks(query, confidence_threshold=confidence_threshold)
-            for track_data, confidence in tracks:
-                track_data = {
-                    'title': track_data['title'],
-                    'song': track_data
+        if type == 'song' or type == 'all':
+            # get songs, but make them the same format as albums, artists, etc.
+            songs = self.search_songs(query, confidence_threshold=confidence_threshold)
+            for song_data, confidence in songs:
+                song_data = {
+                    'title': song_data['title'],
+                    'song': song_data
                 }
-                results.append((track_data, confidence))
+                results.append((song_data, confidence))
 
 
         # sort the results by confidence
@@ -282,6 +281,7 @@ class SongDatabase:
                 confidence_threshold:float (0.0 to 1.0) (the minimum confidence to return a match)
             Returns:
                 matches: 
+                    list[(album: dict{'title': str, 'song': data about song}, confidence: float)] (an ordered list of tuples of the form (album/artist/song data, confidence))
                     list[tuple[album: dict, confidence: float]] (a list of songs in the album) 
                     OR None (if no matches found) 
         """
@@ -428,51 +428,51 @@ class SongDatabase:
         return matching_artists
 
 
-    def search_tracks(self, query:str, artist_name=None, confidence_threshold:float=0.8) -> list[tuple[dict, float]]:
-        """ Searches for tracks by name.
+    def search_songs(self, query:str, artist_name=None, confidence_threshold:float=0.8) -> list[tuple[dict, float]]:
+        """ Searches for songs by name.
             Parameters:   
-                query:str  (track to search)
-                artist_name:str (artist of the track) (optional)
+                query:str  (song to search)
+                artist_name:str (artist of the song) (optional)
                 confidence_threshold:float (0.0 to 1.0) (the minimum confidence to return a match)
             Returns:
                 matches:
-                    list[tuple[track: dict, confidence: float]] (a list of songs in the track)
+                    list[tuple[song: dict, confidence: float]] (a list of songs in the song)
                     OR None (if no matches found)
         """
-        # Do a fuzzy match of each track name
-        # matching_tracks will look like this: [(track_name:str, confidence:float), (track_name:str, confidence:float), ...]
-        matching_tracks = []
+        # Do a fuzzy match of each song name
+        # matching_songs will look like this: [(song_name:str, confidence:float), (song_name:str, confidence:float), ...]
+        matching_songs = []
 
         query = query.lower()
 
-        for track_name in self.tracks.keys():
-            confidence = fuzzy_match(query, track_name.lower())
+        for song_name in self.songs.keys():
+            confidence = fuzzy_match(query, song_name.lower())
             if confidence > confidence_threshold:
-                track_data = self.tracks[track_name]
+                song_data = self.songs[song_name]
 
-                # If artist name is specified, only return tracks by that artist
+                # If artist name is specified, only return songs by that artist
                 if artist_name:
                     # fuzzy match the artist name
-                    artist_confidence = fuzzy_match(artist_name, track_data['artist'])
-                    # If the artist name doesn't match, skip this track
+                    artist_confidence = fuzzy_match(artist_name, song_data['artist'])
+                    # If the artist name doesn't match, skip this song
                     if artist_confidence < confidence_threshold:
                         continue
 
-                    # average the confidence of the artist name and the track name
+                    # average the confidence of the artist name and the song name
                     confidence = (confidence + artist_confidence) / 2
 
-                matching_tracks.append((track_data, confidence))
+                matching_songs.append((song_data, confidence))
 
         # If there are no matches, return None
-        if not matching_tracks:
+        if not matching_songs:
             return None
 
 
-        # Sort the matching tracks by confidence, max to min
-        matching_tracks.sort(key=lambda x: x[1], reverse=True)
+        # Sort the matching songs by confidence, max to min
+        matching_songs.sort(key=lambda x: x[1], reverse=True)
 
-        # Return the list of matching tracks
-        return matching_tracks
+        # Return the list of matching songs
+        return matching_songs
 
 
 
@@ -555,25 +555,25 @@ def test():
 
 
     print("----------------------------------------------------")
-    print("----------- Testing search_tracks() --------------")
+    print("----------- Testing search_songs() --------------")
     print("----------------------------------------------------")
     print()
 
-    track_query = "Amotto"
-    print(f'Searching for "{track_query}" in tracks:')
-    tracks = player.search_tracks(track_query, confidence_threshold=0.5)
-    if tracks:
-        track_data, confidence = tracks[0]
-        print(f'Match: "{track_data["title"]}" with confidence {confidence}')
+    song_query = "Amotto"
+    print(f'Searching for "{song_query}" in songs:')
+    songs = player.search_songs(song_query, confidence_threshold=0.5)
+    if songs:
+        song_data, confidence = songs[0]
+        print(f'Match: "{song_data["title"]}" with confidence {confidence}')
     else:
         print("No matches found")
     print()
 
-    print(f'Searching for "{track_query}" in tracks by "Lamar Holley":')
-    tracks = player.search_tracks(track_query, "Lamar Holley", confidence_threshold=0.5)
-    if tracks:
-        track_data, confidence = tracks[0]
-        print(f'Match: "{track_data["title"]}" with confidence {confidence}')
+    print(f'Searching for "{song_query}" in songs by "Lamar Holley":')
+    songs = player.search_songs(song_query, "Lamar Holley", confidence_threshold=0.5)
+    if songs:
+        song_data, confidence = songs[0]
+        print(f'Match: "{song_data["title"]}" with confidence {confidence}')
     else:
         print("No matches found")
 
@@ -583,11 +583,11 @@ def test():
     print("----------------------------------------------------")
     print()
 
-    print(f'Searching for "{track_query}" in all categories:')
-    tracks = player.search(track_query, confidence_threshold=0.5)
-    if tracks:
-        track_data, confidence = tracks[0]
-        print(f'Match: "{track_data["title"]}" with confidence {confidence}')
+    print(f'Searching for "{song_query}" in all categories:')
+    songs = player.search(song_query, confidence_threshold=0.5)
+    if songs:
+        song_data, confidence = songs[0]
+        print(f'Match: "{song_data["title"]}" with confidence {confidence}')
     else:
         print("No matches found")
 
