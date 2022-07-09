@@ -37,6 +37,7 @@ class SettingsManager:
 
     def get_setting(self, keys):
         """ Gets the value of the setting using a path
+
             Parameters:
                 keys (string): path to the setting, separated by "."
                                     For example, "speech.stt.google.credentials"
@@ -59,6 +60,7 @@ class SettingsManager:
 
     def set_setting(self, setting_path, value):
         """ Sets the value of the setting using a path
+
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
@@ -87,6 +89,7 @@ class SettingsManager:
     
     def create_setting(self, setting_path, default_value):
         """ Adds a setting to the settings manager without overwriting an existing value.
+
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
@@ -98,6 +101,7 @@ class SettingsManager:
 
     def setting_exists(self, setting_path):
         """ Checks if the setting exists
+        
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"

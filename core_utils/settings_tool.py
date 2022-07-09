@@ -22,6 +22,7 @@ class SettingsTool:
 
     def get_setting(self, keys) -> object:
         """ Gets the value of the setting using a path
+            
             Parameters:
                 keys (string): path to the setting, separated by "."
                                 For example, "speech.stt.google.credentials"
@@ -33,6 +34,7 @@ class SettingsTool:
 
     def set_setting(self, setting_path, value):
         """ Sets the value of the setting using a path. Creates the setting if it doesn't exist.
+
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
@@ -43,6 +45,7 @@ class SettingsTool:
     
     def create_setting(self, setting_path, default_value=None):
         """ Adds a setting to the settings manager without overwriting an existing value.
+        
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
@@ -54,6 +57,7 @@ class SettingsTool:
     
     def save_settings(self) -> bool:
         """ Saves the settings to disk
+
             Returns:
                 bool: True if the settings were saved, False otherwise 
         """
@@ -62,6 +66,7 @@ class SettingsTool:
     
     def setting_exists(self, setting_path) -> bool:
         """ Checks if the setting exists
+
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"
@@ -73,6 +78,7 @@ class SettingsTool:
     
     def get_sub_tool(self, setting_path: str):
         """ Gets a sub tool for a setting path
+        
             Parameters:
                 setting_path (string): path to the setting, separated by "."
                                                 For example, "speech.stt.google.credentials"

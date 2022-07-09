@@ -20,6 +20,7 @@ class SongDatabase:
 
     def __init__(self, music_dir:str=str(Path.home()) + "/Music"):
         """Initializes the song database.
+
             Parameters:
                 music_dir    (the directory to search for music)
         """
@@ -42,6 +43,7 @@ class SongDatabase:
     #########################
     def get_random_song(self) -> str:
         """Returns a random song from the database
+
         Returns:
             dict: (a dictionary of song metadata)
                 song metadata: {'filepath': str, 'title': str, 'artist': str, 'album': str, ...}
@@ -56,6 +58,7 @@ class SongDatabase:
     def standardize_title(self, title):
         """ Removes all non-alphanumeric characters and replaces underscores and hyphens with spaces
             and converts to lowercase 
+
             Parameters:
                 title:str (title to standardize)
             Returns:
@@ -68,8 +71,9 @@ class SongDatabase:
 
 
     def read_playlist(self, filepath:str) -> list[str]:
-        """Parses a playlist file and returns a list of songs
+        """Parses a playlist file and returns a list of songs.
         Supports m3u, m3u8, pls, xspf, wpl, and plain text with one song per line
+
         Parameters:
             filepath:str (the path to the playlist file)
         Returns:
@@ -130,6 +134,7 @@ class SongDatabase:
                       playlist_extension=('.asx', '.xspf', '.b4s', '.m3u',
                                           'm3u8')):
         """ Loads the database of songs from a directory 
+
             Parameters:
                 directory:str (directory to load songs from)
                 music_extension:tuple (extensions of music files)
@@ -227,6 +232,7 @@ class SongDatabase:
                type: str = 'all',
                confidence_threshold: float = 0.8) -> list[tuple[dict, float]]:
         """ Searches the database for a query
+
             Parameters:
                 query:str  - the query to search for
                 type:str  - 'album', 'artist', 'genre', 'song', or 'playlist' or 'all'
@@ -275,6 +281,7 @@ class SongDatabase:
             artist_name: str = None,
             confidence_threshold: float = 0.5) -> list[tuple[dict, float]]:
         """ Searches for albums by name and optionally artist.
+
             Parameters:   
                 query:str  (album to search)
                 artist name:str (artist name to search for)
@@ -323,6 +330,7 @@ class SongDatabase:
 
     def search_genres(self, query:str, confidence_threshold: float = 0.8) -> list[tuple[dict, float]]:
         """ Searches for genres by name.
+
             Parameters:   
                 query:str  (genre to search)
                 confidence_threshold:float (0.0 to 1.0) (the minimum confidence to return a match)
@@ -358,6 +366,7 @@ class SongDatabase:
 
     def search_playlists(self, query:str, confidence_threshold: float = 0.8) -> list[tuple[dict, float]]:
         """ Searches for playlists by name.
+
             Parameters:   
                 query:str  (playlist to search)
                 confidence_threshold:float (0.0 to 1.0) (the minimum confidence to return a match)
@@ -393,6 +402,7 @@ class SongDatabase:
 
     def search_artists(self, query:str, confidence_threshold:float=0.8) -> list[tuple[dict, float]]:
         """ Searches for artists by name.
+
             Parameters:   
                 query:str  (artist to search)
                 confidence_threshold:float (0.0 to 1.0) (the minimum confidence to return a match)
@@ -430,7 +440,8 @@ class SongDatabase:
 
     def search_songs(self, query:str, artist_name=None, confidence_threshold:float=0.8) -> list[tuple[dict, float]]:
         """ Searches for songs by name.
-            Parameters:   
+
+            Parameters: 
                 query:str  (song to search)
                 artist_name:str (artist of the song) (optional)
                 confidence_threshold:float (0.0 to 1.0) (the minimum confidence to return a match)
