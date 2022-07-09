@@ -42,7 +42,7 @@ class AudioPlayer:
 
     def play_sound(self, filename:str = None):
         """Play Sound
-        :param filename (str): filename of wave file
+        :param filename (str): filename of wave file or buffer object
         :return: pygame.mixer.Sound
         """
         newsound = mixer.Sound(filename)
