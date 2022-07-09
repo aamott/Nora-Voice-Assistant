@@ -576,7 +576,7 @@ def test():
         print(f'Match: "{song_data["title"]}" with confidence {confidence}')
     else:
         print("No matches found")
-
+    print()
 
     print("----------------------------------------------------")
     print("--------------- Testing search() ------------------")
