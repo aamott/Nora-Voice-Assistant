@@ -48,14 +48,17 @@ class Skill(base_skill.BaseSkill):
         if answer:
             # if the answer is longer than 500 characters, only use the first 3 sentences.
             if len(answer) > 500:
-                mini_answer = answer.split(".")
+                mini_answer = answer.split(".") 
                 mini_answer = mini_answer[:3]
                 mini_answer = ".".join(mini_answer)
-            self.audio_utils.say(mini_answer)
+                self.audio_utils.say(mini_answer)
 
-            usr_input = self.audio_utils.input("Would you like to hear the rest?")
-            if 'yes' in usr_input or 'yeah' in usr_input or 'sure' in usr_input:
-                self.audio_utils.say(answer[len(mini_answer):])
+                usr_input = self.audio_utils.input("Would you like to hear the rest?")
+                if 'yes' in usr_input or 'yeah' in usr_input or 'sure' in usr_input:
+                    self.audio_utils.say(answer[len(mini_answer):])
+        
+            else:
+                self.audio_utils.say(answer)
         else:
             self.audio_utils.say("DuckDuckGo couldn't find an instant answer for, " + query)
 
