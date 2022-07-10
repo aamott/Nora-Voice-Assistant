@@ -118,7 +118,8 @@ server = create_server(channels=channels, settings_manager=settings_manager)
 ########################################
 with server.run_in_thread():
     # startup fanciness
-    audio_utils.say("Hello, I am Nora. I am a virtual assistant.")
+    name = settings_manager.get_setting("name")
+    audio_utils.say(f"Hello, I am {name}. I am a virtual assistant.")
 
     # start the wakeword thread
     wakeword_thread = Thread(target=await_wakeword_thread)
