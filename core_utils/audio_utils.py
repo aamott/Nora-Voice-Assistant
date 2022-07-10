@@ -21,7 +21,8 @@ class AudioUtils:
         self.settings_tool=settings_tool
         # Audio Setup
         self._audio_player = AudioPlayer()
-        self._audio_recorder = AudioRecorder()
+        recorder_settings = self.settings_tool.get_sub_tool("audio_recorder")
+        self._audio_recorder = AudioRecorder(settings_tool=recorder_settings)
 
         # Speech to Text Setup
         stt_settings_tool = settings_tool.get_sub_tool("speech_to_text")

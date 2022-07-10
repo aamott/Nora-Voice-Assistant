@@ -10,25 +10,54 @@ import time
 from scipy.io.wavfile import write
 import io
 
+from ..settings_tool import SettingsTool
+
 
 class AudioRecorder:
 
-    def __init__(self, samplerate=48000, channels=1):
+    def __init__(self,
+                 settings_tool: SettingsTool=None,
+                 samplerate=48000,
+                 channels=1):
+        """ Initialize the audio recorder.
+
+            Args:
+                settings_tool (SettingsTool): settings tool to use for getting settings
+                samplerate (int): sample rate of the audio
+                channels (int): number of channels
+                max_frames_silence (int): max number of frames of silence detected before recording is stopped
+                silence_threshold (int): threshold for silence detection. A good threshold can be
+                    determined with the calibrate_silence method.
+        """
+        self.settings_tool = settings_tool
         sd.default.samplerate = samplerate
         sd.default.channels = channels
         self.samplerate = sd.default.samplerate
 
-        self.min_threshold = 0
+        # anything below this threshold is considered silence
+        self.silence_threshold = 0
+
+        # how many frames of silence before recording stops - filters false silence
+        if self.settings_tool:
+            self.max_frames_silence = settings_tool.get_setting("Max Frames of Silence", default=50)
+        else:
+            self.max_frames_silence = 50
+
+        # current number of frames of silence - starts at 0
         self.frames_of_silence = 0
         self.recording = False
-        self.max_frames_silence = 50  # how many frames of silence before recording stops - filters false silence
         self.recorded_audio = None
 
 
-    def calibrate_silence(self, samplerate : int = None, channels=1, sample_time=1):
+    def calibrate_silence(self, samplerate : int = None, channels=1, sample_time=1, threshold_multiplier=None):
         """ Sample silence for a specified time. Use for auto-adjusting the threshold 
+
             Args:
+                samplerate (int): sample rate of the audio
+                channels (int): number of channels
                 sample_time (int): number of seconds to sample
+                threshold_multiplier (float): multiplier to adjust the threshold by. Make 
+                    bigger to make recording stop sooner, smaller to make recording stop later.
             Returns:
                 int: silence threshold
         """
@@ -40,9 +69,17 @@ class AudioRecorder:
                 # samplerate=self.default_samplerate,
                 dtype="int16") as stream:
             data = stream.read(sample_time * self.samplerate)
-            self.min_threshold = np.max(data[0])
+            self.silence_threshold = np.max(data[0])
 
-        return self.min_threshold
+        # multiply silence threshold by a factor to account for differences in microphone sensitivity
+        if threshold_multiplier:
+            self.silence_threshold *= threshold_multiplier
+        else:
+            if self.settings_tool:
+                self.silence_threshold *= self.settings_tool.get_setting("Silence Threshold Multiplier", default=1.0)
+            else:
+                self.silence_threshold *= 1.0
+        return self.silence_threshold
 
 
     def _process_frame(self, indata, num_frames, time, status):
@@ -68,11 +105,11 @@ class AudioRecorder:
 
         max_velocity = np.max(indata)
 
-        if max_velocity > self.min_threshold:
+        if max_velocity > self.silence_threshold:
             # print("Speaking...")
             self.frames_of_silence -= 1
 
-        elif max_velocity < self.min_threshold:
+        elif max_velocity < self.silence_threshold:
             # print("Not speaking...")
             self.frames_of_silence += 1
             # stop recording if silence has been detected for a while
@@ -95,6 +132,7 @@ class AudioRecorder:
                filename=None,
                max_recording_seconds=8) -> np.ndarray:
         """Record audio from the microphone for a specified time or until silence is detected.
+
             Args:
                 samplerate (int): sample rate of the audio. Defaults to 48000.
                 channels (int): number of channels
@@ -126,11 +164,14 @@ class AudioRecorder:
                     if time.time() - start_time > max_recording_seconds:
                         self.recording = False
 
+                # reset frames_of_silence
+                self.frames_of_silence = 0
+
         except Exception as e:
             print("Failed to record:", e)
             raise e
 
-        # flatten the recorded audio
+        # flatten the recorded audio and return it
         return self.recorded_audio.flatten()
 
 
@@ -140,6 +181,7 @@ class AudioRecorder:
                                 filename=None,
                                 max_recording_seconds=8):
         """Record audio from the microphone for a specified time.
+
             Args:
                 samplerate (int): sample rate of the audio
                 channels (int): number of channels
@@ -211,6 +253,7 @@ class AudioRecorder:
                           channels=1,
                           timeout: int = None):
         """ Record audio from the microphone in a continuous loop.
+
             Args:
                 frame_processor (callable->bool): function to pass audio frames to.
                                     Should accept numpy array of audio data and return True if done recording.
