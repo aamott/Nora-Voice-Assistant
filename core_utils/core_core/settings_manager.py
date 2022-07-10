@@ -35,24 +35,35 @@ class SettingsManager:
         return self.settings
 
 
-    def get_setting(self, keys):
-        """ Gets the value of the setting using a path
+    def get_setting(self, keys, default=None):
+        """ Gets the value of the setting using a path. If the setting does not exist and
+            the default value is set, the setting is created and default returned.
+            If the default value is not set, None is returned.
 
             Parameters:
                 keys (string): path to the setting, separated by "."
                                     For example, "speech.stt.google.credentials"
             
-            Returns: dict or single value 
+            Returns: any: the value of the setting, or None if the setting does not exist
         """
+        original_key = keys
         def get_value(keys, settings):
             if "." in keys:
                 key, rest = keys.split(".", 1)
                 if key not in settings:
-                    return None
+                    if default is not None:
+                        self.set_setting(original_key, default)
+                        return default
+                    else:
+                        return None
                 return get_value(rest, settings[key])
             else:
                 if keys not in settings:
-                    return None
+                    if default is not None:
+                        self.set_setting(original_key, default)
+                        return default
+                    else:
+                        return None
                 return settings[keys]
 
         return get_value(keys, self.settings)
@@ -86,7 +97,7 @@ class SettingsManager:
         # save the settings
         self.save_settings()
 
-    
+
     def create_setting(self, setting_path, default_value):
         """ Adds a setting to the settings manager without overwriting an existing value.
 
@@ -119,7 +130,7 @@ if __name__ == "__main__":
     settings_manager.__init__()
     # Get a nonexistant setting
     print("Test:", settings_manager.get_setting("test"))
-    
+
     # Set a setting
     settings_manager.set_setting("test", "Success")
     print("Test:", settings_manager.get_setting("test"))

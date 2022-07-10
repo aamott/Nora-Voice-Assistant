@@ -20,16 +20,18 @@ class SettingsTool:
         self.setting_path = setting_path
 
 
-    def get_setting(self, keys) -> object:
-        """ Gets the value of the setting using a path
-            
+    def get_setting(self, keys, default=None) -> object:
+        """ Gets the value of the setting using a path. If the setting does not exist and
+            the default value is set, the setting is created and default returned.
+            If the default value is not set, None is returned.
+
             Parameters:
                 keys (string): path to the setting, separated by "."
-                                For example, "speech.stt.google.credentials"
+                                    For example, "speech.stt.google.credentials"
             
-            Returns: dict or single value 
+            Returns: any: the value of the setting, or None if the setting does not exist
         """
-        return self.settings_manager.get_setting(self.setting_path + "." + keys)
+        return self.settings_manager.get_setting(self.setting_path + "." + keys, default=default)
 
 
     def set_setting(self, setting_path, value):
@@ -42,7 +44,7 @@ class SettingsTool:
         """
         self.settings_manager.set_setting(self.setting_path + "." + setting_path, value)
 
-    
+
     def create_setting(self, setting_path, default_value=None):
         """ Adds a setting to the settings manager without overwriting an existing value.
         
@@ -54,7 +56,7 @@ class SettingsTool:
         # settings_manager handles the creation of the setting
         self.settings_manager.create_setting(self.setting_path + "." + setting_path, default_value)
 
-    
+
     def save_settings(self) -> bool:
         """ Saves the settings to disk
 
@@ -63,7 +65,7 @@ class SettingsTool:
         """
         return self.settings_manager.save_settings()
 
-    
+
     def setting_exists(self, setting_path) -> bool:
         """ Checks if the setting exists
 
@@ -75,7 +77,7 @@ class SettingsTool:
         """
         return self.settings_manager.setting_exists(self.setting_path + "." + setting_path)
 
-    
+
     def get_sub_tool(self, setting_path: str):
         """ Gets a sub tool for a setting path
         
