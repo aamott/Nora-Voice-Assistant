@@ -1,6 +1,7 @@
 ###########################
 # Music Player Skill
 ###########################
+from atexit import register
 from multiprocessing.spawn import import_main_path
 from skills import base_skill
 from core_utils.core_core.channels import Channels
@@ -52,6 +53,27 @@ class Skill(base_skill.BaseSkill):
                     intent_phrases=["Play {song}", "Start {song}"],
                     intent_name="Music_Player"
                     )
+        register_intent(
+            intent_callback= self.music_pause,
+                    
+                    intent_phrases=["pause", "pause (the | ) music"],
+                    
+                    intent_name="music_pause"
+                    )
+        register_intent(
+            intent_callback= self.music_resume,
+                    
+                    intent_phrases=["Resume (music | )", "Play (the music| music)"],
+                    
+                    intent_name="music_resume"
+                    )
+        register_intent(
+            intent_callback= self.music_stop,
+                    
+                    intent_phrases=["Stop (music | )", "stop (the music| )"],
+                    
+                    intent_name="music_stop"
+                    )
 
 
     def play_song_intent(self, intent_data):
@@ -72,3 +94,12 @@ class Skill(base_skill.BaseSkill):
         # Play the song
         self.audio_utils.play(top_song["filepath"])
         self.audio_utils.say("Playing " + top_song["title"])
+
+    def music_pause(self, intent_data):
+       self.audio_utils.pause()
+    
+    def music_resume(self, intent_data):
+       self.audio_utils.resume()
+
+    def music_stop(self, intent_data):
+       self.audio_utils.stop()

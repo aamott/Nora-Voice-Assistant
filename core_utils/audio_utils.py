@@ -107,6 +107,9 @@ class AudioUtils:
 
     def stop_sound(self):
         self._audio_player.stop_sound()
+    
+    def get_volume(self):
+        self._audio_player.get_volume()
 
 
     ###########################

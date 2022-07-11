@@ -12,11 +12,18 @@ class AudioPlayer:
     def __init__(self):
         mixer.init()
         volume = 1
+        mixer.music.set_volume(volume)
 
         # voice
         self.voice_channel = mixer.Channel(0)
 
         self.sounds = []
+
+    
+    def get_volume(self):
+        """will return a number between 1 and 0.0 
+        """
+        return mixer.music.get_volume()    
 
 
     def play(self, filename:str = None):
