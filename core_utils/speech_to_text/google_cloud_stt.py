@@ -33,7 +33,7 @@ class STT( STT_Abstract ):
         Listens for audio, then returns the text of the audio
         """
         # record
-        audio_file = self.audio_recorder.get_recording_as_wav()
+        audio_file = self.audio_recorder.record_until_silence_as_wav()
         print("Done recording")
 
         # convert to AudioData object

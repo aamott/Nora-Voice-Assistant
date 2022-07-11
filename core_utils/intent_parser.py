@@ -24,16 +24,22 @@ class IntentParser:
 
     def parse_intent(self, user_input) -> dict:
         """Parses the user input
+
             Returns:
                 intent ( {'name':str, 'original_phrase':str 'callback':callable, 'entities': {'<entity_name>': value}} )
                     or None if no intent is detected
         """
         intent = self.intents.calc_intent(user_input)
-        if intent["name"]:
-            # add the intent callback (since padaos can't store it)
-            intent_callback = self.intent_callbacks[intent["name"]]
-            intent["original_phrase"] = user_input
-            intent["callback"] = intent_callback
+        if intent.get("name"):
+            try:
+                # add the intent callback (since padaos can't store it)
+                intent_callback = self.intent_callbacks[intent["name"]]
+                intent["original_phrase"] = user_input
+                intent["callback"] = intent_callback
+            
+            except Exception as e:
+                print("Error on intent callback: " + str(e))
+                intent = None
 
             return intent
         else:
@@ -82,6 +88,7 @@ class IntentParser:
 
     def _register_intent(self, intent_callback: callable, intent_phrases: list[str], intent_name : str):
         """ Registers an intent
+        
             Parameters:
                 intent_callback (callable): the function to be called when the intent is detected
                 intent_phrases (list): the phrases to be recognized, (formatted for 

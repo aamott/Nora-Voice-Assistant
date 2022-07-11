@@ -127,7 +127,7 @@ class AudioUtils:
             Returns:
                 ndarray [int16]: audio data
         """
-        recording = self._audio_recorder.get_recording(
+        recording = self._audio_recorder.record_until_silence(
             samplerate=samplerate,
             channels=channels,
             filename=filename,

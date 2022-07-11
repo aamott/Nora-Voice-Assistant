@@ -69,6 +69,7 @@ class Wakeword:
         """ Callback function for wakeword detection. This function will be passed to the AudioRecorder.
             When the wakeword is detected, the wakeword_detected_callback function will be called.
             If the shutdown_event is set, the function will return immediately.
+
             Args:
                 audio_data (ndarray): The audio data to process.
             Returns:
@@ -99,6 +100,7 @@ class Wakeword:
 
     def await_wakeword(self, timeout: int = None, shutdown_event: Event = None):
         """ Await wakeword.
+        
             Args:
                 timeout (int): The timeout in seconds. If None, the function will wait indefinitely.
                 shutdown_event (Event): The shutdown event. If set, the function will return immediately.
