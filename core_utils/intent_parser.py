@@ -24,6 +24,7 @@ class IntentParser:
 
     def parse_intent(self, user_input) -> dict:
         """Parses the user input
+
             Returns:
                 intent ( {'name':str, 'original_phrase':str 'callback':callable, 'entities': {'<entity_name>': value}} )
                     or None if no intent is detected
@@ -87,6 +88,7 @@ class IntentParser:
 
     def _register_intent(self, intent_callback: callable, intent_phrases: list[str], intent_name : str):
         """ Registers an intent
+        
             Parameters:
                 intent_callback (callable): the function to be called when the intent is detected
                 intent_phrases (list): the phrases to be recognized, (formatted for 

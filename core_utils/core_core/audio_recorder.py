@@ -1,6 +1,11 @@
 ###########################
 # Audio Recorder
 # Contains tools to record audio
+# TODO: What if we continually recorded audio,
+#       pushed into a queue, and then we read from the queue
+#       using callback functions?
+#      We could limit the size of the queue to prevent
+#     memory issues. It would allow very low latency.
 ###########################
 
 import sounddevice as sd
@@ -126,7 +131,7 @@ class AudioRecorder:
             self.recorded_audio = np.concatenate([self.recorded_audio, indata], axis=0)
 
 
-    def get_recording(self,
+    def record_until_silence(self,
                samplerate : int = None,
                channels=1,
                filename=None,
@@ -175,7 +180,7 @@ class AudioRecorder:
         return self.recorded_audio.flatten()
 
 
-    def get_recording_as_wav(self,
+    def record_until_silence_as_wav(self,
                                 samplerate=48000,
                                 channels=1,
                                 filename=None,
@@ -191,7 +196,7 @@ class AudioRecorder:
             Returns:
                 BytesIO: audio data wav file as a BytesIO object. Can be treated like a file.
         """
-        audio_array = self.get_recording(samplerate=samplerate,
+        audio_array = self.record_until_silence(samplerate=samplerate,
                                             channels=channels,
                                             filename=filename,
                                             max_recording_seconds=max_recording_seconds)
@@ -284,7 +289,7 @@ if __name__ == "__main__":
     threshold = recorder.calibrate_silence()
 
     print("Recording...")
-    audio = recorder.get_recording_as_wav().read()
+    audio = recorder.record_until_silence_as_wav().read()
 
     print("Playing the recording...")
     import pygame
