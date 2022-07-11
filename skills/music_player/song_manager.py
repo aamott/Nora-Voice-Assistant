@@ -172,6 +172,8 @@ class SongDatabase:
                     else:
                         title = Path(item_path).stem
                         title = self.standardize_title(title)
+                        tags.title = title
+                        song_data["title"] = title
                     self.songs[title] = song_data
 
                     # ARTIST: creates a list of songs under each artist

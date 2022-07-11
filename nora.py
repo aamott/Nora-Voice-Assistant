@@ -90,6 +90,8 @@ wakeword_settings_tool = SettingsTool(settings_manager=settings_manager,
 wakeword = Wakeword(settings_tool=wakeword_settings_tool,
                     audio_utils=audio_utils)
 
+#get the name of the assiantat
+name = settings_manager.get_setting("name", "Carmen")
 
 channels.subscribe(shutdown_system, 'system')
 
