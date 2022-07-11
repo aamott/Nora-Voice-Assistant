@@ -29,11 +29,16 @@ class IntentParser:
                     or None if no intent is detected
         """
         intent = self.intents.calc_intent(user_input)
-        if intent["name"]:
-            # add the intent callback (since padaos can't store it)
-            intent_callback = self.intent_callbacks[intent["name"]]
-            intent["original_phrase"] = user_input
-            intent["callback"] = intent_callback
+        if intent.get("name"):
+            try:
+                # add the intent callback (since padaos can't store it)
+                intent_callback = self.intent_callbacks[intent["name"]]
+                intent["original_phrase"] = user_input
+                intent["callback"] = intent_callback
+            
+            except Exception as e:
+                print("Error on intent callback: " + str(e))
+                intent = None
 
             return intent
         else:
