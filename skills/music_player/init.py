@@ -49,7 +49,7 @@ class Skill(base_skill.BaseSkill):
         register_intent(
                     intent_callback= self.play_song_intent,
                     # We can add 'entities' (which are like parameters) to the intent.
-                    intent_phrases=["Play {song}", "Start {song}}"],
+                    intent_phrases=["Play {song}", "Start {song}"],
                     intent_name="Music_Player"
                     )
 
