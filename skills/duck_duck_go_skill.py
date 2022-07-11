@@ -2,7 +2,6 @@
 # DuckDuckGo Skill
 # Answers queries from the DuckDuckGo API.
 ####################################
-from torch import LongTensor
 from skills import base_skill
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool
