@@ -110,6 +110,18 @@ class AudioUtils:
     
     def get_volume(self):
         self._audio_player.get_volume()
+    
+    def decrease_volume(self):
+        self._audio_player.descrease_volume()
+    
+    def increase_volume(self):
+        self._audio_player.increase_volume()
+    
+    def min_volume(self):
+        self._audio_player.set_min_volume()
+    
+    def max_volume(self):
+        self._audio_player.set_max_volume()
 
 
     ###########################

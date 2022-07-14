@@ -13,7 +13,6 @@ import core_utils.skill_creator as skill_creator
 from core_utils.audio_utils import AudioUtils
 from core_utils.wakeword import Wakeword
 from core_utils.server import create_server
-
 from threading import Thread, Event
 import queue
 
