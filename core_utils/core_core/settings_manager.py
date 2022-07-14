@@ -48,8 +48,10 @@ class SettingsManager:
         """
         original_key = keys
         def get_value(keys, settings):
+            # if the key is still a path, split it
             if "." in keys:
                 key, rest = keys.split(".", 1)
+                # if setting doesn't exist, return None
                 if key not in settings:
                     if default is not None:
                         self.set_setting(original_key, default)
@@ -57,14 +59,22 @@ class SettingsManager:
                     else:
                         return None
                 return get_value(rest, settings[key])
+            # if the key is not a path, check if it exists and return it
             else:
+                # if setting doesn't exist, return None
                 if keys not in settings:
                     if default is not None:
                         self.set_setting(original_key, default)
                         return default
                     else:
                         return None
-                return settings[keys]
+                # return settings[keys] or default or None 
+                if settings[keys] is None:
+                    if default is not None:
+                        self.set_setting(original_key, default)
+                        return default
+                    else:
+                        return None
 
         return get_value(keys, self.settings)
 
