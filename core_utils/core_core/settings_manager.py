@@ -75,6 +75,8 @@ class SettingsManager:
                         return default
                     else:
                         return None
+                else:
+                    return settings[keys]
 
         return get_value(keys, self.settings)
 
