@@ -74,8 +74,36 @@ class Skill(base_skill.BaseSkill):
                     
                     intent_name="music_stop"
                     )
-
-
+        register_intent(
+            intent_callback= self.decrease_volume,
+                    
+                    intent_phrases=["lower (the | ) volume", "decrease (the | ) volume"],
+                    
+                    intent_name="decrease volume"
+                    )
+        register_intent(
+            intent_callback= self.increase_volume,
+                    
+                    intent_phrases=["increase (the | ) volume", "up (the | ) volume"],
+                    
+                    intent_name="increase volume"
+                    )
+        register_intent(
+            intent_callback= self.max_volume,
+                    
+                    intent_phrases=["max volume"],
+                    
+                    intent_name="max volume"
+                    )           
+        register_intent(
+            intent_callback= self.mmin_volume,
+                    
+                    intent_phrases=["lowest volume", "(min| minimum) volume"],
+                    
+                    intent_name="min volume"
+                    ) 
+    
+    
     def play_song_intent(self, intent_data):
         """ Plays a song from the song database. """
         # intent_data looks like this:
@@ -103,3 +131,15 @@ class Skill(base_skill.BaseSkill):
 
     def music_stop(self, intent_data):
        self.audio_utils.stop()
+    
+    def decrease_volume(self, intent_data):
+       self.audio_utils.decrease_volume()
+    
+    def increase_volume(self, intent_data):
+       self.audio_utils.increase_volume()
+    
+    def max_volume(self, intent_data):
+        self.audio_utils.max_volume()
+    
+    def min_volume(self, intent_data):
+        self.audio_utils.min_volume()
