@@ -7,19 +7,20 @@
 # Requirements
 #    pip install azure-cognitiveservices-speech
 ###########################################
+from os import remove
 from core_utils.text_to_speech.tts_abstract import TTS as TTS_Abstract
 from core_utils.core_core.channels import Channels
 from core_utils.settings_tool import SettingsTool  # for audio output
-# from core_utils.core_core.audio_player import AudioPlayer
+from core_utils.core_core.audio_player import AudioPlayer
 import azure.cognitiveservices.speech as speechsdk
-from azure.cognitiveservices.speech.audio import AudioOutputConfig
+from azure.cognitiveservices.speech import AudioDataStream
 
 
 class TTS(TTS_Abstract):
     # The id of the object as it will appear in the json
     name = "MS_Voice_TTS"
 
-    def __init__(self, settings_tool: SettingsTool, channels: Channels): # TODO: uncomment when implemented - , audio_player: AudioPlayer=None):
+    def __init__(self, settings_tool: SettingsTool, channels: Channels, audio_player: AudioPlayer):
         """ Microsoft's Text to Speech wrapper for Alfred
             Find your key and resource region under the 'Keys and Endpoint' tab in your Speech resource in Azure Portal
 
@@ -30,7 +31,7 @@ class TTS(TTS_Abstract):
         """
         self.settings_tool = settings_tool
         self.channels = channels
-        # self.audio_player = audio_player
+        self.audio_player = audio_player
 
         # Add any settings that don't exist yet
         self.populate_settings_tool()
@@ -59,23 +60,29 @@ class TTS(TTS_Abstract):
 
 
     def say(self, text, is_ssml=False):
-
-        # # TODO: Uncomment when AudioUtils.play_speech is implemented
-        # #            then use that instead of configuring to use a speaker
-        # synthesizer = speechsdk.SpeechSynthesizer(
-        #     speech_config=self.speech_config, audio_config=None)
-        # result = synthesizer.speak_text_async(text).get()
-        # # Bytes object
-        # result.audio_data
-
-        audio_config = AudioOutputConfig(use_default_speaker=True)
         synthesizer = speechsdk.SpeechSynthesizer(
-            speech_config=self.speech_config, audio_config=audio_config)
-        # Speak the result
-        if is_ssml:
-            speech_synthesis_result = synthesizer.speak_ssml_async(text).get()
-        else:
-            speech_synthesis_result = synthesizer.speak_text_async(text).get()
+            speech_config=self.speech_config, audio_config=None)
+        speech_synthesis_result = synthesizer.speak_text_async(text).get()
+        # # TODO: Figure out how to use the bytes object without it playing super fast
+        # Bytes object:
+        # self.audio_player.play(speech_synthesis_result.audio_data)
+
+        # Save to wav to be played
+        stream = AudioDataStream(speech_synthesis_result)
+        stream.save_to_wav_file_async("tts.wav").get()
+        self.audio_player.play_sound('tts.wav')
+        remove('tts.wav')
+
+
+        # The code used before the AudioUtils.play_speech was implemented
+        # audio_config = AudioOutputConfig(use_default_speaker=True)
+        # synthesizer = speechsdk.SpeechSynthesizer(
+        #     speech_config=self.speech_config, audio_config=audio_config)
+        # # Speak the result
+        # if is_ssml:
+        #     speech_synthesis_result = synthesizer.speak_ssml_async(text).get()
+        # else:
+        #     speech_synthesis_result = synthesizer.speak_text_async(text).get()
 
         # Debugging
         if speech_synthesis_result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:

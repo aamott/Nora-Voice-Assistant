@@ -29,6 +29,7 @@ class UserDatabase:
 
     def get_users(self) -> dict:
         """Returns the users as a dictionary. 
+
             Returns: dict
         """
         return self.users
@@ -36,6 +37,7 @@ class UserDatabase:
 
     def get_user(self, username:str) -> Union[dict, None]:
         """ Gets a user by username
+        
             Returns: dict of user data
                         or None if no users found or invalid input
         """

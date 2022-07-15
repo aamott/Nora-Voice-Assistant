@@ -21,7 +21,8 @@ class AudioUtils:
         self.settings_tool=settings_tool
         # Audio Setup
         self._audio_player = AudioPlayer()
-        self._audio_recorder = AudioRecorder()
+        recorder_settings = self.settings_tool.get_sub_tool("audio_recorder")
+        self._audio_recorder = AudioRecorder(settings_tool=recorder_settings)
 
         # Speech to Text Setup
         stt_settings_tool = settings_tool.get_sub_tool("speech_to_text")
@@ -35,7 +36,8 @@ class AudioUtils:
         self._tts = tts_getter.get_tts_object(
             tts_module=tts_module,
             channels=channels,
-            settings_tool=tts_settings_tool)
+            settings_tool=tts_settings_tool,
+            audio_player=self._audio_player)
 
 
 
@@ -105,6 +107,21 @@ class AudioUtils:
 
     def stop_sound(self):
         self._audio_player.stop_sound()
+    
+    def get_volume(self):
+        self._audio_player.get_volume()
+    
+    def decrease_volume(self):
+        self._audio_player.descrease_volume()
+    
+    def increase_volume(self):
+        self._audio_player.increase_volume()
+    
+    def min_volume(self):
+        self._audio_player.set_min_volume()
+    
+    def max_volume(self):
+        self._audio_player.set_max_volume()
 
 
     ###########################
@@ -122,7 +139,7 @@ class AudioUtils:
             Returns:
                 ndarray [int16]: audio data
         """
-        recording = self._audio_recorder.get_recording(
+        recording = self._audio_recorder.record_until_silence(
             samplerate=samplerate,
             channels=channels,
             filename=filename,

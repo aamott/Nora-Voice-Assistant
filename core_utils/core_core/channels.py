@@ -6,6 +6,8 @@
 #   - publish(message, channel_name)
 #   - subscribe(callback, channel_name)
 #################################################
+import inspect
+
 
 class Channels:
     def __init__(self):
@@ -27,9 +29,20 @@ class Channels:
         """ Subscribe to a channel.
 
         Args:
-            callback (callable): The callback callable to be called when a message is published to the channel.
+            callback (callable): The function be called when a message is published to the channel.
+                                    The function must take one argument, the message.
             channel_name (str): The name of the channel to subscribe to.
         """
+        # check that the callback signature includes an argument for the message
+        callback_args = inspect.signature(callback).parameters
+        if len(callback_args) == 0:
+            raise ValueError("Callback function must take one argument, the message.")
+        # if there are any other agruments, see if they have default values.
+        if len(callback_args) > 1:
+            if callback_args[1].default == inspect.Parameter.empty:
+                raise ValueError("Callback function must take one argument, the message.")
+
+        # check if the callback is already subscribed to the channel
         if channel_name not in self.channels:
             self.channels[channel_name] = []
         self.channels[channel_name].append(callback)

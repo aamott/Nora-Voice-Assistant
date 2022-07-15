@@ -1,24 +1,22 @@
 # Web Server
 fastapi
-uvicorn
+uvicorn[standard]
 python-jose[cryptography]
 python-multipart
 passlib[bcrypt]
 
 # intents
 padaos
-lingua_franca
 
 # Speech Recognition
 speechrecognition
-deepspeech; python_version <= '3.9'
+deepspeech; python_version == '3.9'
 azure-cognitiveservices-speech
 
 # Text to Speech
 gTTS>=2.2.3
 ibm-watson
 pyttsx3
-pydub
 
 # Wakeword
 pvporcupine
@@ -31,10 +29,3 @@ playsound==1.2.2 # TODO: remove this dependency
 
 # Settings
 pyyaml
-
-# Skills -- TODO: Can these requirements be placed alongside
-# each skill to make skill creation easier?
-# Music Skill
-tinytag
-# Wolfram Alpha Skill
-wolframalpha

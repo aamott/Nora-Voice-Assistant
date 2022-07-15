@@ -135,6 +135,25 @@ then it would only match the phrase "Hello world".
 4. Entities can be used to get a specific part of a phrase. `["Hello {name}"]` would match "hello Paul" as well as "hello world". The power behind this is that later, we can get `name` out of the `intent_data`. Let's go into detail below.
 
 ### `intent_data`
+Intent data is passed into your intent callback whenever it is detected. If you want it to, it can carry pieces of data from the user. For example, if I want to get the name of the user, I can use the `intent_data` dictionary to get it. 
+```python
+    ...
+
+    def hello_intent(self, intent_data):
+        """This function is called when the
+        intent is detected."""
+        name = intent_data["entities"]["name"]
+        self.audio_utils.say("Hello {name}!".format(name=name))
+```
+To register this intent, I would write: 
+```python
+        ...
+        register_intent(
+            intent_callback=self.hello_intent,
+            intent_phrases=["Hello. My name is {name}"], # <--- intent_phrase
+            intent_name="say_hello_with_name")
+```
+intent_data looks like this:
 ```python
 # intent_data
 {'name': str, 'original_phrase': str 'entities': {<entity name>: str, <other entity name>: str}}

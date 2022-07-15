@@ -13,7 +13,6 @@ import core_utils.skill_creator as skill_creator
 from core_utils.audio_utils import AudioUtils
 from core_utils.wakeword import Wakeword
 from core_utils.server import create_server
-
 from threading import Thread, Event
 import queue
 
@@ -41,11 +40,12 @@ def consume_input():
 
 
 def await_wakeword_thread():
-    """ Thread for the wakeword. """
+    """ Thread for the wakeword.
+    Loops and waits for the wakeword to be spoken. When it is,
+    it grabs the user's command.
+    """
     while not shutdown_event.is_set():
-        wakeword.await_wakeword()
-        # TODO: find a more immediate way to kill the thread.
-        #  It currently waits until await_wakeword is done running.
+        wakeword.await_wakeword(shutdown_event=shutdown_event)
         if shutdown_event.is_set():
             break
 
@@ -56,13 +56,10 @@ def await_wakeword_thread():
             speech_queue.put(text)
 
 
-def shutdown_system():
+def shutdown_system(message=None):
     """ Shuts down the system. """
     print("Save settings")
     settings_manager.save_settings()
-    print("Shutting down...")
-    audio_utils.say("Shutting down")
-    print(shutdown_event.is_set())
     shutdown_event.set()
 
 
@@ -92,8 +89,10 @@ wakeword_settings_tool = SettingsTool(settings_manager=settings_manager,
 wakeword = Wakeword(settings_tool=wakeword_settings_tool,
                     audio_utils=audio_utils)
 
+#get the name of the assiantat
+name = settings_manager.get_setting("name", "Carmen")
 
-channels.subscribe("shutdown_system", shutdown_system)
+channels.subscribe(shutdown_system, 'system')
 
 # calibrating audio
 print("Calibrating...")
@@ -120,7 +119,8 @@ server = create_server(channels=channels, settings_manager=settings_manager)
 ########################################
 with server.run_in_thread():
     # startup fanciness
-    audio_utils.say("Hello, I am Nora. I am a virtual assistant.")
+    name = settings_manager.get_setting("name")
+    audio_utils.say(f"Hello, I am {name}. I am a virtual assistant.")
 
     # start the wakeword thread
     wakeword_thread = Thread(target=await_wakeword_thread)

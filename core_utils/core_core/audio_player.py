@@ -9,14 +9,22 @@ from pygame import mixer
 
 class AudioPlayer:
     # base standard volume
+    
     def __init__(self):
         mixer.init()
         volume = 1
-
+        mixer.music.set_volume(volume)
+        
         # voice
         self.voice_channel = mixer.Channel(0)
 
         self.sounds = []
+
+    
+    def get_volume(self):
+        """will return a number between 1 and 0.0 
+        """
+        return mixer.music.get_volume()    
 
 
     def play(self, filename:str = None):
@@ -38,11 +46,24 @@ class AudioPlayer:
 
     def stop(self):
         mixer.music.stop()
+    
+    def descrease_volume(self):
+        mixer.music.set_volume(mixer.music.get_volume() - 0.1)
+    
+    def increase_volume(self):
+        mixer.music.set_volume(mixer.music.get_volume() + 0.1)
+    
+    def set_max_volume(self):
+        mixer.music.set_volume(1)
+    
+    def set_min_volume(self):
+        mixer.music.set_volume(0.1)
+
 
 
     def play_sound(self, filename:str = None):
         """Play Sound
-        :param filename (str): filename of wave file
+        :param filename (str): filename of wave file or buffer object
         :return: pygame.mixer.Sound
         """
         newsound = mixer.Sound(filename)

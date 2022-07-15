@@ -7,6 +7,7 @@ from core_utils.settings_tool import SettingsTool
 from core_utils.audio_utils import AudioUtils
 import webbrowser
 
+
 class Skill(base_skill.BaseSkill):
     name = "Internet Search Skill"
 
@@ -25,10 +26,9 @@ class Skill(base_skill.BaseSkill):
         register_intent(
             intent_callback=self.internet_search_intent,
             # We can add 'entities', (or named values to look for), to the intent.
-            intent_phrases=[
-                "Search (for | ) {search_phrase}", "Look up {search_phrase}"
-            ],
-            intent_name="Internet_search")
+            intent_phrases=["Search (for | ) {search_phrase}", "Look up {search_phrase}"],
+            intent_name="Internet_search"
+            )
 
 
     def internet_search_intent(self, intent_data):
@@ -42,3 +42,4 @@ class Skill(base_skill.BaseSkill):
         url = f"https://www.google.com/search?q={search_phrase}"
 
         webbrowser.open(url)
+        

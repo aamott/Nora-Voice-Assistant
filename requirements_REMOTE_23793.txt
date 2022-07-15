@@ -1,6 +1,6 @@
 # Web Server
 fastapi
-uvicorn
+uvicorn[standard]
 python-jose[cryptography]
 python-multipart
 passlib[bcrypt]
@@ -11,7 +11,7 @@ lingua_franca
 
 # Speech Recognition
 speechrecognition
-deepspeech; python_version <= '3.9'
+deepspeech; python_version == '3.9'
 azure-cognitiveservices-speech
 
 # Text to Speech

@@ -40,7 +40,7 @@ class STT( STT_Abstract ):
 
     def listen(self):
         # Get audio BytesIO object
-        audio = self.audio_recorder.get_recording(samplerate=16000)
+        audio = self.audio_recorder.record_until_silence(samplerate=16000)
 
         # get text with DeepSpeech (ds)
         return self.ds.stt(audio)
