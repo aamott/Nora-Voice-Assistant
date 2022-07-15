@@ -19,7 +19,6 @@ class Skill(base_skill.BaseSkill):
         self.settings_tool.create_setting("wolfram_alpha_app_id")
         app_id = self.settings_tool.get_setting("wolfram_alpha_app_id")
         if app_id is None:
-            self.audio_utils.say("Please set your wolfram alpha app id in the settings.")
             # throw an exception to stop the skill from loading.
             raise Exception("Wolfram alpha app id not set.")
 
