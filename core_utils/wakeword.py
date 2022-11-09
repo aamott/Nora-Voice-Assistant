@@ -35,7 +35,7 @@ class Wakeword:
         key = self.settings_tool.get_setting("key")
         sensitivities = self.settings_tool.get_setting("sensitivities")
         keywords = self.settings_tool.get_setting("keywords")
-        keyword_paths = self.settings_tool.get_setting("model_path")
+        keyword_paths = self.settings_tool.get_setting("model_path", default='wakewords/carmen_en_windows_v2_1_0.ppn')
 
         # validate the settings
         if key is None:
