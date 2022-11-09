@@ -127,5 +127,8 @@ def make_user():
     print()
 
 
-create_settings_file()
-make_user()
+if __name__ == "__main__":
+
+    # create settings file
+    create_settings_file()
+    make_user()
