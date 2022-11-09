@@ -33,10 +33,12 @@ class Skill(base_skill.BaseSkill):
 
         # check that the folder exists
         if not os.path.exists(folder):
-            self.audio_utils.say("The current music folder doesn't exist. Please set it in the settings.")
-            return
+            self.audio_utils.say("The currently selected music folder doesn't exist. Please set it in the settings.")
+            raise Exception("Music path does not exist.")
 
         supported_music_filetypes = [".mp3", ".wav", ".ogg"] # This can be removed if we use a fully featured music player.
+
+        print("Loading Music Directory: ", folder)
         self.song_manager = SongDatabase(music_dir=folder, music_extensions=supported_music_filetypes)
 
 
