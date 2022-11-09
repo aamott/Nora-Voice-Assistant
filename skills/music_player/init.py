@@ -22,7 +22,7 @@ class Skill(base_skill.BaseSkill):
         self.audio_utils = audio_utils
 
         # Populate the settings tool. This only needs to be done once so the user has a setting to change.
-        self.settings_tool.create_setting("music folder")
+        self.settings_tool.create_setting("music folder", default_value=str(Path.home()) + "/Music" )
 
         # Initialize the song database
         folder = self.settings_tool.get_setting("music folder")
