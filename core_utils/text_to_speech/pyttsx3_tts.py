@@ -6,6 +6,7 @@
 # Microsoft Mark Desktop
 ######################################
 from os import remove
+from time import sleep
 from ..core_core.audio_player import AudioPlayer
 from ..core_core.channels import Channels
 from ..settings_tool import SettingsTool
@@ -20,7 +21,10 @@ class TTS(TTS_Abstract):
         self.settings_tool = settings_tool
         self.channels = channels
         self.audio_player = audio_player
+        self.engine = None
 
+    
+    def init_engine(self):
         self.engine = pyttsx3.init()
 
         # Add any settings that don't exist yet
@@ -28,8 +32,7 @@ class TTS(TTS_Abstract):
         self.settings_tool.save_settings()
 
         # default voice
-        voice_name = self.settings_tool.get_setting(
-            "voice_name") or "Microsoft Zira Desktop - English (United States)"
+        voice_name = self.settings_tool.get_setting("voice_name")
         self.set_voice(voice_name)
 
 
@@ -49,12 +52,13 @@ class TTS(TTS_Abstract):
                 new_voice = voice
                 break
 
-            # if we didn't find the voice, use the default
+        # if we didn't find the voice, use the default
+        if new_voice:
+            self.engine.setProperty('voice', voice.id)
+        else:
             print("Voice not found, using default")
             new_voice = voices[0]
             self.settings_tool.set_setting("voice_name", new_voice.name)
-
-        self.engine.setProperty('voice', voice.id)
 
 
     def get_available_voices(self) -> list:
@@ -68,22 +72,28 @@ class TTS(TTS_Abstract):
             Args:
                 text (str): the text to be spoken
         """
-        # self.engine.say(text)
-        # self.engine.runAndWait()
+        # for this to work in a thread, we have to 
+        # re-initialize the engine every single time.
+        # Lag is still small
+        self.init_engine()
 
-        # save the speech to a file buffer
+        try:
+            self.engine.save_to_file(text, "tts.wav")
+            self.engine.runAndWait()
+            sleep(0.05)
+            self.audio_player.play_sound("tts.wav")
+            remove("tts.wav")
+        except Exception as e:
+            print("pyttsx3: ", e)
 
-        self.engine.save_to_file(text, "tts.wav")
-        self.engine.runAndWait()
-        self.audio_player.play_sound("tts.wav")
-        # remove the file
-        remove("tts.wav")
+        # free the resources
+        self.engine = None
 
 
     def populate_settings_tool(self):
         """ Populates the settings tool with the settings for this TTS object """
-        if self.settings_tool.get_setting("voice_name") is None:
-            self.settings_tool.set_setting("voice_name", "Microsoft Zira Desktop - English (United States)")
+        self.settings_tool.create_setting("voice_name", 
+                                        default_value="Microsoft Zira Desktop - English (United States)")
 
         # show a list of voices
         voices = self.get_available_voices()

@@ -78,7 +78,10 @@ class AudioUtils:
         if text == "" or text == None:
             raise ValueError("Text to speak is empty.")
         print("+ ", text)
-        self._tts.say(text)
+        try:
+            self._tts.say(text)
+        except Exception as e:
+            print("Exception in audio_utils->say: ", e)
 
 
     ###########################
