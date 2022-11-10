@@ -192,13 +192,13 @@ The AudioUtils object is used for any audio control and interaction, including s
 - [x] Speech to Text engines 🗣️
     - [X] Audio Recording class 🎤
 - [X] Text to Speech engines 👂
-    - [ ] Use Audio Playback class  🎧
+    - [X] Use Audio Playback class  🎧
 - [X] Intent Parser -  [Padaos](https://github.com/MycroftAI/padaos) 🤔
 - [X] Wakeword - [Porcupine](https://pypi.org/project/pvporcupine/) ⏰
 
 ### Basic Skills 🤹🏻‍♀️
 - [X] Hello World 👋
-- [ ] Music Player 🎵
+- [X] Music Player 🎵
 - [ ] Weather 🌍
 - [ ] News 📰
 - [ ] Calculator 📈
