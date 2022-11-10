@@ -57,10 +57,18 @@ class Wakeword:
             sensitivities = [ i * sensitivities[0] for i in range(0, len(keywords)) ]
 
         # load the wakeword
-        self.porcupine = pvporcupine.create(access_key=key,
-                                            keywords=keywords,
-                                            sensitivities=sensitivities,
-                                            keyword_paths=keyword_paths)
+        try: 
+            # try to load with any custom wakewords
+            self.porcupine = pvporcupine.create(access_key=key,
+                                                keywords=keywords,
+                                                sensitivities=sensitivities,
+                                                keyword_paths=keyword_paths)
+        except Exception as e:
+            # try to load without any custom keywords 
+            self.porcupine = pvporcupine.create(access_key=key,
+                                    keywords=keywords,
+                                    sensitivities=sensitivities)
+
         if self.porcupine is None:
             raise Exception("Failed to load porcupine using API key: " + key)
 
