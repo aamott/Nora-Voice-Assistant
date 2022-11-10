@@ -98,7 +98,7 @@ class Skill(base_skill.BaseSkill):
                     intent_name="max volume"
                     )           
         register_intent(
-            intent_callback= self.mmin_volume,
+            intent_callback= self.min_volume,
                     
                     intent_phrases=["lowest volume", "(min| minimum) volume"],
                     
