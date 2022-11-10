@@ -4,7 +4,7 @@
 # Currently untested - use at your own risk
 ##############################
 
-sudo apt install python3-pip flac libespeak1 python3-pip python3-numpy libportaudio2 libsndfile1 libffi-dev libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
+sudo apt install python3-pip ffmpeg flac libespeak1 python3-pip python3-numpy libportaudio2 libsndfile1 libffi-dev libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
 
 ###########################
 # Python executable
